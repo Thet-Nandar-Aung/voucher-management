@@ -1,6 +1,4 @@
-package sg.edu.nus.iss.springboot.voucher.management.service;
-
-import java.util.Optional;
+package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +18,7 @@ public class VoucherManagementUserDetailService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		Optional<User> userd = userRepository.findByEmail(username);
-		return userRepository.findByEmail(username).map(VoucherManagementUserDetail::new)
+		return userRepository.findByUsername(username).map(VoucherManagementUserDetail::new)
 				.orElseThrow(() -> new UsernameNotFoundException("No user found"));
 	}
 

@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import sg.edu.nus.iss.springboot.voucher.management.service.VoucherManagementUserDetailService;
+import sg.edu.nus.iss.springboot.voucher.management.service.impl.VoucherManagementUserDetailService;
 
 
 @Configuration

@@ -1,13 +1,12 @@
-package sg.edu.nus.iss.springboot.voucher.management.entity;
+package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 
 
 public class VoucherManagementUserDetail implements UserDetails {
@@ -20,10 +19,7 @@ public class VoucherManagementUserDetail implements UserDetails {
 		
 		userName = user.getUsername();
         password = user.getPassword();
-        authorities = Arrays.stream(user.getRole()
-                .split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+       
 	}
 
 	@Override
