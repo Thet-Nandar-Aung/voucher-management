@@ -6,30 +6,28 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 public class User {
-	
+
 	public User() {
 		super();
 	}
 
-	public User(long userid,String email, String username, String password, RoleType role,boolean isActive) {
+	public User(String email, String username, String password, RoleType role, boolean isActive) {
 		super();
-		this.userid=userid;
 		this.email = email;
 		this.username = username;
 		this.password = password;
 		this.role = role;
-		this.isActive=isActive;
+		this.isActive = isActive;
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long userid;
+	@UuidGenerator(style = UuidGenerator.Style.AUTO)
+	private String userId;
 
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -47,22 +45,24 @@ public class User {
 	@Column(nullable = false, columnDefinition = "datetime default now()")
 	private LocalDateTime createdDate;
 
-
 	@Column(nullable = true, columnDefinition = "datetime")
 	private LocalDateTime updatedDate;
 
-	@Column(nullable = false,columnDefinition = "boolean default true")
+	@Column(nullable = false, columnDefinition = "boolean default true")
 	private boolean isActive;
-	
+
 	@Column(nullable = true, columnDefinition = "datetime")
 	private LocalDateTime lastLoginDate;
 
-	public Long getUserid() {
-		return userid;
+	@Column(nullable = true)
+	private String image;
+
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUserid(Long userid) {
-		this.userid = userid;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getEmail() {
@@ -129,6 +129,12 @@ public class User {
 		this.lastLoginDate = lastLoginDate;
 	}
 
-	
-	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 }

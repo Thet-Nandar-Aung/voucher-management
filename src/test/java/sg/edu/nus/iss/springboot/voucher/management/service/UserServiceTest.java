@@ -27,7 +27,7 @@ import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplTest {
+public class UserServiceTest {
 
 	@Mock
 	private UserRepository userRepo;
@@ -44,7 +44,7 @@ public class UserServiceImplTest {
 		userService = new UserService(userRepo, passwordEncoder);
 	}
 
-	User user = new User((long) 1, "admin@gmail.com", "Admin", "Pwd@123", RoleType.ADMIN, true);
+	User user = new User("admin@gmail.com", "Admin", "Pwd@123", RoleType.ADMIN, true);
 
 	@Test
 	void getAllUser() {
@@ -56,27 +56,37 @@ public class UserServiceImplTest {
 	}
 
 	@Test
-	void upsertUser() {
+	void createUser() {
 
 		String email = "";
 
-		if (user.getEmail().equals("admi@gmail.com")) {
+		if (!user.getEmail().equals("admi@gmail.com")) {
+
+			when(userRepo.save(user)).thenReturn(user);
+
+			user.setPassword(user.getPassword());
+			User createduser = userService.create(user);
+			email = createduser.getEmail();
+		} 
+
+		assertThat(email).isNotNull();
+		assertThat(email.equals("admin@gmail.com")).isTrue();
+	}
+	
+	@Test
+	void updateUser() {
+
+		String email = "";
+
+		if (user.getEmail().equals("admin@gmail.com")) {
 
 			user.setActive(true);
 			user.setUsername("test12");
 			user.setUpdatedDate(LocalDateTime.now());
 			when(userRepo.save(user)).thenReturn(user);
-			User updatedUser = userService.upsert(user);
+			User updatedUser = userService.update(user);
 			email = updatedUser.getEmail();
-		} else {
-
-			when(userRepo.save(user)).thenReturn(user);
-
-			user.setPassword(user.getPassword());
-			User createduser = userService.upsert(user);
-			email = createduser.getEmail();
 		}
-
 		assertThat(email).isNotNull();
 		assertThat(email.equals("admin@gmail.com")).isTrue();
 	}
@@ -88,9 +98,8 @@ public class UserServiceImplTest {
 
 		user.setPassword("newPwd");
 
-		User updatedUser = userService.upsert(user);
+		User updatedUser = userService.update(user);
 
-		assertThat(updatedUser.getUserid()).isNotNull();
 		assertThat(updatedUser.getPassword()).isNotNull();
 		assertThat(passwordEncoder.matches("newPwd", passwordEncoder.encode("newPwd"))).isTrue();
 

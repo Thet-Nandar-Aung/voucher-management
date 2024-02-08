@@ -3,6 +3,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
+import sg.edu.nus.iss.springboot.voucher.management.model.ResetPasswordRequest;
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.IUserService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
@@ -31,27 +33,37 @@ public class UserService implements IUserService {
 		return userRepository.findByIsActiveTrue();
 	}
 
+
 	@Override
-	public User upsert(User user) {
+	public User findByEmailAndStatus(String email, boolean isActive) {
 
+		return userRepository.findByEmailAndStatus(email, isActive);
+	}
+
+	@Override
+	public User create(User user) {
 		try {
-			// if User already exists , will update
 
-			User dbUser = userRepository.findByEmail(user.getEmail());
-			if (!GeneralUtility.makeNotNull(dbUser).equals("")) {
-				dbUser.setUsername(user.getUsername());
-				dbUser.setRole(user.getRole());
-				dbUser.setActive(user.isActive());
-				dbUser.setUpdatedDate(LocalDateTime.now());
-				return userRepository.save(dbUser);
+			user.setActive(true);
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setCreatedDate(LocalDateTime.now());
+			return userRepository.save(user);
 
-			} else {// if User not found, will create
-				user.setActive(true);
-				user.setPassword(passwordEncoder.encode(user.getPassword()));
-				user.setCreatedDate(LocalDateTime.now());
-				return userRepository.save(user);
+		} catch (Exception e) {
+			e.printStackTrace();
 
-			}
+		}
+
+		return new User();
+	}
+
+	@Override
+	public User update(User user) {
+		try {
+
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setUpdatedDate(LocalDateTime.now());
+			return userRepository.save(user);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,31 +75,9 @@ public class UserService implements IUserService {
 
 	@Override
 	public User findByEmail(String email) {
-
+		
 		return userRepository.findByEmail(email);
 	}
 
-	@Override
-	public User resetPassword(long userid, String password) {
-		try {
-			Optional<User> user = findById(userid);
-			if (user.isPresent()) {
-				user.get().setPassword(passwordEncoder.encode(password));
-				user.get().setUpdatedDate(LocalDateTime.now());
-				User updatedUser = userRepository.save(user.get());
-				return updatedUser;
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new User();
-	}
-
-	@Override
-	public Optional<User> findById(long userid) {
-		// TODO Auto-generated method stub
-		return userRepository.findById(userid);
-	}
-
+	
 }

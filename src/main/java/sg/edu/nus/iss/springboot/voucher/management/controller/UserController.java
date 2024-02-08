@@ -1,6 +1,5 @@
 package sg.edu.nus.iss.springboot.voucher.management.controller;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(value = "/getAllUser", produces = "application/json")
+	@GetMapping(value = "/getAll", produces = "application/json")
 	public ResponseEntity<UserResponse> getAllUser() {
 		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
 
@@ -33,7 +32,7 @@ public class UserController {
 			List<User> userList = userService.findByIsActiveTrue();
 
 			if (userList.isEmpty()) {
-				userResponse.setMessage("No User found");
+				userResponse.setMessage("No User found.");
 				userResponse.setResult(resultList);
 				return new ResponseEntity<>(userResponse, HttpStatus.OK);
 			} else {
@@ -58,8 +57,8 @@ public class UserController {
 		}
 	}
 
-	@PostMapping(value = "/upsertUser", produces = "application/json")
-	public ResponseEntity<UserResponse> upsertUser(@RequestBody User user) {
+	@PostMapping(value = "/create", produces = "application/json")
+	public ResponseEntity<UserResponse> createUser(@RequestBody User user) {
 		String message = "";
 
 		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
@@ -67,31 +66,36 @@ public class UserController {
 		UserResponse userResponse = new UserResponse();
 		ResultItem result = new ResultItem();
 		try {
-			// if User already exists , will update
 
-			User upsertUser = userService.upsert(user);
-			if (!GeneralUtility.makeNotNull(upsertUser).equals("")) {
-				
-				message = "User created(or)updated successfully.";
-				result.setEmail(upsertUser.getEmail());
-				result.setUsername(upsertUser.getUsername());
-				result.setRole(upsertUser.getRole());
-				resultList.add(result);
-				userResponse.setMessage(message);
+			User dbUser = userService.findByEmail(user.getEmail());
+			if (GeneralUtility.makeNotNull(dbUser).equals("")) {
+				// if User not found, will create
+				User upsertUser = userService.create(user);
+				if (!GeneralUtility.makeNotNull(upsertUser).equals("")) {
+
+					message = "User created successfully.";
+					result.setEmail(upsertUser.getEmail());
+					result.setUsername(upsertUser.getUsername());
+					result.setRole(upsertUser.getRole());
+					resultList.add(result);
+					userResponse.setMessage(message);
+					userResponse.setResult(resultList);
+					return new ResponseEntity<>(userResponse, HttpStatus.OK);
+
+				} else {
+					message = "Create user failed: Unable to create a new user account with email :" + user.getEmail();
+					resultList.add(result);
+					userResponse.setMessage(message);
+					userResponse.setResult(resultList);
+					return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+
+			} else {
+				userResponse.setMessage("User already exists.");
 				userResponse.setResult(resultList);
-				return new ResponseEntity<>(userResponse, HttpStatus.OK);
-
-
-			} else {// if User not found, will create
-				
-				message = "Error occurred when user create(or)update.";
-				resultList.add(result);
-				userResponse.setMessage(message);
-				userResponse.setResult(resultList);
-				return new ResponseEntity<>(userResponse, HttpStatus.NOT_FOUND);
-
+				return new ResponseEntity<>(userResponse, HttpStatus.BAD_REQUEST);
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			userResponse.setMessage("Error, " + e.toString());
@@ -100,26 +104,98 @@ public class UserController {
 		}
 	}
 
-	@PutMapping(value = "/resetPassword/{id}", produces = "application/json")
-	public ResponseEntity<MessageResponse> resetPassword( @PathVariable(name = "id") long id ,@RequestBody ResetPasswordRequest resetPassword) {
-		MessageResponse response = new MessageResponse();
-		try {
-			User user = userService.resetPassword(id, resetPassword.getPassword());
+	@PutMapping(value = "/update", produces = "application/json")
+	public ResponseEntity<UserResponse> updateUser(@RequestBody User user) {
+		String message = "";
 
-			if (!GeneralUtility.makeNotNull(user).equals("")) {
-				response.setMessage("Password updated successfully.");
-				return new ResponseEntity<>(response, HttpStatus.OK);
+		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
+
+		UserResponse userResponse = new UserResponse();
+		ResultItem result = new ResultItem();
+		try {
+			User dbUser = userService.findByEmail(user.getEmail());
+
+			if (!GeneralUtility.makeNotNull(dbUser).equals("")) {
+				
+				dbUser.setUsername(user.getUsername());
+				dbUser.setPassword(user.getPassword());
+				dbUser.setRole(user.getRole());				
+				dbUser.setActive(user.isActive());
+				
+				User upsertUser = userService.update(dbUser);
+				if (!GeneralUtility.makeNotNull(upsertUser).equals("")) {
+
+					message = "User updated successfully.";
+					result.setEmail(upsertUser.getEmail());
+					result.setUsername(upsertUser.getUsername());
+					result.setRole(upsertUser.getRole());
+					resultList.add(result);
+					userResponse.setMessage(message);
+					userResponse.setResult(resultList);
+					return new ResponseEntity<>(userResponse, HttpStatus.OK);
+				} else {
+					message = "Update user failed: Changes could not be applied to the user with email :"
+							+ user.getEmail();
+					resultList.add(result);
+					userResponse.setMessage(message);
+					userResponse.setResult(resultList);
+					return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+
 			} else {
-				response.setMessage("User not found.");
-				return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+
+				message = "User Not found.";
+				resultList.add(result);
+				userResponse.setMessage(message);
+				userResponse.setResult(resultList);
+				return new ResponseEntity<>(userResponse, HttpStatus.NOT_FOUND);
+
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			userResponse.setMessage("Error, " + e.toString());
+			userResponse.setResult(resultList);
+			return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping(value = "/resetPassword", produces = "application/json")
+	public ResponseEntity<MessageResponse> resetPassword(@RequestBody ResetPasswordRequest resetPwdReq) {
+		MessageResponse response = new MessageResponse();
+		String message = "";
+		try {
+
+			User dbUser = userService.findByEmailAndStatus(resetPwdReq.getEmail(), true);
+			if (!GeneralUtility.makeNotNull(dbUser).equals("")) {
+
+				dbUser.setPassword(resetPwdReq.getPassword());
+				User modifiedUser = userService.update(dbUser);
+
+				if (!GeneralUtility.makeNotNull(modifiedUser).equals("")) {
+					message =  "Reset Password Completed.";
+					response.setMessage(message);
+					return new ResponseEntity<>(response, HttpStatus.OK);
+				} else {
+					message = "Reset Password failed: Unable to reset password for the user with email :"
+							+ resetPwdReq.getEmail();
+					response.setMessage(message);
+					return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
+				}
+			} else {
+				message = "Reset Password failed: Unable to find the user with email :"
+						+ resetPwdReq.getEmail();
+				response.setMessage(message);
+				return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setMessage("Error, " + e.toString());
 
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 	}
 
 }

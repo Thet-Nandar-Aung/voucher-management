@@ -28,13 +28,13 @@
 			"response": []
 		},
 		{
-			"name": "Create or Update User",
+			"name": "Create User",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"John189@gmail.com\",\n    \"username\": \"John\",\n    \"password\":\"Pwd@2221212\",\n    \"role\": \"ADMIN\",\n    \"active\":true\n}",
+					"raw": "{\n    \"email\": \"simon.dc.@gmail.com\",\n    \"username\": \"Simon\",\n    \"password\":\"Pwd@221212\",\n    \"role\": \"CUSTOMER\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -42,7 +42,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/user/upsertUser",
+					"raw": "http://localhost:8081/api/user/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -51,7 +51,7 @@
 					"path": [
 						"api",
 						"user",
-						"upsertUser"
+						"create"
 					]
 				}
 			},
@@ -64,7 +64,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"password\":\"Pwd@345\"\n}",
+					"raw": "{\n    \"email\": \"john.mc.@gmail.com\",\n    \"password\": \"Pwd@345\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -72,7 +72,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/user/resetPassword/1",
+					"raw": "http://localhost:8081/api/user/resetPassword",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -81,8 +81,37 @@
 					"path": [
 						"api",
 						"user",
-						"resetPassword",
-						"1"
+						"resetPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"john.mc.@gmail.com\",\n    \"username\": \"John\",\n    \"password\":\"Pwd@21212\",\n    \"role\": \"MERCHANT\",\n    \"active\":true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/user/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"update"
 					]
 				}
 			},
