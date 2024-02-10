@@ -10,7 +10,6 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.RoleType;
 @Data
 public class UserResponse {
 
-	
 	private String message;
 	private ArrayList<ResultItem> result;
 
@@ -35,16 +34,18 @@ public class UserResponse {
 		private String email;
 		private String username;
 		private RoleType role;
+		private String image;
 
 		public ResultItem() {
 			super();
 		}
 
-		public ResultItem(String email, String username, RoleType role) {
+		public ResultItem(String email, String username, RoleType role, String image) {
 			super();
 			this.email = email;
 			this.username = username;
 			this.role = role;
+			this.image = image;
 		}
 
 		public String getEmail() {
@@ -70,7 +71,14 @@ public class UserResponse {
 		public void setRole(RoleType role) {
 			this.role = role;
 		}
-		
+
+		public String getImage() {
+			return image;
+		}
+
+		public void setImage(String image) {
+			this.image = image;
+		}
 
 	}
 

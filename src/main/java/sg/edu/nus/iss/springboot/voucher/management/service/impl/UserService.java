@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,9 +17,12 @@ import sg.edu.nus.iss.springboot.voucher.management.model.ResetPasswordRequest;
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.IUserService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
+import sg.edu.nus.iss.springboot.voucher.management.utility.ImageUploadToS3;
 
 @Service
 public class UserService implements IUserService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -50,6 +55,7 @@ public class UserService implements IUserService {
 			return userRepository.save(user);
 
 		} catch (Exception e) {
+			logger.error("Error occurred while user creating, " + e.toString());
 			e.printStackTrace();
 
 		}
@@ -66,6 +72,7 @@ public class UserService implements IUserService {
 			return userRepository.save(user);
 
 		} catch (Exception e) {
+			logger.error("Error occurred while user updating, " + e.toString());
 			e.printStackTrace();
 
 		}

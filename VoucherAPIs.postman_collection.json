@@ -12,7 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/api/user/getAllUser",
+					"raw": "http://localhost:8081/api/user/getAll",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -21,7 +21,7 @@
 					"path": [
 						"api",
 						"user",
-						"getAllUser"
+						"getAll"
 					]
 				}
 			},
@@ -31,15 +31,34 @@
 			"name": "Create User",
 			"request": {
 				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"simon.dc.@gmail.com\",\n    \"username\": \"Simon\",\n    \"password\":\"Pwd@221212\",\n    \"role\": \"CUSTOMER\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
+					},
+					{
+						"key": "user",
+						"value": "",
+						"type": "text",
+						"disabled": true
 					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/Users/Image/photo.jpg"
+						},
+						{
+							"key": "user",
+							"value": "{\"email\": \"angelica@gmail.com\",\"username\": \"Angelica\",\"password\":\"Pwd@21212\",\"role\": \"MERCHANT\"}",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:8081/api/user/create",
@@ -64,7 +83,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"john.mc.@gmail.com\",\n    \"password\": \"Pwd@345\"\n}",
+					"raw": "{\n    \"email\": \"angelica@gmail.com\",\n    \"password\": \"Pwd@345\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -90,16 +109,29 @@
 		{
 			"name": "Update User",
 			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"john.mc.@gmail.com\",\n    \"username\": \"John\",\n    \"password\":\"Pwd@21212\",\n    \"role\": \"MERCHANT\",\n    \"active\":true\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
 					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/Users/Image/photo.jpg"
+						},
+						{
+							"key": "user",
+							"value": "{\"email\": \"angelica@gmail.com\",\"username\": \"Angelica\",\"password\":\"Pwd@21212\",\"role\":\"MERCHANT\",\"active\":false}",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:8081/api/user/update",
