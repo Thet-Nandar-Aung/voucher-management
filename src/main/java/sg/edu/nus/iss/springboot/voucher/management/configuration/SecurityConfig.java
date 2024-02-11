@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.springboot.voucher.management.configuration;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,7 @@ import sg.edu.nus.iss.springboot.voucher.management.service.impl.VoucherManageme
 public class SecurityConfig {
 
 	private static final String[] SECURED_URLs = { "/api/**" };
-	
+
 	@Value("${aws.region}")
 	private String awsRegion;
 
@@ -40,10 +41,10 @@ public class SecurityConfig {
 
 	@Value("${aws.s3.bucket}")
 	private String s3Bucket;
-	
+
 	@Value("${aws.s3.image.prefix}")
 	private String s3imagePrefix;
-	
+
 	@Value("${aws.s3.bucket.image}")
 	private String imageKey;
 
@@ -61,12 +62,12 @@ public class SecurityConfig {
 	public String getAwsSecretKey() {
 		return awsSecretKey;
 	}
-	
+
 	@Bean
 	public String getS3Bucket() {
 		return s3Bucket;
 	}
-	
+
 	@Bean
 	public String getS3imagePrefix() {
 		return s3imagePrefix;
@@ -111,8 +112,7 @@ public class SecurityConfig {
 
 	@Bean
 	public AmazonS3 s3Client() {
-		AWSCredentials awsCredentials = new BasicAWSCredentials(awsAccessKey,
-				awsSecretKey);
+		AWSCredentials awsCredentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
 		AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
 				.withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).withRegion(awsRegion).build();
 		return amazonS3Client;

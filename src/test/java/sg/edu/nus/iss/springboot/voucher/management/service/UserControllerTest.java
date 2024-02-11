@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,15 +14,16 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.model.ResetPasswordRequest;
+import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-
 public class UserControllerTest {
 
 	@Autowired
@@ -30,12 +32,21 @@ public class UserControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	User testUser = new User("tester1@gmail.com", "Tester", "Pwd@123", RoleType.CUSTOMER, true);
+	@Autowired
+	private UserService userService;
+
+
+	User testUser;
+
+	@BeforeEach
+	void setUp() {
+		testUser = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
+	}
+
 
 	@Test
+	@Transactional
 	public void testCreateUser() throws Exception {
-		// Assuming this is the actual user you expect to be created
-		User user2 = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
 
 		// MockMultipartFile for image file
 		MockMultipartFile imageFile = new MockMultipartFile("image", "welcome.jpg", "image/jpg", "welcome".getBytes());
@@ -45,21 +56,22 @@ public class UserControllerTest {
 				"{\"email\": \"antonia@gmail.com\",\"username\": \"Antonia\",\"password\":\"Pwd@21212\",\"role\": \"MERCHANT\"}"
 						.getBytes());
 
-		// Perform the test using MockMvc
+		
 		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/user/create").file(user).file(imageFile)
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.message").value("User created successfully."))
-				.andExpect(jsonPath("$.result[0].username").value(user2.getUsername()))
-				.andExpect(jsonPath("$.result[0].email").value(user2.getEmail()))
-				.andExpect(jsonPath("$.result[0].role").value(user2.getRole().toString())).andDo(print());
+				.andExpect(jsonPath("$.result[0].username").value(testUser.getUsername()))
+				.andExpect(jsonPath("$.result[0].email").value(testUser.getEmail()))
+				.andExpect(jsonPath("$.result[0].role").value(testUser.getRole().toString())).andDo(print());
 
 	}
 
 	@Test
+	@Transactional
 	public void testUpdateUser() throws Exception {
-		// Assuming this is the actual user you expect to be created
-		User user2 = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
+
+		userService.create(testUser);
 
 		// MockMultipartFile for image file
 		MockMultipartFile imageFile = new MockMultipartFile("image", "welcome.jpg", "image/jpg", "welcome".getBytes());
@@ -73,13 +85,16 @@ public class UserControllerTest {
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.message").value("User updated successfully."))
-				.andExpect(jsonPath("$.result[0].username").value(user2.getUsername()))
-				.andExpect(jsonPath("$.result[0].email").value(user2.getEmail()))
-				.andExpect(jsonPath("$.result[0].role").value(user2.getRole().toString())).andDo(print());
+				.andExpect(jsonPath("$.result[0].username").value(testUser.getUsername()))
+				.andExpect(jsonPath("$.result[0].email").value(testUser.getEmail()))
+				.andExpect(jsonPath("$.result[0].role").value(testUser.getRole().toString())).andDo(print());
 	}
 
 	@Test
+	@Transactional
 	public void testResetPassword() throws Exception {
+
+		userService.create(testUser);
 
 		ResetPasswordRequest resetPwdReq = new ResetPasswordRequest("antonia@gmail.com", "newPwd@123");
 
@@ -91,7 +106,10 @@ public class UserControllerTest {
 	}
 
 	@Test
+	@Transactional
 	public void testGetAllUser() throws Exception {
+
+		userService.create(testUser);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/user/getAll"))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))

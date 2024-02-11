@@ -2,22 +2,16 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
-import sg.edu.nus.iss.springboot.voucher.management.model.ResetPasswordRequest;
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.IUserService;
-import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
-import sg.edu.nus.iss.springboot.voucher.management.utility.ImageUploadToS3;
 
 @Service
 public class UserService implements IUserService {
