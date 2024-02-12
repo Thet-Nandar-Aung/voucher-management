@@ -90,13 +90,12 @@ public class UserController {
 		}
 	}
 
-	@PostMapping(value = "/create", produces = "application/json", consumes = { "application/json",
-			"multipart/form-data" })
+	@PostMapping(value = "/create", produces = "application/json")
 	public ResponseEntity<UserResponse> createUser(@RequestPart("user") User user,
-			@RequestPart("image") MultipartFile uploadFile) {
+			 @RequestPart(value = "image", required = false) MultipartFile uploadFile) {
 		logger.info("Call user create API...");
 
-		logger.info("create user: " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
+		
 		String message = "";
 
 		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
@@ -111,7 +110,8 @@ public class UserController {
 
 				// if User not found, will create
 
-				if (uploadFile.getSize() > 1) {
+				if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
+					logger.info("create user: " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
 					ImageUploadToS3 imgUpload = new ImageUploadToS3();
 					presignedUrl = GeneralUtility
 							.makeNotNull(imgUpload.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile));
@@ -168,12 +168,11 @@ public class UserController {
 	@PostMapping(value = "/update", produces = "application/json", consumes = { "application/json",
 			"multipart/form-data" })
 	public ResponseEntity<UserResponse> updateUser(@RequestPart("user") User user,
-			@RequestPart("image") MultipartFile uploadFile) {
+			@RequestPart(value = "image", required = false) MultipartFile uploadFile) {
 
 		logger.info("Call user update API...");
 
-		logger.info("Update user : " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
-
+		
 		String message = "";
 
 		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
@@ -186,7 +185,11 @@ public class UserController {
 
 			if (!GeneralUtility.makeNotNull(dbUser).equals("")) {
 
-				if (uploadFile.getSize() > 1) {
+				if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
+					
+					logger.info("Update user : " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
+
+					
 					ImageUploadToS3 imgUpload = new ImageUploadToS3();
 					presignedUrl = GeneralUtility
 							.makeNotNull(imgUpload.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile));
