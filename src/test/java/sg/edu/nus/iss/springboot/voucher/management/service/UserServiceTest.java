@@ -15,12 +15,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.TestPropertySource;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 
 @ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = {
+        "DB_USERNAME=admin",
+        "DB_PASSWORD=RDS_12345"
+})
 public class UserServiceTest {
 
 	@Mock
