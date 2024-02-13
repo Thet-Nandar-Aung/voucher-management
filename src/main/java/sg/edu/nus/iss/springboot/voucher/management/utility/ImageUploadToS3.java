@@ -45,9 +45,9 @@ public class ImageUploadToS3 {
 	}
 
 	public String generatePresignedUrl(AmazonS3 s3Client, SecurityConfig securityConfig,
-			String imageUrl) {
+			String imageKey) {
 		String presignedUrl = "";
-		if (imageUrl.startsWith("http")) {
+		
 
 			String bucketName = securityConfig.getS3Bucket().trim();
 
@@ -58,13 +58,13 @@ public class ImageUploadToS3 {
 			expiration.setTime(expTimeMillis); // URL valid for 5 minutes
 
 			GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName,
-					imageUrl).withMethod(HttpMethod.GET).withExpiration(expiration);
+					imageKey).withMethod(HttpMethod.GET).withExpiration(expiration);
 			//
 			URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
 			presignedUrl = url.toString();
 			logger.info("Pre-Signed URL: " + url.toString());
 
-		}
+		
 
 		return presignedUrl;
 	}
@@ -96,7 +96,7 @@ public class ImageUploadToS3 {
 		if (isExistsValidImage) {
 
 			presignedUrl = imgUpload.generatePresignedUrl(s3Client, securityConfig,
-					securityConfig.getS3imagePrefix().trim() +"/"+ uploadFile.getOriginalFilename().trim());
+					securityConfig.getImageKey().trim() + uploadFile.getOriginalFilename().trim());
 
 			logger.info("presignedUrl: " + presignedUrl);
 

@@ -67,7 +67,7 @@ public class UserController {
 						if (isImageExists) {
 
 							String presignedUrl = GeneralUtility
-									.makeNotNull(imgUpload.generatePresignedUrl(s3Client, securityConfig, imageUrl));
+									.makeNotNull(imgUpload.generatePresignedUrl(s3Client, securityConfig, securityConfig.getImageKey().trim() + fileName.trim()));
 
 							userResp.setImage(presignedUrl);
 						}
