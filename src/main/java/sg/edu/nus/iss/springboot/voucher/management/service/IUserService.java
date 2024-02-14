@@ -17,4 +17,5 @@ public interface IUserService {
 
 	User update(User user);
 
+	Boolean validateUserLogin(String email, String password);
 }
