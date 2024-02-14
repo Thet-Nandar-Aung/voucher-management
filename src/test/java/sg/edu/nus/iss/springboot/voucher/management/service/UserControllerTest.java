@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.model.ResetPasswordRequest;
+import sg.edu.nus.iss.springboot.voucher.management.model.UserLoginRequest;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 
 @SpringBootTest
@@ -121,4 +122,16 @@ public class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(jsonPath("$.message").value("200 OK"));
 	}
 
+	@Test
+	public void testUserLogin() throws Exception {
+
+		UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getEmail(), "newPwd@123");
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(userLoginRequest)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(content().string("true")).andDo(print());
+	}
+	
 }

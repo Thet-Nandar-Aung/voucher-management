@@ -80,5 +80,16 @@ public class UserService implements IUserService {
 		return userRepository.findByEmail(email);
 	}
 
-	
+	@Override
+	public Boolean validateUserLogin(String email, String password) {
+		try {
+			User user = findByEmail(email);
+			if (user != null && passwordEncoder.matches(password, user.getPassword())){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

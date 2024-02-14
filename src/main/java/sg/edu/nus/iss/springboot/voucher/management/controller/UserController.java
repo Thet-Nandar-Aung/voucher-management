@@ -317,4 +317,14 @@ public class UserController {
 
 	}
 
+	@PostMapping(value = "/login", produces = "application/json")
+	public boolean validateUserLogin(@RequestBody UserLoginRequest loginRequest) {
+		try {
+			return userService.validateUserLogin(loginRequest.getEmail(), loginRequest.getPassword());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }
