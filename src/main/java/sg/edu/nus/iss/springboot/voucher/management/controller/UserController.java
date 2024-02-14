@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 
-import sg.edu.nus.iss.springboot.voucher.management.configuration.SecurityConfig;
+import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.model.*;
 import sg.edu.nus.iss.springboot.voucher.management.model.UserResponse.ResultItem;
@@ -32,7 +32,7 @@ public class UserController {
 	private AmazonS3 s3Client;
 
 	@Autowired
-	private SecurityConfig securityConfig;
+	private VourcherManagementSecurityConfig securityConfig;
 
 	@GetMapping(value = "/getAll", produces = "application/json")
 	public ResponseEntity<UserResponse> getAllUser() {
@@ -62,12 +62,12 @@ public class UserController {
 						String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
 
 						boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
-								securityConfig.getImageKey().trim() + fileName.trim());
+								securityConfig.getS3ImagePrivateUsers().trim() + fileName.trim());
 
 						if (isImageExists) {
 
 							String presignedUrl = GeneralUtility
-									.makeNotNull(imgUpload.generatePresignedUrl(s3Client, securityConfig, securityConfig.getImageKey().trim() + fileName.trim()));
+									.makeNotNull(imgUpload.generatePresignedUrl(s3Client, securityConfig, securityConfig.getS3ImagePrivateUsers().trim() + fileName.trim()));
 
 							userResp.setImage(presignedUrl);
 						}
@@ -113,9 +113,9 @@ public class UserController {
 						logger.info("create user: " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
 						ImageUploadToS3 imgUpload = new ImageUploadToS3();
 						presignedUrl = GeneralUtility.makeNotNull(
-								imgUpload.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile));
+								imgUpload.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile,securityConfig.getS3ImagePrivateUsers().trim()));
 						if (!presignedUrl.equals("")) {
-							String imageUrl = securityConfig.getS3imagePrefix().trim() + "/"
+							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"+securityConfig.getS3ImagePrivateUsers().trim()
 									+ uploadFile.getOriginalFilename().trim();
 							user.setImage(imageUrl);
 						}
@@ -198,9 +198,9 @@ public class UserController {
 
 						ImageUploadToS3 imgUpload = new ImageUploadToS3();
 						presignedUrl = GeneralUtility.makeNotNull(
-								imgUpload.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile));
+								imgUpload.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile,securityConfig.getS3ImagePrivateUsers().trim()));
 						if (!presignedUrl.equals("")) {
-							String imageUrl = securityConfig.getS3imagePrefix().trim() + "/"
+							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"+securityConfig.getS3ImagePrivateUsers().trim()
 									+ uploadFile.getOriginalFilename().trim();
 							user.setImage(imageUrl);
 						}
@@ -315,6 +315,16 @@ public class UserController {
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+	}
+
+	@PostMapping(value = "/login", produces = "application/json")
+	public boolean validateUserLogin(@RequestBody UserLoginRequest loginRequest) {
+		try {
+			return userService.validateUserLogin(loginRequest.getEmail(), loginRequest.getPassword());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

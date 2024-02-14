@@ -1,6 +1,5 @@
 package sg.edu.nus.iss.springboot.voucher.management.configuration;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +15,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.CorsRegistration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -26,7 +31,7 @@ import sg.edu.nus.iss.springboot.voucher.management.service.impl.VoucherManageme
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class VourcherManagementSecurityConfig {
 
 	private static final String[] SECURED_URLs = { "/api/**" };
 
@@ -42,11 +47,17 @@ public class SecurityConfig {
 	@Value("${aws.s3.bucket}")
 	private String s3Bucket;
 
-	@Value("${aws.s3.image.prefix}")
-	private String s3imagePrefix;
+	@Value("${aws.s3.image.public}")
+	private String s3ImagePublic;
 
-	@Value("${aws.s3.bucket.image}")
-	private String imageKey;
+	@Value("${aws.s3.image.private}")
+	private String s3ImagePrivate;
+
+	@Value("${aws.s3.image.private.users}")
+	private String s3ImagePrivateUsers;
+
+	@Value("${aws.s3.image.url.prefix}")
+	private String s3ImageUrlPrefix;
 
 	@Bean
 	public String getAwsRegion() {
@@ -69,13 +80,23 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public String getS3imagePrefix() {
-		return s3imagePrefix;
+	public String getS3ImagePublic() {
+		return s3ImagePublic;
 	}
 
 	@Bean
-	public String getImageKey() {
-		return imageKey;
+	public String getS3ImagePrivate() {
+		return s3ImagePrivate;
+	}
+
+	@Bean
+	public String getS3ImagePrivateUsers() {
+		return s3ImagePrivateUsers;
+	}
+
+	@Bean
+	public String getS3ImageUrlPrefix() {
+		return s3ImageUrlPrefix;
 	}
 
 	@Autowired
@@ -94,10 +115,17 @@ public class SecurityConfig {
 		return authenticationProvider;
 	}
 
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-		return http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
+		return http.cors(cors -> {
+			cors.configurationSource(request -> {
+				CorsConfiguration config = new CorsConfiguration();
+				config.applyPermitDefaultValues();
+				return config;
+			});
+		}).headers(headers -> headers.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "*")))
+				.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(
 						auth -> auth.requestMatchers(SECURED_URLs).permitAll().anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
