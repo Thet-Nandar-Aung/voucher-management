@@ -123,9 +123,12 @@ public class UserControllerTest {
 	}
 
 	@Test
+	@Transactional
 	public void testUserLogin() throws Exception {
 
-		UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getEmail(), "newPwd@123");
+		userService.create(testUser);
+
+		UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getEmail(), "Pwd@21212");
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userLoginRequest)))
