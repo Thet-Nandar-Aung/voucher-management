@@ -29,6 +29,14 @@ spec:
                 secretKeyRef:
                   name: my-secret
                   key: db_password
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws_s3_access_key_id
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws_s3_secret_key_id
 
 ---
 apiVersion: v1
