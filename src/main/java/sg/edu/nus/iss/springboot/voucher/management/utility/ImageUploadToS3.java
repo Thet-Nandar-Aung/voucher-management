@@ -2,12 +2,11 @@ package sg.edu.nus.iss.springboot.voucher.management.utility;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.time.Instant;
 import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.SpringApplication;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.HttpMethod;
@@ -15,18 +14,16 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
-import sg.edu.nus.iss.springboot.voucher.management.configuration.SecurityConfig;
-import sg.edu.nus.iss.springboot.voucher.management.controller.UserController;
-import sg.edu.nus.iss.springboot.voucher.management.entity.User;
+import sg.edu.nus.iss.springboot.voucher.management.VoucherManagementApplication;
+import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
 
 public class ImageUploadToS3 {
 
 	private static final Logger logger = LoggerFactory.getLogger(ImageUploadToS3.class);
 
-	public boolean imageUpload(AmazonS3 s3Client, MultipartFile multipartFile, SecurityConfig securityConfig) {
+	public boolean imageUpload(AmazonS3 s3Client, MultipartFile multipartFile, VourcherManagementSecurityConfig securityConfig,String keyPrefix) {
 
 		String bucketName = securityConfig.getS3Bucket().trim();
-		String keyPrefix = securityConfig.getImageKey().trim();
 		String uploadFileName = multipartFile.getOriginalFilename();
 
 		try {
@@ -43,8 +40,8 @@ public class ImageUploadToS3 {
 		}
 		return false;
 	}
-
-	public String generatePresignedUrl(AmazonS3 s3Client, SecurityConfig securityConfig,
+	
+	public String generatePresignedUrl(AmazonS3 s3Client, VourcherManagementSecurityConfig securityConfig,
 			String imageKey) {
 		String presignedUrl = "";
 		
@@ -69,20 +66,20 @@ public class ImageUploadToS3 {
 		return presignedUrl;
 	}
 
-	public String generatePresignedUrlAndUploadObject(AmazonS3 s3Client, SecurityConfig securityConfig, MultipartFile uploadFile) {
+	public String generatePresignedUrlAndUploadObject(AmazonS3 s3Client, VourcherManagementSecurityConfig securityConfig, MultipartFile uploadFile,String keyPrefix) {
 		ImageUploadToS3 imgUpload = new ImageUploadToS3();
 		String presignedUrl = "";
 		boolean isExistsValidImage = false;
 		// chekck Image already eixsts or not
 
 		boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
-				securityConfig.getImageKey().trim() + uploadFile.getOriginalFilename().trim());
+				keyPrefix.trim() + uploadFile.getOriginalFilename().trim());
 
 		logger.info("Image already uploaded to s3. " + isImageExists);
 
 		if (!isImageExists) {
 
-			boolean isUploaded = imgUpload.imageUpload(s3Client, uploadFile, securityConfig);
+			boolean isUploaded = imgUpload.imageUpload(s3Client, uploadFile, securityConfig,keyPrefix);
 			if (isUploaded) {
 				isExistsValidImage = true;
 			}
@@ -96,7 +93,7 @@ public class ImageUploadToS3 {
 		if (isExistsValidImage) {
 
 			presignedUrl = imgUpload.generatePresignedUrl(s3Client, securityConfig,
-					securityConfig.getImageKey().trim() + uploadFile.getOriginalFilename().trim());
+					keyPrefix.trim() + uploadFile.getOriginalFilename().trim());
 
 			logger.info("presignedUrl: " + presignedUrl);
 
