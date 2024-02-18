@@ -318,13 +318,38 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/login", produces = "application/json")
-	public boolean validateUserLogin(@RequestBody UserLoginRequest loginRequest) {
+	public ResponseEntity<UserResponse> validateUserLogin(@RequestBody UserLoginRequest loginRequest) {
+		
+		logger.info("Call user login API...");
+		UserResponse userResponse = new UserResponse();
+		String message = "";
+		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
 		try {
-			return userService.validateUserLogin(loginRequest.getEmail(), loginRequest.getPassword());
+			User user = userService.validateUserLogin(loginRequest.getEmail(), loginRequest.getPassword());
+			if(user != null){
+				// return user details
+				ResultItem userResp = new ResultItem();
+				userResp.setEmail(user.getEmail());
+				userResp.setUsername(user.getUsername());
+				userResp.setRole(user.getRole());
+				// image to be changed to presigned url
+				userResp.setImage(user.getImage());
+				resultList.add(userResp);
+				message = user.getEmail() + " login successfully";
+			}else{
+				// return invalid email or password.
+				message = "Invalid email or password";
+				userResponse.setMessage(message);
+			}
+			userResponse.setMessage(message);
+			userResponse.setResult(resultList);
+			return new ResponseEntity<>(userResponse, HttpStatus.OK);
 		} catch (Exception e) {
+			logger.error("Error, " + e.toString());
 			e.printStackTrace();
+			userResponse.setMessage("Error, " + e.toString());
+			return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return false;
 	}
 
 }

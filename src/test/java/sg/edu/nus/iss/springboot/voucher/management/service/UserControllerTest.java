@@ -136,7 +136,10 @@ public class UserControllerTest {
 				.content(objectMapper.writeValueAsString(userLoginRequest)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(content().string("true")).andDo(print());
+				.andExpect(jsonPath("$.message").value(testUser.getEmail() + " login successfully"))
+				.andExpect(jsonPath("$.result[0].username").value(testUser.getUsername()))
+				.andExpect(jsonPath("$.result[0].email").value(testUser.getEmail()))
+				.andExpect(jsonPath("$.result[0].role").value(testUser.getRole().toString())).andDo(print());
 	}
 	
 }

@@ -81,15 +81,15 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public Boolean validateUserLogin(String email, String password) {
+	public User validateUserLogin(String email, String password) {
 		try {
 			User user = findByEmail(email);
 			if (user != null && passwordEncoder.matches(password, user.getPassword())){
-				return true;
+				return user;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 	}
 }
