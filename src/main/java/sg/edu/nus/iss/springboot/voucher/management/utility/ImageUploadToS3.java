@@ -11,7 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
 import sg.edu.nus.iss.springboot.voucher.management.VoucherManagementApplication;
@@ -21,7 +23,8 @@ public class ImageUploadToS3 {
 
 	private static final Logger logger = LoggerFactory.getLogger(ImageUploadToS3.class);
 
-	public boolean imageUpload(AmazonS3 s3Client, MultipartFile multipartFile, VourcherManagementSecurityConfig securityConfig,String keyPrefix) {
+	public static boolean imageUpload(AmazonS3 s3Client, MultipartFile multipartFile,
+			VourcherManagementSecurityConfig securityConfig, String keyPrefix) {
 
 		String bucketName = securityConfig.getS3Bucket().trim();
 		String uploadFileName = multipartFile.getOriginalFilename();
@@ -31,7 +34,7 @@ public class ImageUploadToS3 {
 
 				InputStream is = multipartFile.getInputStream();
 				PutObjectResult putObjResult = s3Client.putObject(bucketName, keyPrefix + uploadFileName, is, null);
-
+				logger.info("Object ETag:" + putObjResult.getETag());
 				return true;
 			}
 		} catch (Exception e) {
@@ -40,11 +43,11 @@ public class ImageUploadToS3 {
 		}
 		return false;
 	}
-	
-	public String generatePresignedUrl(AmazonS3 s3Client, VourcherManagementSecurityConfig securityConfig,
+
+	public static String generatePresignedUrl(AmazonS3 s3Client, VourcherManagementSecurityConfig securityConfig,
 			String imageKey) {
 		String presignedUrl = "";
-		
+		try {
 
 			String bucketName = securityConfig.getS3Bucket().trim();
 
@@ -60,45 +63,109 @@ public class ImageUploadToS3 {
 			URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
 			presignedUrl = url.toString();
 			logger.info("Pre-Signed URL: " + url.toString());
+		} catch (Exception e) {
+			logger.error("Error while generatePresignedUrl : " + e.getMessage());
 
-		
-
+		}
 		return presignedUrl;
 	}
 
-	public String generatePresignedUrlAndUploadObject(AmazonS3 s3Client, VourcherManagementSecurityConfig securityConfig, MultipartFile uploadFile,String keyPrefix) {
-		ImageUploadToS3 imgUpload = new ImageUploadToS3();
+	public static String generatePresignedUrlAndUploadObject(AmazonS3 s3Client,
+			VourcherManagementSecurityConfig securityConfig, MultipartFile uploadFile, String keyPrefix) {
+
 		String presignedUrl = "";
-		boolean isExistsValidImage = false;
-		// chekck Image already eixsts or not
 
-		boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
-				keyPrefix.trim() + uploadFile.getOriginalFilename().trim());
+		try {
+			boolean isExistsValidImage = false;
+			// chekck Image already eixsts or not
 
-		logger.info("Image already uploaded to s3. " + isImageExists);
-
-		if (!isImageExists) {
-
-			boolean isUploaded = imgUpload.imageUpload(s3Client, uploadFile, securityConfig,keyPrefix);
-			if (isUploaded) {
-				isExistsValidImage = true;
-			}
-			//
-
-			logger.info("Image successfully uploaded. " + uploadFile);
-		} else {
-			isExistsValidImage = true;
-		}
-
-		if (isExistsValidImage) {
-
-			presignedUrl = imgUpload.generatePresignedUrl(s3Client, securityConfig,
+			boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
 					keyPrefix.trim() + uploadFile.getOriginalFilename().trim());
 
-			logger.info("presignedUrl: " + presignedUrl);
+			logger.info("Image already uploaded to s3. " + isImageExists);
+
+			if (!isImageExists) {
+
+				boolean isUploaded = ImageUploadToS3.imageUpload(s3Client, uploadFile, securityConfig, keyPrefix);
+				if (isUploaded) {
+					isExistsValidImage = true;
+				}
+				//
+
+				logger.info("Image successfully uploaded. " + uploadFile);
+			} else {
+				isExistsValidImage = true;
+			}
+
+			if (isExistsValidImage) {
+
+				presignedUrl = ImageUploadToS3.generatePresignedUrl(s3Client, securityConfig,
+						keyPrefix.trim() + uploadFile.getOriginalFilename().trim());
+
+				logger.info("presignedUrl: " + presignedUrl);
+
+			}
+		} catch (Exception e) {
+			logger.error("Error while generatePresignedUrlAndUploadObject : " + e.getMessage());
 
 		}
 		return presignedUrl;
+	}
+
+	public static boolean checkImageExistBeforeUpload(AmazonS3 s3Client, MultipartFile multipartFile,
+			VourcherManagementSecurityConfig securityConfig, String keyPrefix,boolean readAccess) {
+		try {
+			boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
+					keyPrefix.trim() + multipartFile.getOriginalFilename().trim());
+
+			logger.info("Image already uploaded to s3. " + isImageExists);
+
+			if (!isImageExists) {
+				boolean isUploaded  = false;
+				/*if(readAccess) {
+					isUploaded = ImageUploadToS3.imageUploadWithReadAccess(s3Client, multipartFile, securityConfig, keyPrefix);
+				}else {*/
+				 isUploaded = ImageUploadToS3.imageUpload(s3Client, multipartFile, securityConfig, keyPrefix);
+				//}
+				if (isUploaded) {
+					return true;
+				}
+			} else {
+				return true;
+			}
+		} catch (Exception e) {
+			logger.error("Error while checkImageExistBeforeUpload : " + e.getMessage());
+
+		}
+		return false;
+	}
+
+	public static boolean imageUploadWithReadAccess(AmazonS3 s3Client, MultipartFile multipartFile,
+			VourcherManagementSecurityConfig securityConfig, String keyPrefix) {
+
+		String bucketName = securityConfig.getS3Bucket().trim();
+		String uploadFileName = multipartFile.getOriginalFilename();
+
+		try {
+			if (!multipartFile.isEmpty()) {
+
+				InputStream is = multipartFile.getInputStream();
+
+				// Create a PutObjectRequest with public read access
+				PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, keyPrefix + uploadFileName, is,
+						null).withCannedAcl(CannedAccessControlList.PublicRead);
+
+				// Upload the object with specified ACL
+				PutObjectResult putObjResult = s3Client.putObject(putObjectRequest);
+				logger.info("Object ETag:" + putObjResult.getETag());
+
+				return true;
+			}
+		} catch (Exception e) {
+			logger.error("Error while uploading image: " + e.getMessage());
+			return false;
+		}
+		return false;
 	}
 
 }

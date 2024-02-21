@@ -49,7 +49,6 @@ public class UserController {
 				return new ResponseEntity<>(userResponse, HttpStatus.OK);
 			} else {
 				userResponse.setMessage(HttpStatus.OK + "");
-				ImageUploadToS3 imgUpload = new ImageUploadToS3();
 
 				for (User user : userList) {
 					ResultItem userResp = new ResultItem();
@@ -67,7 +66,7 @@ public class UserController {
 						if (isImageExists) {
 
 							String presignedUrl = GeneralUtility
-									.makeNotNull(imgUpload.generatePresignedUrl(s3Client, securityConfig, securityConfig.getS3ImagePrivateUsers().trim() + fileName.trim()));
+									.makeNotNull(ImageUploadToS3.generatePresignedUrl(s3Client, securityConfig, securityConfig.getS3ImagePrivateUsers().trim() + fileName.trim()));
 
 							userResp.setImage(presignedUrl);
 						}
@@ -111,9 +110,9 @@ public class UserController {
 
 					if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
 						logger.info("create user: " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
-						ImageUploadToS3 imgUpload = new ImageUploadToS3();
+						
 						presignedUrl = GeneralUtility.makeNotNull(
-								imgUpload.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile,securityConfig.getS3ImagePrivateUsers().trim()));
+								ImageUploadToS3.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile,securityConfig.getS3ImagePrivateUsers().trim()));
 						if (!presignedUrl.equals("")) {
 							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"+securityConfig.getS3ImagePrivateUsers().trim()
 									+ uploadFile.getOriginalFilename().trim();
@@ -196,9 +195,9 @@ public class UserController {
 
 						logger.info("Update user : " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
 
-						ImageUploadToS3 imgUpload = new ImageUploadToS3();
+						
 						presignedUrl = GeneralUtility.makeNotNull(
-								imgUpload.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile,securityConfig.getS3ImagePrivateUsers().trim()));
+								ImageUploadToS3.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile,securityConfig.getS3ImagePrivateUsers().trim()));
 						if (!presignedUrl.equals("")) {
 							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"+securityConfig.getS3ImagePrivateUsers().trim()
 									+ uploadFile.getOriginalFilename().trim();

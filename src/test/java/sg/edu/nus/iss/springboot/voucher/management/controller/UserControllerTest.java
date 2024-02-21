@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.springboot.voucher.management.service;
+package sg.edu.nus.iss.springboot.voucher.management.controller;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -106,7 +106,7 @@ public class UserControllerTest {
 
 		ResetPasswordRequest resetPwdReq = new ResetPasswordRequest("antonia@gmail.com", "newPwd@123");
 
-		mockMvc.perform(MockMvcRequestBuilders.put("/api/user/resetPassword").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/user/resetPassword").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(resetPwdReq))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.message").value("Reset Password Completed.")).andDo(print());
