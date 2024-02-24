@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.springboot.voucher.management.model;
+package sg.edu.nus.iss.springboot.voucher.management.DTO;
 
 public class UserRequest {
 

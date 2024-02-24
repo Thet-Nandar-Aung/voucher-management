@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import sg.edu.nus.iss.springboot.voucher.management.entity.RoleType;
+import sg.edu.nus.iss.springboot.voucher.management.DTO.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
-import sg.edu.nus.iss.springboot.voucher.management.model.UserRequest;
+import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 

@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
+
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity

@@ -3,9 +3,9 @@ package sg.edu.nus.iss.springboot.voucher.management.service;
 import java.util.List;
 import java.util.Optional;
 
+import sg.edu.nus.iss.springboot.voucher.management.DTO.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
-import sg.edu.nus.iss.springboot.voucher.management.model.UserRequest;
 
 public interface IUserService {
 	List<User> findByIsActiveTrue();

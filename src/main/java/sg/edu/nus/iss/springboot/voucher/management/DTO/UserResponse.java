@@ -1,11 +1,11 @@
-package sg.edu.nus.iss.springboot.voucher.management.model;
+package sg.edu.nus.iss.springboot.voucher.management.DTO;
 
 import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
 
 import lombok.*;
-import sg.edu.nus.iss.springboot.voucher.management.entity.RoleType;
+import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 
 @Data
 public class UserResponse {
