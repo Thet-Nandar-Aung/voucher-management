@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import sg.edu.nus.iss.springboot.voucher.management.dto.UserLoginRequest;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
@@ -131,10 +130,10 @@ public class UserControllerTest {
 
 		userService.create(testUser);
 
-		UserLoginRequest userLoginRequest = new UserLoginRequest(testUser.getEmail(), "Pwd@21212");
+		UserRequest userRequest = new UserRequest(testUser.getEmail(), "Pwd@21212");
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(userLoginRequest)))
+				.content(objectMapper.writeValueAsString(userRequest)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.message").value(testUser.getEmail() + " login successfully"))

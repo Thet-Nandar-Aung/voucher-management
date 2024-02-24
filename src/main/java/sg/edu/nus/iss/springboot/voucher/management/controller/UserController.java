@@ -317,14 +317,14 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/login", produces = "application/json")
-	public ResponseEntity<UserResponse> validateUserLogin(@RequestBody UserLoginRequest loginRequest) {
+	public ResponseEntity<UserResponse> validateUserLogin(@RequestBody UserRequest userRequest) {
 		
 		logger.info("Call user login API...");
 		UserResponse userResponse = new UserResponse();
 		String message = "";
 		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
 		try {
-			User user = userService.validateUserLogin(loginRequest.getEmail(), loginRequest.getPassword());
+			User user = userService.validateUserLogin(userRequest.getEmail(), userRequest.getPassword());
 			if(user != null){
 				// return user details
 				ResultItem userResp = new ResultItem();
