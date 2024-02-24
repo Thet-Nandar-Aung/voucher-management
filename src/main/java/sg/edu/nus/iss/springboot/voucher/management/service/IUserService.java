@@ -3,8 +3,9 @@ package sg.edu.nus.iss.springboot.voucher.management.service;
 import java.util.List;
 import java.util.Optional;
 
+import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
-import sg.edu.nus.iss.springboot.voucher.management.model.ResetPasswordRequest;
+import sg.edu.nus.iss.springboot.voucher.management.model.UserRequest;
 
 public interface IUserService {
 	List<User> findByIsActiveTrue();
@@ -18,4 +19,6 @@ public interface IUserService {
 	User update(User user);
 
 	User validateUserLogin(String email, String password);
+	
+	Optional<User>  findById(String userId);
 }

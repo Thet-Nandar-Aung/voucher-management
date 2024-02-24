@@ -2,6 +2,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,5 +92,11 @@ public class UserService implements IUserService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public Optional<User> findById(String userId) {
+		// TODO Auto-generated method stub
+		return userRepository.findById(userId) ;
 	}
 }

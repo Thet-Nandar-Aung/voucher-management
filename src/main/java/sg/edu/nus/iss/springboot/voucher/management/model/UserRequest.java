@@ -1,15 +1,22 @@
 package sg.edu.nus.iss.springboot.voucher.management.model;
 
-public class ResetPasswordRequest {
+public class UserRequest {
 
 	private String email;
 	private String password;
 
-	public ResetPasswordRequest() {
+	public UserRequest() {
 		super();
 	}
+	
 
-	public ResetPasswordRequest(String email, String password) {
+	public UserRequest(String email) {
+		super();
+		this.email = email;
+	}
+
+
+	public UserRequest(String email, String password) {
 		super();
 		this.email = email;
 		this.password = password;

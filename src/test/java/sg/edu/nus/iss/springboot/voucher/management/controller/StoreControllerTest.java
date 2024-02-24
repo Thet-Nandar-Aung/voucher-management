@@ -20,8 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import sg.edu.nus.iss.springboot.voucher.management.entity.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
+import sg.edu.nus.iss.springboot.voucher.management.entity.User;
+import sg.edu.nus.iss.springboot.voucher.management.model.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
+import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -38,10 +42,17 @@ public class StoreControllerTest {
 	@Autowired
 	private StoreService storeService;
 
+	@Autowired
+	private UserService userService;
+
+	User testUser;
+
 	Store testStore;
 
 	@BeforeEach
 	void setUp() {
+
+		testUser = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
 
 		testStore = new Store("MUJI",
 				"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
@@ -58,6 +69,37 @@ public class StoreControllerTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(jsonPath("$.message").value("200 OK"))
 				.andDo(print());
+	}
+
+	@Test
+	@Transactional
+	void testGetAllStoreByUser() throws Exception {
+
+		User createdUser = userService.create(testUser);
+		testStore.setCreatedBy(createdUser.getUserId());
+
+		storeService.create(testStore);
+
+		String userId = createdUser.getUserId().trim();
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/store/getAllByUser/{userId}", userId)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.message").value("200 OK")).andDo(print());
+
+	}
+
+	@Test
+	@Transactional
+	void testGetStoreById() throws Exception {
+		Store createdStore = storeService.create(testStore);
+
+		String storeId = createdStore.getStoreId();
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/store/getById/{storeId}", storeId)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.message").value("200 OK"))
+				.andExpect(jsonPath("$.result[0].storeId").value(storeId)).andDo(print());
 	}
 
 	@Test

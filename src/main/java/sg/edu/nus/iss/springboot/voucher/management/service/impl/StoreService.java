@@ -69,4 +69,10 @@ public class StoreService implements IStoreService {
 		return storeRepository.findById(storeId);
 	}
 
+	@Override
+	public List<Store> findAllByUserAndStatus(String created_by, boolean isDeleted) {
+		// TODO Auto-generated method stub
+		return storeRepository.findAllByUserAndStatus(created_by, isDeleted);
+	}
+
 }

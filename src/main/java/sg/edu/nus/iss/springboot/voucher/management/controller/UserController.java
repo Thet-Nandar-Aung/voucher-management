@@ -263,7 +263,7 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/resetPassword", produces = "application/json")
-	public ResponseEntity<MessageResponse> resetPassword(@RequestBody ResetPasswordRequest resetPwdReq) {
+	public ResponseEntity<MessageResponse> resetPassword(@RequestBody UserRequest resetPwdReq) {
 
 		logger.info("Call user resetPassword API...");
 

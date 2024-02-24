@@ -113,7 +113,7 @@ public class ImageUploadToS3 {
 	}
 
 	public static boolean checkImageExistBeforeUpload(AmazonS3 s3Client, MultipartFile multipartFile,
-			VourcherManagementSecurityConfig securityConfig, String keyPrefix,boolean readAccess) {
+			VourcherManagementSecurityConfig securityConfig, String keyPrefix) {
 		try {
 			boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
 					keyPrefix.trim() + multipartFile.getOriginalFilename().trim());
@@ -122,11 +122,9 @@ public class ImageUploadToS3 {
 
 			if (!isImageExists) {
 				boolean isUploaded  = false;
-				/*if(readAccess) {
-					isUploaded = ImageUploadToS3.imageUploadWithReadAccess(s3Client, multipartFile, securityConfig, keyPrefix);
-				}else {*/
+				
 				 isUploaded = ImageUploadToS3.imageUpload(s3Client, multipartFile, securityConfig, keyPrefix);
-				//}
+				
 				if (isUploaded) {
 					return true;
 				}

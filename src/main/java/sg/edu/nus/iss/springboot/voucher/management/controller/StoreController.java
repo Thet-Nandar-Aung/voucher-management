@@ -3,15 +3,21 @@ package sg.edu.nus.iss.springboot.voucher.management.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +31,7 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.model.StoreResponse;
 import sg.edu.nus.iss.springboot.voucher.management.model.StoreResponse.ResultStore;
 import sg.edu.nus.iss.springboot.voucher.management.model.StoreResponseDetail;
+import sg.edu.nus.iss.springboot.voucher.management.model.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.model.StoreResponseDetail.ResultStoreDetail;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
@@ -32,6 +39,7 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
 import sg.edu.nus.iss.springboot.voucher.management.utility.ImageUploadToS3;
 
 @RestController
+@Validated
 @RequestMapping("/api/store")
 public class StoreController {
 
@@ -50,7 +58,7 @@ public class StoreController {
 	private VourcherManagementSecurityConfig securityConfig;
 
 	@GetMapping(value = "/getAll", produces = "application/json")
-	public ResponseEntity<StoreResponseDetail> getAllStore() {
+	public ResponseEntity<StoreResponseDetail> getAllActiveStore() {
 		logger.info("Call store getAll API...");
 
 		ArrayList<ResultStoreDetail> resultList = new ArrayList<ResultStoreDetail>();
@@ -61,6 +69,7 @@ public class StoreController {
 			if (storeList.isEmpty()) {
 				storeResponse.setMessage("No Store found.");
 				storeResponse.setResult(resultList);
+				//return  ResponseEntity.ok().cacheControl(CacheControl.maxAge(30,TimeUnit.SECONDS).mustRevalidate().sMaxAge(30,TimeUnit.SECONDS)).body(storeResponse);
 				return new ResponseEntity<>(storeResponse, HttpStatus.OK);
 			} else {
 
@@ -103,33 +112,221 @@ public class StoreController {
 					result.setContactNumber(GeneralUtility.makeNotNull(store.getContactNumber()));
 					result.setPostalCode(postalCode);
 
-					String imageUrl = GeneralUtility.makeNotNull(store.getImage());
-					if (!imageUrl.equals("")) {
-
-						String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-
-						boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
-								securityConfig.getS3ImagePublic().trim() + fileName.trim());
-
-						if (isImageExists) {
-
-							String presignedUrl = GeneralUtility
-									.makeNotNull(ImageUploadToS3.generatePresignedUrl(s3Client, securityConfig,
-											securityConfig.getS3ImagePublic().trim() + fileName.trim()));
-
-							result.setImage(presignedUrl);
-						}
-					} else {
-						result.setImage("");
-					}
+					result.setImage(GeneralUtility.makeNotNull(store.getImage()));
+				
 
 					resultList.add(result);
 
 				}
 
 				storeResponse.setResult(resultList);
+				
+				//return  ResponseEntity.ok().cacheControl(CacheControl.maxAge(30,TimeUnit.SECONDS).mustRevalidate().sMaxAge(30,TimeUnit.SECONDS)).body(storeResponse);
 
 				return new ResponseEntity<>(storeResponse, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("Error, " + e.toString());
+			storeResponse.setMessage("Error," + e.toString());
+			storeResponse.setResult(resultList);
+			return  ResponseEntity.internalServerError().cacheControl(CacheControl.maxAge(30,TimeUnit.SECONDS)).body(storeResponse);
+			//return new ResponseEntity<>(storeResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping(value = "/getAllByUser/{userId}", produces = "application/json")
+	public ResponseEntity<StoreResponseDetail> getAllStoreByUser(@PathVariable String userId) {
+		logger.info("Call store getAllByUser API...");
+
+		String message = "";
+
+		ArrayList<ResultStoreDetail> resultList = new ArrayList<ResultStoreDetail>();
+		StoreResponseDetail storeResponse = new StoreResponseDetail();
+		try {
+			
+			if (!userId.equals("")) {
+
+				logger.info("user id: " + userId);
+				Optional<User> user = userService.findById(userId.trim());
+
+				if (!GeneralUtility.makeNotNull(user).equals("")) {
+					String userRole = GeneralUtility.makeNotNull(user.get().getRole()).trim();
+
+					logger.info("user role: " + userRole);
+
+					if (userRole.equals(RoleType.MERCHANT.toString())) {
+
+						List<Store> storeList = storeService
+								.findAllByUserAndStatus(GeneralUtility.makeNotNull(userId).trim(), false);
+
+						if (storeList.isEmpty()) {
+							storeResponse.setMessage("No Store found.");
+							storeResponse.setResult(resultList);
+							return new ResponseEntity<>(storeResponse, HttpStatus.OK);
+						} else {
+
+							storeResponse.setMessage(HttpStatus.OK + "");
+
+							for (Store store : storeList) {
+								ResultStoreDetail result = new ResultStoreDetail();
+								result.setStoreId(store.getStoreId());
+								result.setStoreName(store.getStoreName());
+								result.setDescription(GeneralUtility.makeNotNull(store.getDescription()));
+
+								String address = "";
+								String address1 = GeneralUtility.makeNotNull(store.getAddress1()).trim();
+								String address2 = GeneralUtility.makeNotNull(store.getAddress2()).trim();
+								String address3 = GeneralUtility.makeNotNull(store.getAddress3()).trim();
+								String postalCode = GeneralUtility.makeNotNull(store.getPostalCode());
+								if (!address1.isEmpty()) {
+									address = address.concat(address1).concat(",");
+								}
+
+								if (!address2.isEmpty()) {
+									address = address.concat(address2).concat(",");
+								}
+
+								if (!address3.isEmpty()) {
+									address = address.concat(address3).concat(",");
+								}
+
+								if (!postalCode.isEmpty()) {
+									address = address.concat(postalCode);
+								}
+
+								result.setAddress(GeneralUtility.makeNotNull(address));
+								result.setAddress1(address1);
+								result.setAddress2(address2);
+								result.setAddress3(address3);
+								result.setCity(GeneralUtility.makeNotNull(store.getCity()));
+								result.setState(GeneralUtility.makeNotNull(store.getState()));
+								result.setCountry(GeneralUtility.makeNotNull(store.getCountry()));
+								result.setContactNumber(GeneralUtility.makeNotNull(store.getContactNumber()));
+								result.setPostalCode(postalCode);
+								
+								result.setImage(GeneralUtility.makeNotNull(store.getImage()));
+
+								resultList.add(result);
+
+							}
+							storeResponse.setMessage(HttpStatus.OK + "");
+
+							storeResponse.setResult(resultList);
+
+							return new ResponseEntity<>(storeResponse, HttpStatus.OK);
+						}
+
+					} else {
+						message = "Bad Request: Invalid user role.";
+						logger.error(message);
+						storeResponse.setMessage(message);
+						storeResponse.setResult(resultList);
+						return new ResponseEntity<>(storeResponse, HttpStatus.BAD_REQUEST);
+					}
+				} else {
+					message = "Store retrieving failed: Invalid User :" + userId;
+					logger.error(message);
+					storeResponse.setMessage(message);
+					storeResponse.setResult(resultList);
+					return new ResponseEntity<>(storeResponse, HttpStatus.NOT_FOUND);
+				}
+
+			} else {
+				message = "Bad Request:User could not be blank.";
+				logger.error(message);
+				storeResponse.setMessage(message);
+				storeResponse.setResult(resultList);
+				return new ResponseEntity<>(storeResponse, HttpStatus.BAD_REQUEST);
+			}
+
+		} catch (Exception e) {
+			logger.error("Error, " + e.toString());
+			storeResponse.setMessage("Error," + e.toString());
+			storeResponse.setResult(resultList);
+			return new ResponseEntity<>(storeResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping(value = "/getById/{storeId}", produces = "application/json")
+	public ResponseEntity<StoreResponseDetail> getStoreById(@PathVariable String storeId) {
+
+		logger.info("Call store getStoreById API...");
+
+		String message = "";
+
+		ArrayList<ResultStoreDetail> resultList = new ArrayList<ResultStoreDetail>();
+		StoreResponseDetail storeResponse = new StoreResponseDetail();
+		try {
+			storeId = GeneralUtility.makeNotNull(storeId).trim();
+			logger.info("storeId: " + storeId);
+
+			if (!storeId.equals("")) {
+				//
+				Optional<Store> dbStore = storeService.findById(GeneralUtility.makeNotNull(storeId));
+
+				if (dbStore.isPresent()) {
+
+					ResultStoreDetail result = new ResultStoreDetail();
+					result.setStoreId(dbStore.get().getStoreId());
+					result.setStoreName(dbStore.get().getStoreName());
+					result.setDescription(GeneralUtility.makeNotNull(dbStore.get().getDescription()));
+
+					String address = "";
+					String address1 = GeneralUtility.makeNotNull(dbStore.get().getAddress1()).trim();
+					String address2 = GeneralUtility.makeNotNull(dbStore.get().getAddress2()).trim();
+					String address3 = GeneralUtility.makeNotNull(dbStore.get().getAddress3()).trim();
+					String postalCode = GeneralUtility.makeNotNull(dbStore.get().getPostalCode());
+					if (!address1.isEmpty()) {
+						address = address.concat(address1).concat(",");
+					}
+
+					if (!address2.isEmpty()) {
+						address = address.concat(address2).concat(",");
+					}
+
+					if (!address3.isEmpty()) {
+						address = address.concat(address3).concat(",");
+					}
+
+					if (!postalCode.isEmpty()) {
+						address = address.concat(postalCode);
+					}
+
+					result.setAddress(GeneralUtility.makeNotNull(address));
+					result.setAddress1(address1);
+					result.setAddress2(address2);
+					result.setAddress3(address3);
+					result.setCity(GeneralUtility.makeNotNull(dbStore.get().getCity()));
+					result.setState(GeneralUtility.makeNotNull(dbStore.get().getState()));
+					result.setCountry(GeneralUtility.makeNotNull(dbStore.get().getCountry()));
+					result.setContactNumber(GeneralUtility.makeNotNull(dbStore.get().getContactNumber()));
+					result.setPostalCode(postalCode);
+
+					result.setImage(GeneralUtility.makeNotNull(dbStore.get().getImage()));
+					
+
+					resultList.add(result);
+
+					storeResponse.setResult(resultList);
+					storeResponse.setMessage(HttpStatus.OK + "");
+
+					return new ResponseEntity<>(storeResponse, HttpStatus.OK);
+
+				} else {
+					message = "Unable to find the store with id :" + storeId;
+					logger.error(message);
+					storeResponse.setMessage(message);
+					storeResponse.setResult(resultList);
+					return new ResponseEntity<>(storeResponse, HttpStatus.NOT_FOUND);
+				}
+
+			} else {
+				message = "Bad Request:Store Id could not be blank.";
+				logger.error(message);
+				storeResponse.setMessage(message);
+				storeResponse.setResult(resultList);
+				return new ResponseEntity<>(storeResponse, HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (Exception e) {
@@ -178,7 +375,7 @@ public class StoreController {
 											+ uploadFile.getOriginalFilename());
 
 									boolean isImageUploaded = ImageUploadToS3.checkImageExistBeforeUpload(s3Client,
-											uploadFile, securityConfig, securityConfig.getS3ImagePublic().trim(), true);
+											uploadFile, securityConfig, securityConfig.getS3ImagePublic().trim());
 									if (isImageUploaded) {
 										String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"
 												+ securityConfig.getS3ImagePublic().trim()
@@ -236,7 +433,7 @@ public class StoreController {
 					}
 
 				} else {
-					message = "Store create failed: Unable to find the user with email :" + store.getCreatedBy();
+					message = "Store create failed: Invalid User :" + store.getCreatedBy();
 					logger.error(message);
 					storeResponse.setMessage(message);
 					storeResponse.setResult(resultList);
@@ -303,8 +500,7 @@ public class StoreController {
 												+ uploadFile.getOriginalFilename());
 
 										boolean isImageUploaded = ImageUploadToS3.checkImageExistBeforeUpload(s3Client,
-												uploadFile, securityConfig, securityConfig.getS3ImagePublic().trim(),
-												true);
+												uploadFile, securityConfig, securityConfig.getS3ImagePublic().trim());
 										if (isImageUploaded) {
 											String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"
 													+ securityConfig.getS3ImagePublic().trim()
@@ -365,8 +561,7 @@ public class StoreController {
 							}
 
 						} else {
-							message = "Update store failed: Unable to find the user with email :"
-									+ store.getCreatedBy();
+							message = "Update store failed: Invalid User :" + store.getCreatedBy();
 							logger.error(message);
 							storeResponse.setMessage(message);
 							storeResponse.setResult(resultList);

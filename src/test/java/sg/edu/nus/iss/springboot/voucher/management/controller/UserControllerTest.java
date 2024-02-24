@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
-import sg.edu.nus.iss.springboot.voucher.management.model.ResetPasswordRequest;
+import sg.edu.nus.iss.springboot.voucher.management.model.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.model.UserLoginRequest;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 
@@ -104,7 +104,7 @@ public class UserControllerTest {
 
 		userService.create(testUser);
 
-		ResetPasswordRequest resetPwdReq = new ResetPasswordRequest("antonia@gmail.com", "newPwd@123");
+		UserRequest resetPwdReq = new UserRequest("antonia@gmail.com", "newPwd@123");
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/user/resetPassword").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(resetPwdReq))).andExpect(MockMvcResultMatchers.status().isOk())

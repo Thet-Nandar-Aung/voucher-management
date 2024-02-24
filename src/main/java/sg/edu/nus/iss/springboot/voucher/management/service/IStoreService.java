@@ -9,6 +9,8 @@ public interface IStoreService {
 
 	List<Store> findByIsDeletedFalse();
 	
+	List<Store>findAllByUserAndStatus(String created_by, boolean isDeleted);
+	
 	Store findByStoreName(String storename);
 	
 	Optional<Store>  findById(String storeId);
