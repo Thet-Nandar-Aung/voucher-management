@@ -24,7 +24,7 @@ public class Campaign {
 	private String description;
 	
 	@Column(nullable = false)
-	private Store store;
+	private String store;
 	
 	@Column(nullable = false)
 	private CampaignStatus campaignStatus = CampaignStatus.CREATED;
@@ -48,10 +48,10 @@ public class Campaign {
 	private String condition2;
 	
 	@Column(nullable = false)
-	private User createdBy;
+	private String createdBy;
 	
 	@Column(nullable = true)
-	private User updatedBy;
+	private String updatedBy;
 	
 	@Column(nullable = false, columnDefinition = "datetime default now()")
 	private LocalDateTime createdDate;
@@ -75,11 +75,11 @@ public class Campaign {
 		this.description = description;
 	}
 
-	public Store getStore() {
+	public String getStore() {
 		return store;
 	}
 
-	public void setStore(Store store) {
+	public void setStore(String store) {
 		this.store = store;
 	}
 
@@ -139,19 +139,19 @@ public class Campaign {
 		this.condition2 = condition2;
 	}
 
-	public User getCreatedBy() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(User createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public User getUpdatedBy() {
+	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(User updatedBy) {
+	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
