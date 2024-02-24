@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import sg.edu.nus.iss.springboot.voucher.management.DTO.UserLoginRequest;
-import sg.edu.nus.iss.springboot.voucher.management.DTO.UserRequest;
+import sg.edu.nus.iss.springboot.voucher.management.dto.UserLoginRequest;
+import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;

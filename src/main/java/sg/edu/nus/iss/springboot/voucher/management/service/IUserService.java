@@ -3,7 +3,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service;
 import java.util.List;
 import java.util.Optional;
 
-import sg.edu.nus.iss.springboot.voucher.management.DTO.UserRequest;
+import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 

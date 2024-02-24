@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.springboot.voucher.management.DTO;
+package sg.edu.nus.iss.springboot.voucher.management.dto;
 
 import java.util.ArrayList;
 

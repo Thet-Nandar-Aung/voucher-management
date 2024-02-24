@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 
-import sg.edu.nus.iss.springboot.voucher.management.DTO.*;
-import sg.edu.nus.iss.springboot.voucher.management.DTO.UserResponse.ResultItem;
 import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
+import sg.edu.nus.iss.springboot.voucher.management.dto.*;
+import sg.edu.nus.iss.springboot.voucher.management.dto.UserResponse.ResultItem;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.*;
 import sg.edu.nus.iss.springboot.voucher.management.utility.*;

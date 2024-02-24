@@ -24,12 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 
-import sg.edu.nus.iss.springboot.voucher.management.DTO.StoreResponse;
-import sg.edu.nus.iss.springboot.voucher.management.DTO.StoreResponseDetail;
-import sg.edu.nus.iss.springboot.voucher.management.DTO.UserRequest;
-import sg.edu.nus.iss.springboot.voucher.management.DTO.StoreResponse.ResultStore;
-import sg.edu.nus.iss.springboot.voucher.management.DTO.StoreResponseDetail.ResultStoreDetail;
 import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
+import sg.edu.nus.iss.springboot.voucher.management.dto.StoreResponse;
+import sg.edu.nus.iss.springboot.voucher.management.dto.StoreResponseDetail;
+import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
+import sg.edu.nus.iss.springboot.voucher.management.dto.StoreResponse.ResultStore;
+import sg.edu.nus.iss.springboot.voucher.management.dto.StoreResponseDetail.ResultStoreDetail;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;

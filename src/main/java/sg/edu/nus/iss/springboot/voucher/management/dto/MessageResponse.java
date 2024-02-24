@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.springboot.voucher.management.DTO;
+package sg.edu.nus.iss.springboot.voucher.management.dto;
 
 public class MessageResponse {
  private String message;
