@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 
 @Entity
@@ -23,9 +26,10 @@ public class Campaign {
 	@Column(nullable = false)
 	private String description;
 	
-	@Column(nullable = false)
-	private String store;
-	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "storeId")
+	private Store storeId;
+
 	@Column(nullable = false)
 	private CampaignStatus campaignStatus = CampaignStatus.CREATED;
 	
@@ -47,11 +51,13 @@ public class Campaign {
 	@Column(nullable = true)
 	private String condition2;
 	
-	@Column(nullable = false)
-	private String createdBy;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "createdBy")
+	private User createdBy;
 	
-	@Column(nullable = true)
-	private String updatedBy;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "updatedBy")
+	private User updatedBy;
 	
 	@Column(nullable = false, columnDefinition = "datetime default now()")
 	private LocalDateTime createdDate;
@@ -74,15 +80,14 @@ public class Campaign {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public String getStore() {
-		return store;
+	
+	public Store getStoreId() {
+		return this.storeId;
 	}
 
-	public void setStore(String store) {
-		this.store = store;
+	public void setStoreId(Store storeId) {
+		this.storeId = storeId;
 	}
-
 	public CampaignStatus getCampaignStatus() {
 		return campaignStatus;
 	}
@@ -139,19 +144,19 @@ public class Campaign {
 		this.condition2 = condition2;
 	}
 
-	public String getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public String getUpdatedBy() {
+	public User getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
+	public void setUpdatedBy(User updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
