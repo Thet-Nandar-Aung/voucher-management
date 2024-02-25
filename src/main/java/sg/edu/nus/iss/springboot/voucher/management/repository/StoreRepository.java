@@ -19,6 +19,6 @@ public interface StoreRepository extends JpaRepository<Store, String>{
 	Store save (Store store);
 	
 	@Query("SELECT s FROM Store s WHERE s.createdBy = ?1 AND s.isDeleted = ?2")
-	public List<Store> findAllByUserAndStatus(String created_by, boolean isDeleted);
+	List<Store> findAllByUserAndStatus(User createdBy, boolean isDeleted);
 
 }

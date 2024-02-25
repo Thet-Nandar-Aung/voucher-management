@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
+import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 
 public interface IStoreService {
 
 	List<Store> findByIsDeletedFalse();
 	
-	List<Store>findAllByUserAndStatus(String created_by, boolean isDeleted);
+	List<Store>findAllByUserAndStatus(User createdBy, boolean isDeleted);
 	
 	Store findByStoreName(String storename);
 	

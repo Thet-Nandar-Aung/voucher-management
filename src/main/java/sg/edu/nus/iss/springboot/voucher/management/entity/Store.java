@@ -1,12 +1,17 @@
 package sg.edu.nus.iss.springboot.voucher.management.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Store {
@@ -74,17 +79,22 @@ public class Store {
 	@Column(nullable = false, columnDefinition = "datetime default now()")
 	private LocalDateTime createdDate;
 
-	@Column(nullable = true)
-	private String createdBy;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "createdBy")
+	private User createdBy;
 
 	@Column(nullable = true, columnDefinition = "datetime")
 	private LocalDateTime updatedDate;
 
-	@Column(nullable = true)
-	private String updatedBy;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "updatedBy")
+	private User updatedBy;
 
 	@Column(nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
+
+	@OneToMany(mappedBy = "campaignId")
+	private List<Campaign> campaign;
 
 	public String getStoreId() {
 		return storeId;
@@ -198,11 +208,11 @@ public class Store {
 		this.createdDate = createdDate;
 	}
 
-	public String getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -214,11 +224,11 @@ public class Store {
 		this.updatedDate = updatedDate;
 	}
 
-	public String getUpdatedBy() {
+	public User getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
+	public void setUpdatedBy(User updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
@@ -228,6 +238,14 @@ public class Store {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public List<Campaign> getCampaign() {
+		return campaign;
+	}
+
+	public void setCampaign(List<Campaign> campaign) {
+		this.campaign = campaign;
 	}
 
 }

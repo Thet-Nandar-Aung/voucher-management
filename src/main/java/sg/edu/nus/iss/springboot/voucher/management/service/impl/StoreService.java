@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
+import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.IStoreService;
 
@@ -70,9 +71,9 @@ public class StoreService implements IStoreService {
 	}
 
 	@Override
-	public List<Store> findAllByUserAndStatus(String created_by, boolean isDeleted) {
+	public List<Store> findAllByUserAndStatus(User createdBy, boolean isDeleted) {
 		// TODO Auto-generated method stub
-		return storeRepository.findAllByUserAndStatus(created_by, isDeleted);
+		return storeRepository.findAllByUserAndStatus(createdBy, isDeleted);
 	}
 
 }

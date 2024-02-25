@@ -69,7 +69,7 @@ public class StoreController {
 			if (storeList.isEmpty()) {
 				storeResponse.setMessage("No Store found.");
 				storeResponse.setResult(resultList);
-				//return  ResponseEntity.ok().cacheControl(CacheControl.maxAge(30,TimeUnit.SECONDS).mustRevalidate().sMaxAge(30,TimeUnit.SECONDS)).body(storeResponse);
+				
 				return new ResponseEntity<>(storeResponse, HttpStatus.OK);
 			} else {
 
@@ -130,13 +130,12 @@ public class StoreController {
 			logger.error("Error, " + e.toString());
 			storeResponse.setMessage("Error," + e.toString());
 			storeResponse.setResult(resultList);
-			return  ResponseEntity.internalServerError().cacheControl(CacheControl.maxAge(30,TimeUnit.SECONDS)).body(storeResponse);
-			//return new ResponseEntity<>(storeResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(storeResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@GetMapping(value = "/getAllByUser/{userId}", produces = "application/json")
-	public ResponseEntity<StoreResponseDetail> getAllStoreByUser(@PathVariable String userId) {
+	@GetMapping(value = "/getAllByUser", produces = "application/json")
+	public ResponseEntity<StoreResponseDetail> getAllStoreByUser(@RequestBody UserRequest userReq) {
 		logger.info("Call store getAllByUser API...");
 
 		String message = "";
@@ -145,20 +144,24 @@ public class StoreController {
 		StoreResponseDetail storeResponse = new StoreResponseDetail();
 		try {
 			
-			if (!userId.equals("")) {
+			logger.info("UserRequest: " + userReq);
+			
+			String email = GeneralUtility.makeNotNull(userReq.getEmail()).trim();
+			
+			if (!email.equals("")) {
 
-				logger.info("user id: " + userId);
-				Optional<User> user = userService.findById(userId.trim());
+				logger.info("email: " + email);
+			    User user = userService.findByEmail(email);
 
 				if (!GeneralUtility.makeNotNull(user).equals("")) {
-					String userRole = GeneralUtility.makeNotNull(user.get().getRole()).trim();
+					String userRole = GeneralUtility.makeNotNull(user.getRole()).trim();
 
 					logger.info("user role: " + userRole);
 
 					if (userRole.equals(RoleType.MERCHANT.toString())) {
 
 						List<Store> storeList = storeService
-								.findAllByUserAndStatus(GeneralUtility.makeNotNull(userId).trim(), false);
+								.findAllByUserAndStatus(user, false);
 
 						if (storeList.isEmpty()) {
 							storeResponse.setMessage("No Store found.");
@@ -225,7 +228,7 @@ public class StoreController {
 						return new ResponseEntity<>(storeResponse, HttpStatus.BAD_REQUEST);
 					}
 				} else {
-					message = "Store retrieving failed: Invalid User :" + userId;
+					message = "Store retrieving failed: Invalid User :" + email;
 					logger.error(message);
 					storeResponse.setMessage(message);
 					storeResponse.setResult(resultList);
@@ -349,10 +352,10 @@ public class StoreController {
 		StoreResponse storeResponse = new StoreResponse();
 		ResultStore result = new ResultStore();
 		try {
-			if (!GeneralUtility.makeNotNull(store.getCreatedBy()).equals("")) {
+			if (!GeneralUtility.makeNotNull(store.getCreatedBy().getEmail()).equals("")) {
 
 				// Check for user role.
-				String email = GeneralUtility.makeNotNull(store.getCreatedBy()).trim();
+				String email = GeneralUtility.makeNotNull(store.getCreatedBy().getEmail()).trim();
 				logger.info("Store create user: " + email);
 				User user = userService.findByEmail(email);
 
@@ -368,7 +371,7 @@ public class StoreController {
 
 							if (GeneralUtility.makeNotNull(dbStore).equals("")) {
 
-								store.setCreatedBy(user.getUserId());
+								store.setCreatedBy(user);
 
 								if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
 									logger.info("create store: " + store.getStoreName() + "::"
@@ -433,7 +436,7 @@ public class StoreController {
 					}
 
 				} else {
-					message = "Store create failed: Invalid User :" + store.getCreatedBy();
+					message = "Store create failed: Invalid User :" + store.getCreatedBy().getEmail();
 					logger.error(message);
 					storeResponse.setMessage(message);
 					storeResponse.setResult(resultList);
@@ -477,10 +480,10 @@ public class StoreController {
 
 				if (dbStore.isPresent()) {
 					//
-					if (!GeneralUtility.makeNotNull(store.getUpdatedBy()).equals("")) {
+					if (!GeneralUtility.makeNotNull(store.getUpdatedBy().getEmail()).equals("")) {
 
 						// Check for user role.
-						String email = GeneralUtility.makeNotNull(store.getUpdatedBy()).trim();
+						String email = GeneralUtility.makeNotNull(store.getUpdatedBy().getEmail()).trim();
 						logger.info("Store update user: " + email);
 						User user = userService.findByEmail(email);
 
@@ -493,7 +496,7 @@ public class StoreController {
 
 								if (!GeneralUtility.makeNotNull(store.getStoreName()).equals("")) {
 
-									dbStore.get().setUpdatedBy(user.getUserId());
+									dbStore.get().setUpdatedBy(user);
 
 									if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
 										logger.info("update store: " + store.getStoreName() + "::"
@@ -561,7 +564,7 @@ public class StoreController {
 							}
 
 						} else {
-							message = "Update store failed: Invalid User :" + store.getCreatedBy();
+							message = "Update store failed: Invalid User :" + store.getUpdatedBy().getEmail();
 							logger.error(message);
 							storeResponse.setMessage(message);
 							storeResponse.setResult(resultList);

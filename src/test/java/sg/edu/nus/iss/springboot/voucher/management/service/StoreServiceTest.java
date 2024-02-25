@@ -18,6 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
+import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
 
@@ -32,6 +33,7 @@ public class StoreServiceTest {
 	private StoreService storeService;
 
 	Store testStore;
+	User testUser;
 
 	@BeforeEach
 	void setUp() {
@@ -40,6 +42,8 @@ public class StoreServiceTest {
 				"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
 				"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
 				"Singapore", false);
+		testUser = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
+
 	}
 
 	@Test
@@ -89,11 +93,11 @@ public class StoreServiceTest {
 
 		when(storeRepo.save(testStore)).thenReturn(testStore);
 
-		testStore.setCreatedBy("2222222");
+		testStore.setCreatedBy(testUser);
 		Store createdStore = storeService.create(testStore);
 
-		when(storeRepo.findAllByUserAndStatus("2222222", false)).thenReturn(List.of(createdStore));
-		var storeList = storeService.findAllByUserAndStatus("2222222", false);
+		when(storeRepo.findAllByUserAndStatus(testUser, false)).thenReturn(List.of(createdStore));
+		var storeList = storeService.findAllByUserAndStatus(testUser, false);
 		assertThat(storeList).isNotNull();
 		assertThat(storeList.size()).isEqualTo(1);
 	}

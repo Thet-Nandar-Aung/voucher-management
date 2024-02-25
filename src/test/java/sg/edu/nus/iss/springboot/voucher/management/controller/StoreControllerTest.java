@@ -76,14 +76,17 @@ public class StoreControllerTest {
 	void testGetAllStoreByUser() throws Exception {
 
 		User createdUser = userService.create(testUser);
-		testStore.setCreatedBy(createdUser.getUserId());
+		testStore.setCreatedBy(createdUser);
 
 		storeService.create(testStore);
 
-		String userId = createdUser.getUserId().trim();
+	    createdUser.getUserId().trim();
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/store/getAllByUser/{userId}", userId)
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+		UserRequest userReq = new UserRequest("antonia@gmail.com");
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/store/getAllByUser")
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userReq)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.message").value("200 OK")).andDo(print());
 
@@ -106,11 +109,14 @@ public class StoreControllerTest {
 	@Transactional
 	void testCreateStore() throws Exception {
 
+		User createdUser = userService.create(testUser);
+		testStore.setCreatedBy(createdUser);
+		
 		// MockMultipartFile for image file
 		MockMultipartFile imageFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
 
 		// MockMultipartFile for user JSON
-		testStore.setCreatedBy("Eleven.11stt@gmail.com");
+	
 		MockMultipartFile store = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
 				objectMapper.writeValueAsBytes(testStore));
 
@@ -125,10 +131,12 @@ public class StoreControllerTest {
 	@Test
 	@Transactional
 	void testUpdateStore() throws Exception {
-
+		
+		User createdUser = userService.create(testUser);
+		testStore.setUpdatedBy(createdUser);
+		
 		Store createdStore = storeService.create(testStore);
 		createdStore.setDeleted(true);
-		createdStore.setUpdatedBy("Eleven.11stt@gmail.com");
 
 		// MockMultipartFile for image file
 		MockMultipartFile imageFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());

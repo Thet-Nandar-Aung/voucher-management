@@ -66,7 +66,8 @@ public class UserController {
 						if (isImageExists) {
 
 							String presignedUrl = GeneralUtility
-									.makeNotNull(ImageUploadToS3.generatePresignedUrl(s3Client, securityConfig, securityConfig.getS3ImagePrivateUsers().trim() + fileName.trim()));
+									.makeNotNull(ImageUploadToS3.generatePresignedUrl(s3Client, securityConfig,
+											securityConfig.getS3ImagePrivateUsers().trim() + fileName.trim()));
 
 							userResp.setImage(presignedUrl);
 						}
@@ -103,18 +104,19 @@ public class UserController {
 		try {
 			if (!GeneralUtility.makeNotNull(user.getEmail()).equals("")) {
 				User dbUser = userService.findByEmail(user.getEmail());
-				String presignedUrl = "";
+
 				if (GeneralUtility.makeNotNull(dbUser).equals("")) {
 
 					// if User not found, will create
 
 					if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
 						logger.info("create user: " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
-						
-						presignedUrl = GeneralUtility.makeNotNull(
-								ImageUploadToS3.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile,securityConfig.getS3ImagePrivateUsers().trim()));
-						if (!presignedUrl.equals("")) {
-							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"+securityConfig.getS3ImagePrivateUsers().trim()
+
+						boolean isImageUploaded = ImageUploadToS3.checkImageExistBeforeUpload(s3Client, uploadFile,
+								securityConfig, securityConfig.getS3ImagePrivateUsers().trim());
+						if (isImageUploaded) {
+							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"
+									+ securityConfig.getS3ImagePrivateUsers().trim()
 									+ uploadFile.getOriginalFilename().trim();
 							user.setImage(imageUrl);
 						}
@@ -129,7 +131,7 @@ public class UserController {
 						result.setEmail(createdUser.getEmail());
 						result.setUsername(createdUser.getUsername());
 						result.setRole(createdUser.getRole());
-						result.setImage(presignedUrl);
+						result.setImage("");//no need to send for creation
 						resultList.add(result);
 						userResponse.setMessage(message);
 						userResponse.setResult(resultList);
@@ -187,19 +189,17 @@ public class UserController {
 		try {
 			if (!GeneralUtility.makeNotNull(user.getEmail()).equals("")) {
 				User dbUser = userService.findByEmail(user.getEmail());
-				String presignedUrl = "";
 
 				if (!GeneralUtility.makeNotNull(dbUser).equals("")) {
 
 					if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
-
 						logger.info("Update user : " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
 
-						
-						presignedUrl = GeneralUtility.makeNotNull(
-								ImageUploadToS3.generatePresignedUrlAndUploadObject(s3Client, securityConfig, uploadFile,securityConfig.getS3ImagePrivateUsers().trim()));
-						if (!presignedUrl.equals("")) {
-							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"+securityConfig.getS3ImagePrivateUsers().trim()
+						boolean isImageUploaded = ImageUploadToS3.checkImageExistBeforeUpload(s3Client, uploadFile,
+								securityConfig, securityConfig.getS3ImagePrivateUsers().trim());
+						if (isImageUploaded) {
+							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"
+									+ securityConfig.getS3ImagePrivateUsers().trim()
 									+ uploadFile.getOriginalFilename().trim();
 							user.setImage(imageUrl);
 						}
@@ -220,7 +220,7 @@ public class UserController {
 						result.setEmail(updatedUser.getEmail());
 						result.setUsername(updatedUser.getUsername());
 						result.setRole(updatedUser.getRole());
-						result.setImage(presignedUrl);
+						result.setImage("");//no need to send for updating
 						resultList.add(result);
 						userResponse.setMessage(message);
 						userResponse.setResult(resultList);
@@ -318,14 +318,14 @@ public class UserController {
 
 	@PostMapping(value = "/login", produces = "application/json")
 	public ResponseEntity<UserResponse> validateUserLogin(@RequestBody UserRequest userRequest) {
-		
+
 		logger.info("Call user login API...");
 		UserResponse userResponse = new UserResponse();
 		String message = "";
 		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
 		try {
 			User user = userService.validateUserLogin(userRequest.getEmail(), userRequest.getPassword());
-			if(user != null){
+			if (user != null) {
 				// return user details
 				ResultItem userResp = new ResultItem();
 				userResp.setEmail(user.getEmail());
@@ -335,7 +335,7 @@ public class UserController {
 				userResp.setImage(user.getImage());
 				resultList.add(userResp);
 				message = user.getEmail() + " login successfully";
-			}else{
+			} else {
 				// return invalid email or password.
 				message = "Invalid email or password";
 				userResponse.setMessage(message);

@@ -50,7 +50,7 @@
 						{
 							"key": "image",
 							"type": "file",
-							"src": "/Users/thetnandaraung/Downloads/photo11.jpg"
+							"src": "/Users/thetnandaraung/Downloads/121212.jpg"
 						},
 						{
 							"key": "user",
@@ -123,11 +123,11 @@
 						{
 							"key": "image",
 							"type": "file",
-							"src": "/Users/Image/photo.jpg"
+							"src": "/Users/thetnandaraung/Downloads/121212.jpg"
 						},
 						{
 							"key": "user",
-							"value": "{\"email\": \"Eleven.11@gmail.com\",\"username\": \"Eleven\",\"password\":\"Pwd@21212\",\"role\":\"MERCHANT\",\"active\":true}",
+							"value": "{\"email\": \"Eleven.11@gmail.com\",\"username\": \"Eleven11\",\"password\":\"Pwd@21212\",\"role\":\"MERCHANT\",\"active\":true}",
 							"contentType": "application/json",
 							"type": "text"
 						}
@@ -192,7 +192,7 @@
 						},
 						{
 							"key": "store",
-							"value": "{\n    \"storeName\": \"IKEA\",\n    \"description\": \"Create a safe and cosy environment.\",\n    \"address1\": \"317 Alexandra Rd\",\n    \"address2\": \"Level 1\",\n    \"city\": \"Singapore\",\n    \"state\": \"Singapore\",\n    \"country\": \"Singapore\",\n    \"postalCode\": \"159965\",\n    \"contactNumber\":\"6786 6868\",\n    \"createdBy\": \"Eleven.11stt@gmail.com\"\n}",
+							"value": "{\n    \"storeName\": \"IKEA\",\n    \"description\": \"Create a safe and cosy environment.\",\n    \"address1\": \"317 Alexandra Rd\",\n    \"address2\": \"Level 1\",\n    \"city\": \"Singapore\",\n    \"state\": \"Singapore\",\n    \"country\": \"Singapore\",\n    \"postalCode\": \"159965\",\n    \"contactNumber\": \"6786 6868\",\n    \"createdBy\": {\n       \"email\": \"Eleven.11stt@gmail.com\"\n    }\n}",
 							"contentType": "application/json",
 							"type": "text"
 						}
@@ -235,7 +235,7 @@
 						},
 						{
 							"key": "store",
-							"value": "{\n    \"storeId\": \"d2234d0a-9abd-4cab-a49b-7428d26f6945\",\n    \"storeName\": \"IKEA\",\n    \"description\": \"Create a safe and cosy environment.\",\n    \"address1\": \"317 Alexandra Rd\",\n    \"address2\": \"Level 1\",\n    \"city\": \"Singapore\",\n    \"state\": \"Singapore\",\n    \"country\": \"Singapore\",\n    \"postalCode\": \"159965\",\n    \"contactNumber\": \"+65 6786 6868\",\n    \"updatedBy\": \"Eleven.11stt@gmail.com\",\n    \"deleted\": false\n}",
+							"value": "{\n    \"storeId\": \"b398421b-5c17-4e91-8960-1574affef757\",\n    \"storeName\": \"IKEA111\",\n    \"description\": \"Create a safe and cosy environment.\",\n    \"address1\": \"317 Alexandra Rd\",\n    \"address2\": \"Level 1\",\n    \"city\": \"Singapore\",\n    \"state\": \"Singapore\",\n    \"country\": \"Singapore\",\n    \"postalCode\": \"159965\",\n    \"contactNumber\": \"+65 6786 6868\",\n    \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    },\n    \"deleted\": false\n}",
 							"contentType": "application/json",
 							"type": "text"
 						}
@@ -259,11 +259,23 @@
 		},
 		{
 			"name": "Search Store by User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8081/api/store/getAllByUser/0275622f-e6ed-4265-bcc4-182f53bb9378",
+					"raw": "http://localhost:8081/api/store/getAllByUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -272,8 +284,7 @@
 					"path": [
 						"api",
 						"store",
-						"getAllByUser",
-						"0275622f-e6ed-4265-bcc4-182f53bb9378"
+						"getAllByUser"
 					]
 				}
 			},
@@ -285,7 +296,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/api/store/getById/d2234d0a-9abd-4cab-a49b-7428d26f6945",
+					"raw": "http://localhost:8081/api/store/getById/b398421b-5c17-4e91-8960-1574affef757",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -295,7 +306,7 @@
 						"api",
 						"store",
 						"getById",
-						"d2234d0a-9abd-4cab-a49b-7428d26f6945"
+						"b398421b-5c17-4e91-8960-1574affef757"
 					]
 				}
 			},

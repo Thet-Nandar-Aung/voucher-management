@@ -1,12 +1,17 @@
 package sg.edu.nus.iss.springboot.voucher.management.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.OneToMany;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 
 import org.hibernate.annotations.UuidGenerator;
@@ -58,6 +63,18 @@ public class User {
 
 	@Column(nullable = true)
 	private String image;
+
+	@OneToMany(mappedBy = "createdBy")
+	private List<Store> createdStores;
+
+	@OneToMany(mappedBy = "updatedBy")
+	private List<Store> updatedStores;
+
+	@OneToMany(mappedBy = "createdBy")
+	private List<Campaign> createdCampaign;
+
+	@OneToMany(mappedBy = "updatedBy")
+	private List<Campaign> updatedCampaign;
 
 	public String getUserId() {
 		return userId;
@@ -137,6 +154,38 @@ public class User {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public List<Store> getCreatedStores() {
+		return createdStores;
+	}
+
+	public void setCreatedStores(List<Store> createdStores) {
+		this.createdStores = createdStores;
+	}
+
+	public List<Store> getUpdatedStores() {
+		return updatedStores;
+	}
+
+	public void setUpdatedStores(List<Store> updatedStores) {
+		this.updatedStores = updatedStores;
+	}
+
+	public List<Campaign> getCreatedCampaign() {
+		return createdCampaign;
+	}
+
+	public void setCreatedCampaign(List<Campaign> createdCampaign) {
+		this.createdCampaign = createdCampaign;
+	}
+
+	public List<Campaign> getUpdatedCampaign() {
+		return updatedCampaign;
+	}
+
+	public void setUpdatedCampaign(List<Campaign> updatedCampaign) {
+		this.updatedCampaign = updatedCampaign;
 	}
 
 }
