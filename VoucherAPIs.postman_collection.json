@@ -192,7 +192,7 @@
 						},
 						{
 							"key": "store",
-							"value": "{\n    \"storeName\": \"IKEA\",\n    \"description\": \"Create a safe and cosy environment.\",\n    \"address1\": \"317 Alexandra Rd\",\n    \"address2\": \"Level 1\",\n    \"city\": \"Singapore\",\n    \"state\": \"Singapore\",\n    \"country\": \"Singapore\",\n    \"postalCode\": \"159965\",\n    \"contactNumber\": \"6786 6868\",\n    \"createdBy\": {\n       \"email\": \"Eleven.11stt@gmail.com\"\n    }\n}",
+							"value": "{\n    \"storeName\": \"IKEA\",\n    \"description\": \"Create a safe and cosy environment.\",\n    \"address1\": \"317 Alexandra Rd\",\n    \"address2\": \"Level 1\",\n    \"city\": \"Singapore\",\n    \"state\": \"Singapore\",\n    \"country\": \"Singapore\",\n    \"postalCode\": \"159965\",\n    \"contactNumber\": \"6786 6868\",\n    \"createdBy\": {\n       \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
 							"contentType": "application/json",
 							"type": "text"
 						}
@@ -259,12 +259,18 @@
 		},
 		{
 			"name": "Search Store by User",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
-				"header": [],
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\"\n}",
