@@ -84,7 +84,7 @@ public class StoreControllerTest {
 
 		UserRequest userReq = new UserRequest("antonia@gmail.com");
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/store/getAllByUser")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/store/getAllByUser")
 				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userReq)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
