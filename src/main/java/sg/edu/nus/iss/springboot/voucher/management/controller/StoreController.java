@@ -134,7 +134,7 @@ public class StoreController {
 		}
 	}
 
-	@GetMapping(value = "/getAllByUser", produces = "application/json")
+	@PostMapping(value = "/getAllByUser", produces = "application/json")
 	public ResponseEntity<StoreResponseDetail> getAllStoreByUser(@RequestBody UserRequest userReq) {
 		logger.info("Call store getAllByUser API...");
 
