@@ -11,7 +11,9 @@ public interface ICampaignService {
 
     Optional<Campaign> findByCampaignId(String campaignId);
     
-    Campaign save(Campaign campaign);
+    Campaign create(Campaign campaign);
+
+    Campaign update(Campaign campaign);
 
     void delete(String campaignId);
 

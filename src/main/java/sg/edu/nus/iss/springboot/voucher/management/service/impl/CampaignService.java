@@ -23,27 +23,29 @@ public class CampaignService implements ICampaignService        {
 
     @Override
     public List<Campaign> findAllCampaigns() {
-    	logger.info("Calling " + Thread.currentThread().getName());
         return campaignRepository.findAll();
     }
 
     @Override
     public Optional<Campaign> findByCampaignId(String campaignId) {
-    	logger.info("Calling " + Thread.currentThread().getName());
        return campaignRepository.findById(campaignId);
     }
 
     @Override
-    public Campaign save(Campaign campaign) {
-    	logger.info("Calling " + Thread.currentThread().getName());
+    public Campaign create(Campaign campaign) {
+        campaign.setCreatedDate(LocalDateTime.now());
+        return campaignRepository.save(campaign);
+    }
+
+    @Override
+    public Campaign update(Campaign campaign) {
         campaign.setUpdatedDate(LocalDateTime.now());
         return campaignRepository.save(campaign);
     }
 
-	@Override
+    @Override
 	public void delete(String campaignId) {
-    	logger.info("Calling " + Thread.currentThread().getName());
-		campaignRepository.deleteById(campaignId);;
+        campaignRepository.findById(campaignId).ifPresent(campaign -> campaignRepository.delete(campaign));
 	}
 
 }
