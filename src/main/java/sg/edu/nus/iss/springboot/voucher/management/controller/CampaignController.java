@@ -37,17 +37,19 @@ public class CampaignController {
     
     @PostMapping(value = "/create", produces = "application/json")
     public ResponseEntity<APIResponse<Campaign>> createCampaign(@RequestPart("campaign") Campaign campaign){
-        System.out.print(campaign);
+        logger.info("Calling Campaign create API...");
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.create(campaign)));
     }
 
     @PostMapping(value = "/update", produces = "application/json")
     public ResponseEntity<APIResponse<Campaign>> updateCampaign(@RequestPart("campaign") Campaign campaign){
+        logger.info("Calling Campaign update API...");
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.update(campaign)));
     }
 
     @PostMapping(value = "/delete/{campaignId}", produces = "application/json")
     public ResponseEntity<APIResponse<Campaign>> deleteCampaign(@PathVariable String campaignId){
+        logger.info("Calling Campaign delete API...");
         campaignService.delete(campaignId);
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success("Deleted successfully"));
     }

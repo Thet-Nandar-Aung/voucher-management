@@ -19,31 +19,27 @@ public class VoucherService implements IVoucherService        {
     private static final Logger logger = LoggerFactory.getLogger(VoucherService.class);
 
     @Autowired
-    private VoucherRepository VoucherRepository;
+    private VoucherRepository voucherRepository;
 
     @Override
     public List<Voucher> findAllVouchers() {
-    	logger.info("Calling " + Thread.currentThread().getName());
-        return VoucherRepository.findAll();
+        return voucherRepository.findAll();
     }
 
     @Override
     public Optional<Voucher> findByVoucherId(String voucherId) {
-    	logger.info("Calling " + Thread.currentThread().getName());
-       return VoucherRepository.findById(voucherId);
+       return voucherRepository.findById(voucherId);
     }
 
     @Override
     public Voucher save(Voucher voucher) {
-    	logger.info("Calling " + Thread.currentThread().getName());
         voucher.setClaimTime(LocalDateTime.now());
-        return VoucherRepository.save(voucher);
+        return voucherRepository.save(voucher);
     }
 
 	@Override
 	public void delete(String voucherId) {
-    	logger.info("Calling " + Thread.currentThread().getName());
-		VoucherRepository.deleteById(voucherId);
+		voucherRepository.findById(voucherId).ifPresent(voucher -> voucherRepository.delete(voucher));
 	}
 
 }

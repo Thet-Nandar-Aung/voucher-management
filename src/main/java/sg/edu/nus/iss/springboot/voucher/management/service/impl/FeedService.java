@@ -19,30 +19,26 @@ public class FeedService implements IFeedService        {
     private static final Logger logger = LoggerFactory.getLogger(FeedService.class);
 
     @Autowired
-    private FeedRepository FeedRepository;
+    private FeedRepository feedRepository;
 
     @Override
     public List<Feed> findAllFeeds() {
-    	logger.info("Calling " + Thread.currentThread().getName());
-        return FeedRepository.findAll();
+        return feedRepository.findAll();
     }
 
     @Override
     public Optional<Feed> findByFeedId(String feedId) {
-    	logger.info("Calling " + Thread.currentThread().getName());
-       return FeedRepository.findById(feedId);
+       return feedRepository.findById(feedId);
     }
 
     @Override
     public Feed save(Feed feed) {
-    	logger.info("Calling " + Thread.currentThread().getName());
-        return FeedRepository.save(feed);
+        return feedRepository.save(feed);
     }
 
 	@Override
 	public void delete(String feedId) {
-    	logger.info("Calling " + Thread.currentThread().getName());
-		FeedRepository.deleteById(feedId);;
+		feedRepository.findById(feedId).ifPresent(feed -> feedRepository.delete(feed));
 	}
 
 }
