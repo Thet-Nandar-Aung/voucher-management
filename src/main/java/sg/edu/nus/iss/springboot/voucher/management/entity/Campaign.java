@@ -61,7 +61,7 @@ public class Campaign {
 	@JoinColumn(name = "updatedBy")
 	private User updatedBy;
 	
-	@Column(nullable = false, columnDefinition = "datetime default now()")
+	@Column(nullable = true, columnDefinition = "datetime default now()")
 	private LocalDateTime createdDate;
 	
 	@Column(nullable = true, columnDefinition = "datetime")
