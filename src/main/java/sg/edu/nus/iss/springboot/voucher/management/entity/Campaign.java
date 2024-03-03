@@ -8,6 +8,8 @@ import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -32,6 +34,7 @@ public class Campaign {
 	@JoinColumn(name = "storeId")
 	private Store storeId;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private CampaignStatus campaignStatus = CampaignStatus.CREATED;
 	
