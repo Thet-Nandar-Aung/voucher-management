@@ -32,7 +32,7 @@ public class Campaign {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "storeId")
-	private Store storeId;
+	private Store store;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -97,12 +97,12 @@ public class Campaign {
 		this.description = description;
 	}
 	
-	public Store getStoreId() {
-		return this.storeId;
+	public Store getStore() {
+		return this.store;
 	}
 
-	public void setStoreId(Store storeId) {
-		this.storeId = storeId;
+	public void setStore(Store store) {
+		this.store = store;
 	}
 	public CampaignStatus getCampaignStatus() {
 		return campaignStatus;
