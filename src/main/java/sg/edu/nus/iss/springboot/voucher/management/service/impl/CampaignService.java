@@ -10,7 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
+import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
+import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
+import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
+import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.ICampaignService;
 
 @Service
@@ -20,6 +24,12 @@ public class CampaignService implements ICampaignService        {
 
     @Autowired
     private CampaignRepository campaignRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private StoreRepository storeRepository;
 
     @Override
     public List<Campaign> findAllCampaigns() {
@@ -33,7 +43,11 @@ public class CampaignService implements ICampaignService        {
 
     @Override
     public Campaign create(Campaign campaign) {
-        campaign.setCreatedDate(LocalDateTime.now());
+        User user = userRepository.findById(campaign.getCreatedBy().getUserId()).orElseThrow();
+        Store store = storeRepository.findById(campaign.getStore().getStoreId()).orElseThrow();
+        campaign.setCreatedBy(user);
+        campaign.setUpdatedBy(user);
+        campaign.setStore(store);
         return campaignRepository.save(campaign);
     }
 
