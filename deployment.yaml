@@ -39,6 +39,16 @@ spec:
                 secretKeyRef:
                   name: my-secret
                   key: aws_s3_secret_key_id
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: SPRING_PROFILES_ACTIVE
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: NODE_ENV
 
 ---
 apiVersion: v1
