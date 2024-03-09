@@ -27,7 +27,7 @@ public class Voucher {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "campaignId")
-	private Campaign campaignId;
+	private Campaign campaign;
 
 	@Column(nullable = false)
 	private VoucherStatus campaignStatus = VoucherStatus.CLAIMED;
@@ -56,12 +56,12 @@ public class Voucher {
 		this.voucherId = voucherId;
 	}
 
-	public Campaign getCampaignId() {
-		return campaignId;
+	public Campaign getCampaign() {
+		return campaign;
 	}
 
-	public void setCampaignId(Campaign campaignId) {
-		this.campaignId = campaignId;
+	public void setCampaignId(Campaign campaign) {
+		this.campaign = campaign;
 	}
 
 	public VoucherStatus getCampaignStatus() {

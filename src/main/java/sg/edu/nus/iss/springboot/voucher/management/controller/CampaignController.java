@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
+import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
 
@@ -36,7 +37,7 @@ public class CampaignController {
     }
     
     @PostMapping(value = "/create", produces = "application/json")
-    public ResponseEntity<APIResponse<Campaign>> createCampaign(@RequestPart("campaign") Campaign campaign){
+    public ResponseEntity<APIResponse<CampaignDTO>> createCampaign(@RequestPart("campaign") Campaign campaign){
         logger.info("Calling Campaign create API...");
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.create(campaign)));
     }
