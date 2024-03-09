@@ -44,11 +44,6 @@ spec:
                 configMapKeyRef:
                   name: my-configmap
                   key: SPRING_PROFILES_ACTIVE
-            - name: NODE_ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: my-configmap
-                  key: NODE_ENV
 
 ---
 apiVersion: v1
