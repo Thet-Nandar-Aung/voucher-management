@@ -1,8 +1,8 @@
 package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +34,23 @@ public class CampaignService implements ICampaignService        {
     private StoreRepository storeRepository;
 
     @Override
-    public List<Campaign> findAllCampaigns() {
-        return campaignRepository.findAll();
+    public List<CampaignDTO> findAllCampaigns() {
+        List<Campaign> campaigns = campaignRepository.findAll();
+        List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+        for (Campaign campaign: campaigns){
+            campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+        }
+        return campaignDTOs;
     }
 
     @Override
-    public Optional<Campaign> findByCampaignId(String campaignId) {
-       return campaignRepository.findById(campaignId);
+    public CampaignDTO findByCampaignId(String campaignId) {
+        Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
+        if (campaign != null)
+        {
+            return DTOMapper.toCampaignDTO(campaign);
+        }
+        return null;
     }
 
     @Override
@@ -58,9 +68,13 @@ public class CampaignService implements ICampaignService        {
     }
 
     @Override
-    public Campaign update(Campaign campaign) {
+    public CampaignDTO update(Campaign campaign) {
+        User user = userRepository.findById(campaign.getUpdatedBy().getUserId()).orElseThrow();
+        campaign.setUpdatedBy(user);
         campaign.setUpdatedDate(LocalDateTime.now());
-        return campaignRepository.save(campaign);
+        Campaign savedCampaign = campaignRepository.save(campaign);
+        CampaignDTO campaignDTO = DTOMapper.toCampaignDTO(savedCampaign);
+        return campaignDTO;
     }
 
     @Override

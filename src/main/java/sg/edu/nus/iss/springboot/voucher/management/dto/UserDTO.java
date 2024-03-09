@@ -1,7 +1,6 @@
 package sg.edu.nus.iss.springboot.voucher.management.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import lombok.Data;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;

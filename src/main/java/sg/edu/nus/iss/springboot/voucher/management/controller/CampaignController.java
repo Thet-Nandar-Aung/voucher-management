@@ -31,7 +31,7 @@ public class CampaignController {
     private CampaignService campaignService;
 
     @GetMapping(value = "/getAll", produces = "application/json")
-    public ResponseEntity<APIResponse<List<Campaign>>> getAllActiveStore() {
+    public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveStore() {
         logger.info("Calling Campaign getALL API...");
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.findAllCampaigns(), null));
     }
@@ -43,7 +43,7 @@ public class CampaignController {
     }
 
     @PostMapping(value = "/update", produces = "application/json")
-    public ResponseEntity<APIResponse<Campaign>> updateCampaign(@RequestPart("campaign") Campaign campaign){
+    public ResponseEntity<APIResponse<CampaignDTO>> updateCampaign(@RequestPart("campaign") Campaign campaign){
         logger.info("Calling Campaign update API...");
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.update(campaign)));
     }

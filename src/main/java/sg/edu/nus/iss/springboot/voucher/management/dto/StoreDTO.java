@@ -1,7 +1,6 @@
 package sg.edu.nus.iss.springboot.voucher.management.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import lombok.Data;
 
@@ -175,5 +174,5 @@ public class StoreDTO {
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
-    
+
 }
