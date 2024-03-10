@@ -24,7 +24,7 @@ import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService
 @Validated
 @RequestMapping("/api/campaign")
 public class CampaignController {
-    	
+
     private static final Logger logger = LoggerFactory.getLogger(CampaignController.class);
 
     @Autowired
@@ -32,27 +32,62 @@ public class CampaignController {
 
     @GetMapping(value = "/getAll", produces = "application/json")
     public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveStore() {
-        logger.info("Calling Campaign getALL API...");
-        return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.findAllCampaigns(), null));
+        try {
+            logger.info("Calling Campaign getALL API...");
+            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.findAllCampaigns(), "Successfully get all campaigns"));
+        } catch (Exception ex) {
+            logger.info("Calling Campaign getALL API failed...");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(campaignService.findAllCampaigns(), "Failed to get all campaigns"));
+        }
     }
-    
+
+    @GetMapping(value = "/campaign/{id}", produces = "application/json")
+    public ResponseEntity<APIResponse<CampaignDTO>> getByCampaignId(@PathVariable String campaignId) {
+        try {
+            logger.info("Calling get Campaign API...");
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(APIResponse.success(campaignService.findByCampaignId(campaignId), "Successfully get campaignId "+ campaignId));
+        } catch (Exception ex) {
+            logger.error("Calling Campaign get Campaign API failed...");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(APIResponse.success(campaignService.findByCampaignId(campaignId), "Failed to get campaignId "+ campaignId));
+        }
+        
+    }
+
     @PostMapping(value = "/create", produces = "application/json")
-    public ResponseEntity<APIResponse<CampaignDTO>> createCampaign(@RequestPart("campaign") Campaign campaign){
-        logger.info("Calling Campaign create API...");
-        return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.create(campaign)));
+    public ResponseEntity<APIResponse<CampaignDTO>> createCampaign(@RequestPart("campaign") Campaign campaign) {
+        try {
+            logger.info("Calling Campaign create API...");
+            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.create(campaign), "Created sucessfully"));
+        } catch (Exception ex) {
+            logger.error("Calling Campaign create API failed...");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(campaignService.create(campaign), "Created failed"));
+        }
     }
 
     @PostMapping(value = "/update", produces = "application/json")
-    public ResponseEntity<APIResponse<CampaignDTO>> updateCampaign(@RequestPart("campaign") Campaign campaign){
-        logger.info("Calling Campaign update API...");
-        return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.update(campaign)));
+    public ResponseEntity<APIResponse<CampaignDTO>> updateCampaign(@RequestPart("campaign") Campaign campaign) {
+        try {
+            logger.info("Calling Campaign update API...");
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(APIResponse.success(campaignService.update(campaign), "Updated sucessfully"));
+        } catch (Exception ex) {
+            logger.info("Calling Campaign update API failed...");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(APIResponse.error(campaignService.update(campaign), "Updated failed"));
+        }
     }
 
     @PostMapping(value = "/delete/{campaignId}", produces = "application/json")
-    public ResponseEntity<APIResponse<Campaign>> deleteCampaign(@PathVariable String campaignId){
-        logger.info("Calling Campaign delete API...");
-        campaignService.delete(campaignId);
-        return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success("Deleted successfully"));
+    public ResponseEntity<APIResponse<Campaign>> deleteCampaign(@PathVariable String campaignId) {
+        try {
+            logger.info("Calling Campaign delete API...");
+            campaignService.delete(campaignId);
+            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success("Deleted successfully"));
+        } catch (Exception ex) {
+            logger.error("Calling Campaign delete API failed...");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Delete failed"));
+        }
     }
 }
-  

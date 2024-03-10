@@ -13,7 +13,7 @@ public class APIResponse<T> {
     private String message;
     private T data;
 
-    public static <T> APIResponse<T> empty(){
+    public static <T> APIResponse<T> empty() {
         return APIResponse.<T>builder()
                 .success(false)
                 .message("")
@@ -21,7 +21,7 @@ public class APIResponse<T> {
                 .build();
     }
 
-    public static <T> APIResponse<T> success(T data){
+    public static <T> APIResponse<T> success(T data) {
         return APIResponse.<T>builder()
                 .success(true)
                 .message("success")
@@ -29,7 +29,7 @@ public class APIResponse<T> {
                 .build();
     }
 
-    public static <T> APIResponse<T> success(String message){
+    public static <T> APIResponse<T> success(String message) {
         return APIResponse.<T>builder()
                 .success(true)
                 .message(message)
@@ -37,14 +37,28 @@ public class APIResponse<T> {
                 .build();
     }
 
-    public static <T> APIResponse<T> error(T data){
+    public static <T> APIResponse<T> error(T data) {
         return APIResponse.<T>builder()
                 .success(false)
                 .message("error")
                 .build();
     }
 
-    public static <T> APIResponse<T> success(T data, String message){
+    public static <T> APIResponse<T> error(String message) {
+        return APIResponse.<T>builder()
+                .success(false)
+                .message(message)
+                .build();
+    }
+
+    public static <T> APIResponse<T> error() {
+        return APIResponse.<T>builder()
+                .success(false)
+                .message("error")
+                .build();
+    }
+
+    public static <T> APIResponse<T> success(T data, String message) {
         return APIResponse.<T>builder()
                 .success(true)
                 .message(message)
@@ -52,7 +66,7 @@ public class APIResponse<T> {
                 .build();
     }
 
-    public static <T> APIResponse<T> error(T data, String message){
+    public static <T> APIResponse<T> error(T data, String message) {
         return APIResponse.<T>builder()
                 .success(false)
                 .message(message)
