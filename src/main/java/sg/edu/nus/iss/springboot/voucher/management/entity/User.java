@@ -12,11 +12,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
+@AllArgsConstructor
 public class User {
 
 	public User() {

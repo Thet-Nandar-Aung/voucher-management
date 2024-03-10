@@ -2,10 +2,12 @@ package sg.edu.nus.iss.springboot.voucher.management.dto;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 
 @Data
+@AllArgsConstructor
 public class UserDTO {
 
     private String userId;
@@ -17,6 +19,9 @@ public class UserDTO {
 	private boolean isActive;
 	private LocalDateTime lastLoginDate;
 	private String image;
+
+    public UserDTO(){
+    }
 
     public String getUserId() {
         return this.userId;

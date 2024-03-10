@@ -14,9 +14,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 
 @Entity
+@AllArgsConstructor
 public class Campaign {
 	
 	public Campaign() {

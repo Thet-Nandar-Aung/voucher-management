@@ -2,10 +2,12 @@ package sg.edu.nus.iss.springboot.voucher.management.dto;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 
 @Data
+@AllArgsConstructor
 public class CampaignDTO {
 
     private String campaignId;
@@ -23,6 +25,8 @@ public class CampaignDTO {
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
 
+    public CampaignDTO(){
+    }
 
     public String getCampaignId() {
         return this.campaignId;
