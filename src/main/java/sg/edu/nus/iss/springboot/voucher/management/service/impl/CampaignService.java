@@ -1,17 +1,23 @@
 package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
+import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
+import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
+import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
+import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.ICampaignService;
+import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
 @Service
 public class CampaignService implements ICampaignService        {
@@ -21,26 +27,54 @@ public class CampaignService implements ICampaignService        {
     @Autowired
     private CampaignRepository campaignRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private StoreRepository storeRepository;
+
     @Override
-    public List<Campaign> findAllCampaigns() {
-        return campaignRepository.findAll();
+    public List<CampaignDTO> findAllCampaigns() {
+        List<Campaign> campaigns = campaignRepository.findAll();
+        List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+        for (Campaign campaign: campaigns){
+            campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+        }
+        return campaignDTOs;
     }
 
     @Override
-    public Optional<Campaign> findByCampaignId(String campaignId) {
-       return campaignRepository.findById(campaignId);
+    public CampaignDTO findByCampaignId(String campaignId) {
+        Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
+        if (campaign != null)
+        {
+            return DTOMapper.toCampaignDTO(campaign);
+        }
+        return null;
     }
 
     @Override
-    public Campaign create(Campaign campaign) {
+    public CampaignDTO create(Campaign campaign) {
+        User user = userRepository.findById(campaign.getCreatedBy().getUserId()).orElseThrow();
+        Store store = storeRepository.findById(campaign.getStore().getStoreId()).orElseThrow();
+        campaign.setCreatedBy(user);
         campaign.setCreatedDate(LocalDateTime.now());
-        return campaignRepository.save(campaign);
+        campaign.setUpdatedBy(user);
+        campaign.setUpdatedDate(LocalDateTime.now());
+        campaign.setStore(store);
+        Campaign savedCampaign = campaignRepository.save(campaign);
+        CampaignDTO campaignDTO = DTOMapper.toCampaignDTO(savedCampaign);
+        return campaignDTO;
     }
 
     @Override
-    public Campaign update(Campaign campaign) {
+    public CampaignDTO update(Campaign campaign) {
+        User user = userRepository.findById(campaign.getUpdatedBy().getUserId()).orElseThrow();
+        campaign.setUpdatedBy(user);
         campaign.setUpdatedDate(LocalDateTime.now());
-        return campaignRepository.save(campaign);
+        Campaign savedCampaign = campaignRepository.save(campaign);
+        CampaignDTO campaignDTO = DTOMapper.toCampaignDTO(savedCampaign);
+        return campaignDTO;
     }
 
     @Override

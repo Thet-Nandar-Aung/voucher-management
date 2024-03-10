@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
+import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
 
@@ -30,19 +31,19 @@ public class CampaignController {
     private CampaignService campaignService;
 
     @GetMapping(value = "/getAll", produces = "application/json")
-    public ResponseEntity<APIResponse<List<Campaign>>> getAllActiveStore() {
+    public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveStore() {
         logger.info("Calling Campaign getALL API...");
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.findAllCampaigns(), null));
     }
     
     @PostMapping(value = "/create", produces = "application/json")
-    public ResponseEntity<APIResponse<Campaign>> createCampaign(@RequestPart("campaign") Campaign campaign){
+    public ResponseEntity<APIResponse<CampaignDTO>> createCampaign(@RequestPart("campaign") Campaign campaign){
         logger.info("Calling Campaign create API...");
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.create(campaign)));
     }
 
     @PostMapping(value = "/update", produces = "application/json")
-    public ResponseEntity<APIResponse<Campaign>> updateCampaign(@RequestPart("campaign") Campaign campaign){
+    public ResponseEntity<APIResponse<CampaignDTO>> updateCampaign(@RequestPart("campaign") Campaign campaign){
         logger.info("Calling Campaign update API...");
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.update(campaign)));
     }

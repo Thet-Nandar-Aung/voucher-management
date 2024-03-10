@@ -8,13 +8,17 @@ import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 
 @Entity
+@AllArgsConstructor
 public class Campaign {
 	
 	public Campaign() {
@@ -30,8 +34,9 @@ public class Campaign {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "storeId")
-	private Store storeId;
+	private Store store;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private CampaignStatus campaignStatus = CampaignStatus.CREATED;
 	
@@ -94,12 +99,12 @@ public class Campaign {
 		this.description = description;
 	}
 	
-	public Store getStoreId() {
-		return this.storeId;
+	public Store getStore() {
+		return this.store;
 	}
 
-	public void setStoreId(Store storeId) {
-		this.storeId = storeId;
+	public void setStore(Store store) {
+		this.store = store;
 	}
 	public CampaignStatus getCampaignStatus() {
 		return campaignStatus;
