@@ -58,6 +58,12 @@ public class Campaign {
 	@Column(nullable = true)
 	private String condition2;
 	
+	@Column(nullable = true, columnDefinition = "datetime")
+	private LocalDateTime startDate;
+
+	@Column(nullable = true, columnDefinition = "datetime")
+	private LocalDateTime endDate;
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "createdBy")
 	private User createdBy;
@@ -193,4 +199,21 @@ public class Campaign {
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+
+	public LocalDateTime getStartDate() {
+		return this.startDate;
+	}
+
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDateTime getEndDate() {
+		return this.endDate;
+	}
+
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
+	}
+
 }
