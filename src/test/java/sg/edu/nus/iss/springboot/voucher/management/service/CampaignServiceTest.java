@@ -68,7 +68,7 @@ public class CampaignServiceTest {
     void createCampaign(){
         Mockito.when(campaignRepository.save(Mockito.any(Campaign.class))).thenReturn(campaign1);
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
-        Mockito.when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         CampaignDTO campaignDTO = campaignService.create(campaign1);
         assertEquals(campaignDTO.getCreatedBy().getUserId(), campaign1.getCreatedBy().getUserId());
         assertEquals(campaignDTO.getDescription(), campaign1.getDescription());
@@ -79,7 +79,7 @@ public class CampaignServiceTest {
     void updateCampaign(){
         Mockito.when(campaignRepository.save(Mockito.any(Campaign.class))).thenReturn(campaign1);
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
-        Mockito.when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         campaign1.setDescription("test update");
         CampaignDTO campaignDTO = campaignService.update(campaign1);
         assertEquals(campaignDTO.getDescription(), "test update");
