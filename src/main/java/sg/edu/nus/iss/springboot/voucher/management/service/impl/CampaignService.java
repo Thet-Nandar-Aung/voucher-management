@@ -55,7 +55,7 @@ public class CampaignService implements ICampaignService        {
 
     @Override
     public CampaignDTO create(Campaign campaign) {
-        User user = userRepository.findById(campaign.getCreatedBy().getUserId()).orElseThrow();
+        User user = userRepository.findByEmail(campaign.getCreatedBy().getEmail());
         Store store = storeRepository.findById(campaign.getStore().getStoreId()).orElseThrow();
         campaign.setCreatedBy(user);
         campaign.setCreatedDate(LocalDateTime.now());
@@ -69,7 +69,7 @@ public class CampaignService implements ICampaignService        {
 
     @Override
     public CampaignDTO update(Campaign campaign) {
-        User user = userRepository.findById(campaign.getUpdatedBy().getUserId()).orElseThrow();
+        User user = userRepository.findByEmail(campaign.getCreatedBy().getEmail());
         campaign.setUpdatedBy(user);
         campaign.setUpdatedDate(LocalDateTime.now());
         Campaign savedCampaign = campaignRepository.save(campaign);
