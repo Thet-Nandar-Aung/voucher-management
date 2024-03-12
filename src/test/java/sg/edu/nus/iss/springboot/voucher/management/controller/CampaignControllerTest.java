@@ -51,7 +51,7 @@ public class CampaignControllerTest {
         private static List<CampaignDTO> mockCampaigns = new ArrayList<>();
         private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null,
                         true,
-                        null, null, null, null, null, null);
+                        null, null, null, null, null, null,null);
         private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null,
                         null,
                         null, null, null, null, user, null, user, false, null);
