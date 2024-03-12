@@ -2,21 +2,24 @@ package sg.edu.nus.iss.springboot.voucher.management.dto;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import sg.edu.nus.iss.springboot.voucher.management.enums.VoucherStatus;
 
 @Data
+@AllArgsConstructor
 public class VoucherDTO {
 
     private String voucherId;
 	private CampaignDTO campaign;
-	private VoucherStatus voucherStatus;
+	private VoucherStatus voucherStatus = VoucherStatus.CLAIMED;
 	private double amount;
-	private LocalDateTime validThrough;
 	private LocalDateTime claimTime;
 	private LocalDateTime consumedTime;
 	private UserDTO claimedBy;
 
+    public VoucherDTO(){
+    }
 
     public String getVoucherId() {
         return this.voucherId;
@@ -48,14 +51,6 @@ public class VoucherDTO {
 
     public void setAmount(double amount) {
         this.amount = amount;
-    }
-
-    public LocalDateTime getValidThrough() {
-        return this.validThrough;
-    }
-
-    public void setValidThrough(LocalDateTime validThrough) {
-        this.validThrough = validThrough;
     }
 
     public LocalDateTime getClaimTime() {

@@ -53,10 +53,10 @@ public class Campaign {
 	private String pin;
 
 	@Column(nullable = true)
-	private String condition1;
+	private String tandc;
 
-	@Column(nullable = true)
-	private String condition2;
+	@Column(nullable = false)
+	private double amount;
 
 	@Column(nullable = true, columnDefinition = "datetime")
 	private LocalDateTime startDate;
@@ -80,9 +80,6 @@ public class Campaign {
 
 	@OneToMany(mappedBy = "voucherId")
 	private List<Voucher> voucher;
-
-	@OneToMany(mappedBy = "feedId")
-	private List<Feed> feed;
 
 	public List<Voucher> getVoucher() {
 		return voucher;
@@ -156,20 +153,20 @@ public class Campaign {
 		this.pin = pin;
 	}
 
-	public String getCondition1() {
-		return condition1;
+	public String getTandc() {
+		return this.tandc;
 	}
 
-	public void setCondition1(String condition1) {
-		this.condition1 = condition1;
+	public void setTandc(String tandc) {
+		this.tandc = tandc;
 	}
 
-	public String getCondition2() {
-		return condition2;
+	public double getAmount() {
+		return this.amount;
 	}
 
-	public void setCondition2(String condition2) {
-		this.condition2 = condition2;
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 
 	public User getCreatedBy() {
@@ -220,12 +217,10 @@ public class Campaign {
 		this.endDate = endDate;
 	}
 
-	public List<Feed> getFeed() {
-		return feed;
-	}
-
-	public void setFeed(List<Feed> feed) {
-		this.feed = feed;
-	}
+    public Campaign(String string, String string2, Store store2, CampaignStatus created, Object object, int i, int j,
+            Object object2, Object object3, Object object4, Object object5, Object object6, User user, User user2,
+            Object object7, Object object8, Object object9, Object object10) {
+        //TODO Auto-generated constructor stub
+    }
 
 }

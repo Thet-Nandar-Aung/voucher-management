@@ -10,38 +10,33 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import sg.edu.nus.iss.springboot.voucher.management.enums.VoucherStatus;
 
 @Entity
+@AllArgsConstructor
 public class Voucher {
-	
+
 	public Voucher() {
-		super();
 	}
-	
+
 	@Id
 	@UuidGenerator(style = UuidGenerator.Style.AUTO)
 	private String voucherId;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "campaignId")
 	private Campaign campaign;
 
 	@Column(nullable = false)
-	private VoucherStatus campaignStatus = VoucherStatus.CLAIMED;
-	
-	@Column(nullable = false)
-	private double amount;
-	
-	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime validThrough;
-	
+	private VoucherStatus voucherStatus = VoucherStatus.CLAIMED;
+
 	@Column(nullable = true, columnDefinition = "datetime default now()")
 	private LocalDateTime claimTime;
-	
+
 	@Column(nullable = true, columnDefinition = "datetime")
 	private LocalDateTime consumedTime;
-		
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "claimedBy")
 	private User claimedBy;
@@ -58,32 +53,16 @@ public class Voucher {
 		return campaign;
 	}
 
-	public void setCampaignId(Campaign campaign) {
+	public void setCampaign(Campaign campaign) {
 		this.campaign = campaign;
 	}
 
-	public VoucherStatus getCampaignStatus() {
-		return campaignStatus;
+	public VoucherStatus getVoucherStatus() {
+		return voucherStatus;
 	}
 
-	public void setCampaignStatus(VoucherStatus campaignStatus) {
-		this.campaignStatus = campaignStatus;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-	public LocalDateTime getValidThrough() {
-		return validThrough;
-	}
-
-	public void setValidThrough(LocalDateTime validThrough) {
-		this.validThrough = validThrough;
+	public void setVoucherStatus(VoucherStatus voucherStatus) {
+		this.voucherStatus = voucherStatus;
 	}
 
 	public LocalDateTime getClaimTime() {
@@ -109,7 +88,5 @@ public class Voucher {
 	public void setClaimedBy(User claimedBy) {
 		this.claimedBy = claimedBy;
 	}
-	
-	
-	
+
 }

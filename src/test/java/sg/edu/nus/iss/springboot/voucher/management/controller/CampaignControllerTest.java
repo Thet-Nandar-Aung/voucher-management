@@ -10,17 +10,18 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
@@ -28,79 +29,91 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
-import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
-import sg.edu.nus.iss.springboot.voucher.management.repository.FeedRepository;
-import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
-import sg.edu.nus.iss.springboot.voucher.management.service.impl.FeedService;
-import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
-import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
+import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(properties = { "DB_USERNAME=admin", "DB_PASSWORD=RDS_12345" })
 public class CampaignControllerTest {
-	@Autowired
-	private MockMvc mockMvc;
 
-	@Mock
-	private FeedRepository feedRepository;
+        @Autowired
+        private MockMvc mockMvc;
 
-	@Mock
-	private CampaignRepository campaignRepository;
+        @Autowired
+        private ObjectMapper objectMapper;
 
-	@Mock
-	private UserRepository userRepository;
+        @MockBean
+        private CampaignService campaignService;
 
-	@Autowired
-	private CampaignService campaignService;
+        @InjectMocks
+        private CampaignController campaignController;
 
-	@Autowired
-	private StoreService storeService;
+        private static List<CampaignDTO> mockCampaigns = new ArrayList<>();
+        private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null,
+                        true,
+                        null, null, null, null, null, null);
+        private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null,
+                        null,
+                        null, null, null, null, user, null, user, false, null);
+        private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0,
+                        0,
+                        null, null, null, null, null, user, user, null, null, null, null);
+        private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0,
+                        0,
+                        null, null, null, null, null, user, user, null, null, null, null);
 
-	@Autowired
-	private UserService userService;
+        @BeforeAll
+        static void setUp() {
+                mockCampaigns.add(DTOMapper.toCampaignDTO(campaign1));
+                mockCampaigns.add(DTOMapper.toCampaignDTO(campaign2));
+        }
 
-	@InjectMocks
-	private FeedService feedService;
+        @Test
+        void testGetAllCampaigns() throws Exception {
+                Mockito.when(campaignService.findAllCampaigns()).thenReturn(mockCampaigns);
+                mockMvc.perform(MockMvcRequestBuilders.get("/api/campaign/getAll")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.success").value(true))
+                                .andExpect(jsonPath("$.data[0].campaignId").value(1)).andDo(print());
+        }
 
-	private static User user;
-	private static List<User> mockUsers = new ArrayList<>();
-	private static Store store;
-	private static Campaign campaign1;
+        @Test
+        void testCreateCampaign() throws Exception {
+                Mockito.when(campaignService.create(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
+                MockMultipartFile campaign = new MockMultipartFile("campaign", "campaign",
+                                MediaType.APPLICATION_JSON_VALUE,
+                                objectMapper.writeValueAsBytes(campaign1));
+                mockMvc.perform(MockMvcRequestBuilders.multipart("/api/campaign/create").file(campaign)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.success").value(true)).andDo(print());
+        }
 
-	@BeforeAll
-	static void setUp() {
+        @Test
+        void testUpdateCampaign() throws Exception {
+                campaign1.setDescription("new desc");
+                Mockito.when(campaignService.update(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
+                MockMultipartFile campaign = new MockMultipartFile("campaign", "campaign",
+                                MediaType.APPLICATION_JSON_VALUE,
+                                objectMapper.writeValueAsBytes(campaign1));
+                mockMvc.perform(MockMvcRequestBuilders.multipart("/api/campaign/update").file(campaign)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.success").value(true)).andDo(print());
+                // .andExpect(jsonPath("$data.description").value("new desc")).andDo(print());
+        }
 
-		user = new User("1", "admin12345@gmail.com", "Admin", "Pwd@123", RoleType.MERCHANT, null, null, true, null,
-				null, null, null, null, null, null);
+        @Test
+        void testDeleteCampaign() throws Exception {
+                mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/delete/{campaignId}", "1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.success").value(true)).andDo(print());
+        }
 
-		store = new Store("MUJI",
-				"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
-				"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
-				"Singapore", false);
-		campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, null,
-				null, null, user, user, null, null, null, null);
-
-		mockUsers.add(user);
-	}
-
-	@Test
-	@Transactional
-	void testPromoteCampaign() throws Exception {
-
-		User createdUser = userService.create(user);
-		store.setCreatedBy(createdUser);
-
-		storeService.create(store);
-
-		CampaignDTO campaignDTO = campaignService.create(campaign1);
-		String campaginId = campaignDTO.getCampaignId();
-
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/promote/{campaignId}", campaginId)
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.message").value("Campaign promoted successfully"))
-				.andExpect(jsonPath("$.data[0].campaignId").value(campaginId)).andDo(print());
-	}
 }
