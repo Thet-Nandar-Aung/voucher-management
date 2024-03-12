@@ -78,6 +78,9 @@ public class User {
 	@OneToMany(mappedBy = "updatedBy")
 	private List<Campaign> updatedCampaign;
 
+	@OneToMany(mappedBy = "targetUserId")
+	private List<Feed> feedTargetUser;
+
 	public String getUserId() {
 		return userId;
 	}
@@ -188,6 +191,14 @@ public class User {
 
 	public void setUpdatedCampaign(List<Campaign> updatedCampaign) {
 		this.updatedCampaign = updatedCampaign;
+	}
+
+	public List<Feed> getFeedTargetUser() {
+		return feedTargetUser;
+	}
+
+	public void setFeedTargetUser(List<Feed> feedTargetUser) {
+		this.feedTargetUser = feedTargetUser;
 	}
 
 }

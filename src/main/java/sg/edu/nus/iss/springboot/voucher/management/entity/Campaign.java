@@ -20,18 +20,18 @@ import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 @Entity
 @AllArgsConstructor
 public class Campaign {
-	
+
 	public Campaign() {
 		super();
 	}
-	
+
 	@Id
 	@UuidGenerator(style = UuidGenerator.Style.AUTO)
 	private String campaignId;
-	
+
 	@Column(nullable = false)
 	private String description;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "storeId")
 	private Store store;
@@ -39,25 +39,25 @@ public class Campaign {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private CampaignStatus campaignStatus = CampaignStatus.CREATED;
-	
+
 	@Column(nullable = true)
 	private String tagsJson;
-	
+
 	@Column(nullable = false)
 	private int numberOfVouchers;
-	
+
 	@Column(nullable = false)
 	private int numberOfLikes = 0;
-	
+
 	@Column(nullable = true)
 	private String pin;
 
 	@Column(nullable = true)
 	private String condition1;
-	
+
 	@Column(nullable = true)
 	private String condition2;
-	
+
 	@Column(nullable = true, columnDefinition = "datetime")
 	private LocalDateTime startDate;
 
@@ -67,19 +67,22 @@ public class Campaign {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "createdBy")
 	private User createdBy;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "updatedBy")
 	private User updatedBy;
-	
+
 	@Column(nullable = true, columnDefinition = "datetime default now()")
 	private LocalDateTime createdDate;
-	
+
 	@Column(nullable = true, columnDefinition = "datetime")
 	private LocalDateTime updatedDate;
-	
+
 	@OneToMany(mappedBy = "voucherId")
 	private List<Voucher> voucher;
+
+	@OneToMany(mappedBy = "feedId")
+	private List<Feed> feed;
 
 	public List<Voucher> getVoucher() {
 		return voucher;
@@ -88,7 +91,7 @@ public class Campaign {
 	public void setVoucher(List<Voucher> voucher) {
 		this.voucher = voucher;
 	}
-	
+
 	public String getCampaignId() {
 		return campaignId;
 	}
@@ -104,7 +107,7 @@ public class Campaign {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public Store getStore() {
 		return this.store;
 	}
@@ -112,6 +115,7 @@ public class Campaign {
 	public void setStore(Store store) {
 		this.store = store;
 	}
+
 	public CampaignStatus getCampaignStatus() {
 		return campaignStatus;
 	}
@@ -214,6 +218,14 @@ public class Campaign {
 
 	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
+	}
+
+	public List<Feed> getFeed() {
+		return feed;
+	}
+
+	public void setFeed(List<Feed> feed) {
+		this.feed = feed;
 	}
 
 }

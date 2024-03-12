@@ -1,10 +1,12 @@
 package sg.edu.nus.iss.springboot.voucher.management.utility;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
+import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.VoucherDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
+import sg.edu.nus.iss.springboot.voucher.management.entity.Feed;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Voucher;
@@ -62,5 +64,16 @@ public class DTOMapper {
         voucherDTO.setConsumedTime(voucher.getConsumedTime());
         voucherDTO.setClaimedBy(toUserDTO(voucher.getClaimedBy()));
         return voucherDTO;
+    }
+    
+    public static FeedDTO toFeedDTO(Feed feed) {
+    	FeedDTO feedDTO = new FeedDTO();
+    	feedDTO.setCampaignId(feed.getCampaignId().getCampaignId());
+    	feedDTO.setFeedId(feed.getFeedId());
+    	feedDTO.setRead(feed.isRead());
+    	feedDTO.setReadTime(feed.getReadTime());
+    	feedDTO.setTargetUserId(toUserDTO(feed.getTargetUserId()));
+    	
+    	return feedDTO;
     }
 }
