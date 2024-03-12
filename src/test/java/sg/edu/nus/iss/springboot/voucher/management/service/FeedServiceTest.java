@@ -76,6 +76,6 @@ public class FeedServiceTest {
 		feedDTOList = feedService.save(campaign1.getCampaignId());
 
 		assertThat(feedDTOList).isNotNull();
-		assertThat(feedDTOList.get(0).getCampaignId().equals("1")).isTrue();
+		assertThat(feedDTOList.get(0).getFeedId().equals("1")).isTrue();
 	}
 }
