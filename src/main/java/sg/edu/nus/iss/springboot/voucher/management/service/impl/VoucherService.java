@@ -50,7 +50,7 @@ public class VoucherService implements IVoucherService {
     @Override
     public List<VoucherDTO> findAllClaimedVouchersByCampaignId(String campaignId) {
         logger.info("Getting all claimed voucher for campaign id {}...", campaignId);
-        List<Voucher> vouchers = voucherRepository.findAllClaimedVouchersByCampaignId(campaignId);
+        List<Voucher> vouchers = voucherRepository.findByCampaignCampaignId(campaignId);
         logger.info("Found {}, converting to DTOs...", vouchers.size());
         List<VoucherDTO> voucherDTOs = new ArrayList<VoucherDTO>();
         for (Voucher voucher : vouchers) {
