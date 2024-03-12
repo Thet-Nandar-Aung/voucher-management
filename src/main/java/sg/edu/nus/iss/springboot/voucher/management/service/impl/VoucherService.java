@@ -3,7 +3,6 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +81,7 @@ public class VoucherService implements IVoucherService {
         try {
             // Add validation here to make sure the same userId is passed
             voucher.setConsumedTime(LocalDateTime.now());
-            voucher.setCampaignStatus(VoucherStatus.CONSUMED);
+            voucher.setVoucherStatus(VoucherStatus.CONSUMED);
             logger.info("Consuming voucher...");
             Voucher savedVoucher = voucherRepository.save(voucher);
             logger.info("Consumed successfully...");

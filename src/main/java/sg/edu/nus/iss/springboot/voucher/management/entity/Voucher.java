@@ -29,7 +29,7 @@ public class Voucher {
 	private Campaign campaign;
 
 	@Column(nullable = false)
-	private VoucherStatus campaignStatus = VoucherStatus.CLAIMED;
+	private VoucherStatus voucherStatus = VoucherStatus.CLAIMED;
 
 	@Column(nullable = true, columnDefinition = "datetime default now()")
 	private LocalDateTime claimTime;
@@ -57,12 +57,12 @@ public class Voucher {
 		this.campaign = campaign;
 	}
 
-	public VoucherStatus getCampaignStatus() {
-		return campaignStatus;
+	public VoucherStatus getVoucherStatus() {
+		return voucherStatus;
 	}
 
-	public void setCampaignStatus(VoucherStatus campaignStatus) {
-		this.campaignStatus = campaignStatus;
+	public void setVoucherStatus(VoucherStatus voucherStatus) {
+		this.voucherStatus = voucherStatus;
 	}
 
 	public LocalDateTime getClaimTime() {

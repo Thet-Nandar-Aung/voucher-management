@@ -55,7 +55,7 @@ public class DTOMapper {
         VoucherDTO voucherDTO = new VoucherDTO();
         voucherDTO.setVoucherId(voucher.getVoucherId());
         voucherDTO.setCampaign(toCampaignDTO(voucher.getCampaign()));
-        voucherDTO.setVoucherStatus(voucher.getCampaignStatus());
+        voucherDTO.setVoucherStatus(voucher.getVoucherStatus());
         voucherDTO.setClaimTime(voucher.getClaimTime());
         voucherDTO.setConsumedTime(voucher.getConsumedTime());
         voucherDTO.setClaimedBy(toUserDTO(voucher.getClaimedBy()));
