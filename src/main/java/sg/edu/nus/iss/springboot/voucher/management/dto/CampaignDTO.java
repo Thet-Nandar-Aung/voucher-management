@@ -18,8 +18,8 @@ public class CampaignDTO {
 	private int numberOfVouchers;
 	private int numberOfLikes;
 	private String pin;
-	private String condition1;
-	private String condition2;
+	private String tandc;
+	private double amount;
     private LocalDateTime startDate;
 	private LocalDateTime endDate;
     private UserDTO createdBy;
@@ -94,20 +94,20 @@ public class CampaignDTO {
         this.pin = pin;
     }
 
-    public String getCondition1() {
-        return this.condition1;
+    public String getTandc() {
+        return this.tandc;
     }
 
-    public void setCondition1(String condition1) {
-        this.condition1 = condition1;
+    public void setTandc(String tandc) {
+        this.tandc = tandc;
     }
 
-    public String getCondition2() {
-        return this.condition2;
+    public double getAmount() {
+        return this.amount;
     }
 
-    public void setCondition2(String condition2) {
-        this.condition2 = condition2;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public UserDTO getCreatedBy() {

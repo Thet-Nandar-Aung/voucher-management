@@ -21,8 +21,8 @@ public class DTOMapper {
         campaignDTO.setNumberOfVouchers(campaign.getNumberOfVouchers());
         campaignDTO.setNumberOfLikes(campaign.getNumberOfLikes());
         campaignDTO.setPin(campaign.getPin());
-        campaignDTO.setCondition1(campaign.getCondition1());
-        campaignDTO.setCondition2(campaign.getCondition2());
+        campaignDTO.setTandc(campaign.getTandc());
+        campaignDTO.setAmount(campaign.getAmount());
         campaignDTO.setStartDate(campaign.getStartDate());
         campaignDTO.setEndDate(campaign.getEndDate());
         campaignDTO.setCreatedBy(toUserDTO(campaign.getCreatedBy()));
@@ -56,8 +56,6 @@ public class DTOMapper {
         voucherDTO.setVoucherId(voucher.getVoucherId());
         voucherDTO.setCampaign(toCampaignDTO(voucher.getCampaign()));
         voucherDTO.setVoucherStatus(voucher.getCampaignStatus());
-        voucherDTO.setAmount(voucher.getAmount());
-        voucherDTO.setValidThrough(voucher.getValidThrough());
         voucherDTO.setClaimTime(voucher.getClaimTime());
         voucherDTO.setConsumedTime(voucher.getConsumedTime());
         voucherDTO.setClaimedBy(toUserDTO(voucher.getClaimedBy()));
