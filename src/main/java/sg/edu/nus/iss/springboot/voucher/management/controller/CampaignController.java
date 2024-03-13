@@ -37,16 +37,31 @@ public class CampaignController {
 	@Autowired
 	private FeedService feedService;
 
-	@GetMapping(value = "/getAll", produces = "application/json")
-	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveStore() {
+	@GetMapping(value = "/all/active", produces = "application/json")
+	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveCampaigns() {
 		try {
-			logger.info("Calling Campaign getALL API...");
+			logger.info("Calling Campaign getAllActiveCampaigns API...");
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(APIResponse.success(campaignService.findAllCampaigns(), "Successfully get all campaigns"));
+					.body(APIResponse.success(campaignService.findAllActiveCampaigns(),
+							"Successfully get all active campaigns"));
 		} catch (Exception ex) {
-			logger.info("Calling Campaign getALL API failed...");
+			logger.info("Calling Campaign getAllActiveCampaigns API failed...");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(APIResponse.error("Failed to get all campaigns"));
+					.body(APIResponse.error("Failed to get all active campaigns"));
+		}
+	}
+
+	@GetMapping(value = "/store/{storeId}", produces = "application/json")
+	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByStoreId(@PathVariable String storeId) {
+		try {
+			logger.info("Calling Campaign getAllCampaignsByStoreId API...");
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(APIResponse.success(campaignService.findAllCampaignsByStoreId(storeId),
+							"Successfully get all active campaigns"));
+		} catch (Exception ex) {
+			logger.info("Calling Campaign getAllCampaignsByStoreId API failed...");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(APIResponse.error("Failed to get all campaigns by store Id"));
 		}
 	}
 
@@ -128,7 +143,7 @@ public class CampaignController {
 				message = "Bad Request:Campaign ID could not be blank.";
 				logger.error(message);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(message));
-			
+
 			}
 
 		} catch (Exception e) {

@@ -50,7 +50,7 @@ public class CampaignServiceTest {
     private static List<Campaign> mockCampaigns = new ArrayList<>();
     private static User user = new User("1","test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true, null, null, null, null, null, null,null);
     private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null, null, null, null, null, null, user, null, user, false, null);
-    private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
+    private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
     private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
    
     @BeforeAll
@@ -60,9 +60,18 @@ public class CampaignServiceTest {
     }
 
     @Test
-    void getAllCampaigns(){
-        Mockito.when(campaignRepository.findAll()).thenReturn(mockCampaigns);
-        List<CampaignDTO> campaignDTOs = campaignService.findAllCampaigns();
+    void getAllActiveCampaigns(){
+        Mockito.when(campaignRepository.findByCampaignStatus(CampaignStatus.PROMOTED)).thenReturn(mockCampaigns);
+        List<CampaignDTO> campaignDTOs = campaignService.findAllActiveCampaigns();
+        assertEquals(mockCampaigns.size(), campaignDTOs.size());
+        assertEquals(mockCampaigns.get(0).getCampaignId(), campaignDTOs.get(0).getCampaignId());
+        assertEquals(mockCampaigns.get(1).getCampaignId(), campaignDTOs.get(1).getCampaignId());
+    }
+
+    @Test
+    void getAllCampaignsByStoreId(){
+        Mockito.when(campaignRepository.findByStoreStoreId(store.getStoreId())).thenReturn(mockCampaigns);
+        List<CampaignDTO> campaignDTOs = campaignService.findAllCampaignsByStoreId(campaign1.getStore().getStoreId());
         assertEquals(mockCampaigns.size(), campaignDTOs.size());
         assertEquals(mockCampaigns.get(0).getCampaignId(), campaignDTOs.get(0).getCampaignId());
         assertEquals(mockCampaigns.get(1).getCampaignId(), campaignDTOs.get(1).getCampaignId());

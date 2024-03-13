@@ -14,6 +14,7 @@ import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
+import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
@@ -39,10 +40,22 @@ public class CampaignService implements ICampaignService {
     private VoucherRepository voucherRepository;
 
     @Override
-    public List<CampaignDTO> findAllCampaigns() {
+    public List<CampaignDTO> findAllActiveCampaigns() {
+        logger.info("Getting all active campaigns...");
+        List<Campaign> campaigns = campaignRepository.findByCampaignStatus(CampaignStatus.PROMOTED);
+        logger.info("Found {}, converting to DTOs...", campaigns.size());
+        List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+        for (Campaign campaign : campaigns) {
+            campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+            campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+        }
+        return campaignDTOs;
+    }
 
-        logger.info("Getting all campaigns...");
-        List<Campaign> campaigns = campaignRepository.findAll();
+    @Override
+    public List<CampaignDTO> findAllCampaignsByStoreId(String storeId) {
+        logger.info("Getting all campaigns by Store Id...");
+        List<Campaign> campaigns = campaignRepository.findByStoreStoreId(storeId);
         logger.info("Found {}, converting to DTOs...", campaigns.size());
         List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
         for (Campaign campaign : campaigns) {

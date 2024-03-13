@@ -72,9 +72,20 @@ public class CampaignControllerTest {
         }
 
         @Test
-        void testGetAllCampaigns() throws Exception {
-                Mockito.when(campaignService.findAllCampaigns()).thenReturn(mockCampaigns);
-                mockMvc.perform(MockMvcRequestBuilders.get("/api/campaign/getAll")
+        void testGetAllActiveCampaigns() throws Exception {
+                Mockito.when(campaignService.findAllActiveCampaigns()).thenReturn(mockCampaigns);
+                mockMvc.perform(MockMvcRequestBuilders.get("/api/campaign/all/active")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.success").value(true))
+                                .andExpect(jsonPath("$.data[0].campaignId").value(1)).andDo(print());
+        }
+
+        @Test
+        void getAllCampaignsByStoreId() throws Exception {
+                Mockito.when(campaignService.findAllCampaignsByStoreId(store.getStoreId())).thenReturn(mockCampaigns);
+                mockMvc.perform(MockMvcRequestBuilders.get("/api/campaign/store/{id}", "1")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(MockMvcResultMatchers.status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
