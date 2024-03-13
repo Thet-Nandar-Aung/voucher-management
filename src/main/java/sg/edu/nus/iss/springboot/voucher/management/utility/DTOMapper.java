@@ -12,8 +12,8 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Voucher;
 
 public class DTOMapper {
-    
-    public static CampaignDTO toCampaignDTO(Campaign campaign){
+
+    public static CampaignDTO toCampaignDTO(Campaign campaign) {
         CampaignDTO campaignDTO = new CampaignDTO();
         campaignDTO.setCampaignId(campaign.getCampaignId());
         campaignDTO.setDescription(campaign.getDescription());
@@ -31,10 +31,13 @@ public class DTOMapper {
         campaignDTO.setCreatedDate(campaign.getCreatedDate());
         campaignDTO.setUpdatedBy(toUserDTO(campaign.getUpdatedBy()));
         campaignDTO.setUpdatedDate(campaign.getUpdatedDate());
+        if (campaign.getVoucher() != null) {
+            campaignDTO.setNumberOfClaimedVouchers(campaign.getVoucher().size());
+        }
         return campaignDTO;
     }
 
-    public static UserDTO toUserDTO(User user){
+    public static UserDTO toUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(user.getUserId());
         userDTO.setUsername(user.getUsername());
@@ -46,14 +49,14 @@ public class DTOMapper {
         return userDTO;
     }
 
-    public static StoreDTO toStoreDTO(Store store){
+    public static StoreDTO toStoreDTO(Store store) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreId(store.getStoreId());
         storeDTO.setStoreName(store.getStoreName());
         return storeDTO;
     }
 
-    public static VoucherDTO toVoucherDTO(Voucher voucher){
+    public static VoucherDTO toVoucherDTO(Voucher voucher) {
         VoucherDTO voucherDTO = new VoucherDTO();
         voucherDTO.setVoucherId(voucher.getVoucherId());
         voucherDTO.setCampaign(toCampaignDTO(voucher.getCampaign()));
@@ -63,15 +66,15 @@ public class DTOMapper {
         voucherDTO.setClaimedBy(toUserDTO(voucher.getClaimedBy()));
         return voucherDTO;
     }
-    
+
     public static FeedDTO toFeedDTO(Feed feed) {
-    	FeedDTO feedDTO = new FeedDTO();
-    	feedDTO.setCampaignId(feed.getCampaignId().getCampaignId());
-    	feedDTO.setFeedId(feed.getFeedId());
-    	feedDTO.setRead(feed.isRead());
-    	feedDTO.setReadTime(feed.getReadTime());
-    	feedDTO.setTargetUserId(toUserDTO(feed.getTargetUserId()));
-    	
-    	return feedDTO;
+        FeedDTO feedDTO = new FeedDTO();
+        feedDTO.setCampaignId(feed.getCampaignId().getCampaignId());
+        feedDTO.setFeedId(feed.getFeedId());
+        feedDTO.setRead(feed.isRead());
+        feedDTO.setReadTime(feed.getReadTime());
+        feedDTO.setTargetUserId(toUserDTO(feed.getTargetUserId()));
+
+        return feedDTO;
     }
 }

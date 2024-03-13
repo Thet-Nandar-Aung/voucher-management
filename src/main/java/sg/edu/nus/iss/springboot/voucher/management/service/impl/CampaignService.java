@@ -3,6 +3,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
+import sg.edu.nus.iss.springboot.voucher.management.repository.VoucherRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.ICampaignService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
@@ -33,6 +35,9 @@ public class CampaignService implements ICampaignService {
     @Autowired
     private StoreRepository storeRepository;
 
+    @Autowired
+    private VoucherRepository voucherRepository;
+
     @Override
     public List<CampaignDTO> findAllCampaigns() {
 
@@ -41,6 +46,7 @@ public class CampaignService implements ICampaignService {
         logger.info("Found {}, converting to DTOs...", campaigns.size());
         List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
         for (Campaign campaign : campaigns) {
+            campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
             campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
         }
         return campaignDTOs;
@@ -52,6 +58,7 @@ public class CampaignService implements ICampaignService {
         Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
         if (campaign != null) {
             logger.info("Campaign found...");
+            campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaignId));
             return DTOMapper.toCampaignDTO(campaign);
         }
         logger.warn("Didn't find any campaign for campaignId {}...", campaignId);
@@ -63,6 +70,7 @@ public class CampaignService implements ICampaignService {
         try {
             User user = userRepository.findByEmail(campaign.getCreatedBy().getEmail());
             Store store = storeRepository.findById(campaign.getStore().getStoreId()).orElseThrow();
+            campaign.setPin(String.valueOf(new Random().nextInt(9000) + 1000));
             campaign.setCreatedBy(user);
             campaign.setCreatedDate(LocalDateTime.now());
             campaign.setUpdatedBy(user);
