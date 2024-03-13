@@ -84,7 +84,7 @@ public class UserService implements IUserService {
 	@Override
 	public User validateUserLogin(String email, String password) {
 		try {
-			User user = findByEmail(email);
+			User user = userRepository.findByEmail(email);
 			if (user != null && passwordEncoder.matches(password, user.getPassword())){
 				return user;
 			}

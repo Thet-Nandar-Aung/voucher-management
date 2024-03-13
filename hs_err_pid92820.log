@@ -1,0 +1,1131 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x000000010aa877f4, pid=92820, tid=63235
+#
+# JRE version: Java(TM) SE Runtime Environment (21.0.1+12) (build 21.0.1+12-LTS-29)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (21.0.1+12-LTS-29, mixed mode, emulated-client, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, bsd-aarch64)
+# Problematic frame:
+# v  ~BufferBlob::MethodHandles adapters 0x000000010aa877f4
+#
+# No core dump will be written. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -XX:+ShowCodeDetailsInExceptionMessages -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:49425 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=49424 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=localhost -Dspring.jmx.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -Dspring.application.admin.enabled=true -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active= -XX:TieredStopAtLevel=1 -Dspring.boot.project.name=voucher-management -javaagent:/Applications/Eclipse.app/Contents/Eclipse/configuration/org.eclipse.osgi/2389/0/.cp/lib/javaagent-shaded.jar -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 sg.edu.nus.iss.springboot.voucher.management.VoucherManagementApplication --spring.output.ansi.enabled=always
+
+Host: "Mac15,10" arm64, 14 cores, 36G, Darwin 23.2.0, macOS 14.2.1 (23C71)
+Time: Wed Mar 13 23:21:23 2024 +08 elapsed time: 383.111879 seconds (0d 0h 6m 23s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000011f008e00):  JavaThread "http-nio-8081-exec-8" daemon [_thread_in_Java, id=63235, stack(0x0000000176ba4000,0x0000000176da7000) (2060K)]
+
+Stack: [0x0000000176ba4000,0x0000000176da7000],  sp=0x0000000176da2d70,  free space=2043k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+v  ~BufferBlob::MethodHandles adapters 0x000000010aa877f4
+J 2862 c1 java.lang.invoke.LambdaForm$MH+0x0000000501001c00.invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; java.base@21.0.1 (35 bytes) @ 0x00000005e3f1eb10 [0x000000010b0b56c0+0x00000004d8e69450]
+C  0x000000013806ff1e
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 2 (SEGV_ACCERR), si_addr: 0xb81500c02b4c0038
+
+Registers:
+ x0=0x2010002030100000  x1=0x0000000fffffc118  x2=0x0000000176da2da0  x3=0x0000000000000002
+ x4=0x000000000000005e  x5=0x00000000000000a0  x6=0x0000000000000000  x7=0x0000000000000000
+ x8=0x0000000000000001  x9=0x0000000000000008 x10=0x0000000500738bfa x11=0x0000000000000009
+x12=0xb81500c02b4c0000 x13=0x00000005000b5538 x14=0x000000009267f856 x15=0x0000000000000056
+x16=0x0000000183442db4 x17=0x0000600000cb6370 x18=0x0000000000000000 x19=0x0000000176da2d70
+x20=0x0000000176da2da0 x21=0x00000001022f2e90 x22=0x0000000500738bfa x23=0x000000010aa65640
+x24=0x0000000176da2e10 x25=0x0000000000000001 x26=0x00000005000b29e8 x27=0x0000000000000000
+x28=0x000000011f008e00  fp=0x0000000176da2df0  lr=0x000000010aa65380  sp=0x0000000176da2d70
+pc=0x000000010aa877f4 cpsr=0x0000000060001000
+
+Register to memory mapping:
+
+x0 =0x2010002030100000 is an unknown value
+x1 =0x0000000fffffc118 points into unknown readable memory: 0x2010002030100000 | 00 00 10 30 20 00 10 20
+x2 =0x0000000176da2da0 is pointing into the stack for thread: 0x000000011f008e00
+x3 =0x0000000000000002 is an unknown value
+x4 =0x000000000000005e is an unknown value
+x5 =0x00000000000000a0 is an unknown value
+x6 =0x0 is null
+x7 =0x0 is null
+x8 =0x0000000000000001 is an unknown value
+x9 =0x0000000000000008 is an unknown value
+x10=0x0000000500738bfa is pointing into metadata
+x11=0x0000000000000009 is an unknown value
+x12=0xb81500c02b4c0000 is an unknown value
+x13={method} {0x00000005000b5538} 'invokeVirtual' '(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;' in 'java/lang/invoke/DirectMethodHandle$Holder'
+x14=0x000000009267f856 is an unknown value
+x15=0x0000000000000056 is an unknown value
+x16=0x0000000183442db4: pthread_jit_write_protect_np+0 in /usr/lib/system/libsystem_pthread.dylib at 0x000000018343b000
+x17=0x0000600000cb6370 points into unknown readable memory: 0x00000000ffffffff | ff ff ff ff 00 00 00 00
+x18=0x0 is null
+x19=0x0000000176da2d70 is pointing into the stack for thread: 0x000000011f008e00
+x20=0x0000000176da2da0 is pointing into the stack for thread: 0x000000011f008e00
+x21=0x00000001022f2e90: _ZN19TemplateInterpreter13_active_tableE+0 in /Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/server/libjvm.dylib at 0x0000000101624000
+x22=0x0000000500738bfa is pointing into metadata
+x23=0x000000010aa65640 is at code_begin+2816 in an Interpreter codelet
+return entry points  [0x000000010aa64b40, 0x000000010aa65fe0]  5280 bytes
+x24=0x0000000176da2e10 is pointing into the stack for thread: 0x000000011f008e00
+x25=0x0000000000000001 is an unknown value
+x26=0x00000005000b29e8 is pointing into metadata
+x27=0x0 is null
+x28=0x000000011f008e00 is a thread
+ fp=0x0000000176da2df0 is pointing into the stack for thread: 0x000000011f008e00
+ lr=0x000000010aa65380 is at code_begin+2112 in an Interpreter codelet
+return entry points  [0x000000010aa64b40, 0x000000010aa65fe0]  5280 bytes
+ sp=0x0000000176da2d70 is pointing into the stack for thread: 0x000000011f008e00
+
+Top of Stack: (sp=0x0000000176da2d70)
+0x0000000176da2d70:   0000000176da2df0 000000010aa7cd80
+0x0000000176da2d80:   0000000176da2db0 0000000000000001
+0x0000000176da2d90:   0000000138530000 00000005c59b8308
+0x0000000176da2da0:   0000000176da2da0 0000000500738bfa
+0x0000000176da2db0:   0000000000000004 00000005000b29e8
+0x0000000176da2dc0:   00000005c2824ae8 0000000176da2d70
+0x0000000176da2dd0:   0000000176da2e10 00000005000b5538
+0x0000000176da2de0:   0000000176da2d98 0000000176da2e20
+0x0000000176da2df0:   0000000176da3160 000000010b0b5868
+0x0000000176da2e00:   00000005e3f6f5c8 00000005c59b8308
+0x0000000176da2e10:   00000005e3f6f718 000000010b0b5868
+0x0000000176da2e20:   00000005c2e13eb8 00000005c2e13eb8
+0x0000000176da2e30:   000000011f008e00 00000005e3f6f8e8
+0x0000000176da2e40:   00000005c59b8308 00000005e3f6f898
+0x0000000176da2e50:   00000005e3f6f718 00000005c59b8308
+0x0000000176da2e60:   000000010b0b57c4 0000000176da30d0
+0x0000000176da2e70:   0000000176da3160 000000010b4c5db0
+0x0000000176da2e80:   00000005e3f6f4f0 00000005c611e0d8
+0x0000000176da2e90:   0000000176da30e8 000000010aa69340
+0x0000000176da2ea0:   000000012be450de 0000000176da2f38
+0x0000000176da2eb0:   0000000000000001 000000011f008e00
+0x0000000176da2ec0:   0000000176da2f20 00000005caf6ce18
+0x0000000176da2ed0:   0000000176da3160 000000010ad9bcc8
+0x0000000176da2ee0:   0000000176da2f70 000000010aa656f0
+0x0000000176da2ef0:   000006903828a100 00000005e3d67768
+0x0000000176da2f00:   00000001d7c7cc05 00000001022f2e90
+0x0000000176da2f10:   0000000176da32b0 000000010ac3dd14
+0x0000000176da2f20:   0000000176da2f20 00000005e3d67768
+0x0000000176da2f30:   00000005e3f6f910 00000005e3f1eb10
+0x0000000176da2f40:   00000005c59b8308 000000010ac42e58
+0x0000000176da2f50:   0000000176da30d0 00000005c6391d90
+0x0000000176da2f60:   00000005c611e0d8 00000005c2e13eb8 
+
+Instructions: (pc=0x000000010aa877f4)
+0x000000010aa876f4:   00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 d4
+0x000000010aa87704:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa87714:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa87724:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa87734:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 83 05 40 f9
+0x000000010aa87744:   63 5c 40 79 88 6e 23 8b 01 81 5f f8 2c 14 40 b9
+0x000000010aa87754:   8c f1 7d d3 8c 29 40 b9 8c f1 7d d3 8c 25 40 b9
+0x000000010aa87764:   8c f1 7d d3 8c 09 40 f9 ec 00 00 b4 88 c3 45 b9
+0x000000010aa87774:   68 00 00 34 88 1d 40 f9 00 01 1f d6 88 29 40 f9
+0x000000010aa87784:   00 01 1f d6 5e 68 00 14 1f 20 03 d5 1f 20 03 d5
+0x000000010aa87794:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa877a4:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa877b4:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 83 05 40 f9
+0x000000010aa877c4:   63 5c 40 79 88 6e 23 8b 02 81 5f f8 8c 86 40 f8
+0x000000010aa877d4:   4a 08 40 b9 aa 00 c0 f2 8b 09 40 f9 4c 6d 2b 8b
+0x000000010aa877e4:   8c e5 40 f9 ec 00 00 b4 88 c3 45 b9 68 00 00 34
+0x000000010aa877f4:   88 1d 40 f9 00 01 1f d6 88 29 40 f9 00 01 1f d6
+0x000000010aa87804:   3f 68 00 14 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa87814:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa87824:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa87834:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 8c 86 40 f8
+0x000000010aa87844:   8c 25 40 b9 8c f1 7d d3 8c 09 40 f9 ec 00 00 b4
+0x000000010aa87854:   88 c3 45 b9 68 00 00 34 88 1d 40 f9 00 01 1f d6
+0x000000010aa87864:   88 29 40 f9 00 01 1f d6 25 68 00 14 1f 20 03 d5
+0x000000010aa87874:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 83 05 40 f9
+0x000000010aa87884:   63 5c 40 79 88 6e 23 8b 02 81 5f f8 8c 86 40 f8
+0x000000010aa87894:   5f 00 40 f9 8c 25 40 b9 8c f1 7d d3 8c 09 40 f9
+0x000000010aa878a4:   ec 00 00 b4 88 c3 45 b9 68 00 00 34 88 1d 40 f9
+0x000000010aa878b4:   00 01 1f d6 88 29 40 f9 00 01 1f d6 10 68 00 14
+0x000000010aa878c4:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa878d4:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5
+0x000000010aa878e4:   1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 
+
+
+Stack slot to memory mapping:
+
+stack at sp + 0 slots: 0x0000000176da2df0 is pointing into the stack for thread: 0x000000011f008e00
+stack at sp + 1 slots: 0x000000010aa7cd80 is at code_begin+0 in an Interpreter codelet
+deoptimization entry points  [0x000000010aa7cd80, 0x000000010aa7f5d8]  10328 bytes
+stack at sp + 2 slots: 0x0000000176da2db0 is pointing into the stack for thread: 0x000000011f008e00
+stack at sp + 3 slots: 0x0000000000000001 is an unknown value
+stack at sp + 4 slots: 0x0000000138530000 is pointing into metadata
+stack at sp + 5 slots: 0x00000005c59b8308 is an oop: sg.edu.nus.iss.springboot.voucher.management.controller.FeedController 
+{0x00000005c59b8308} - klass: 'sg/edu/nus/iss/springboot/voucher/management/controller/FeedController'
+ - ---- fields (total size 2 words):
+ - private 'feedService' 'Lsg/edu/nus/iss/springboot/voucher/management/service/impl/FeedService;' @12  a 'sg/edu/nus/iss/springboot/voucher/management/service/impl/FeedService'{0x00000005c58412d0} (0xb8b0825a)
+stack at sp + 6 slots: 0x0000000176da2da0 is pointing into the stack for thread: 0x000000011f008e00
+stack at sp + 7 slots: 0x0000000500738bfa is pointing into metadata
+
+MethodHandle::interpreter_entry::_linkToVirtual [0x000000010aa8778c, 0x000000010aa87808] (124 bytes)
+[MachCode]
+  0x000000010aa8778c: 1f20 03d5 | 1f20 03d5 | 1f20 03d5 | 1f20 03d5 | 1f20 03d5 | 1f20 03d5 | 1f20 03d5 | 1f20 03d5 
+  0x000000010aa877ac: 1f20 03d5 | 1f20 03d5 | 1f20 03d5 | 1f20 03d5 | 1f20 03d5 | 8305 40f9 | 635c 4079 | 886e 238b 
+  0x000000010aa877cc: 0281 5ff8 | 8c86 40f8 | 4a08 40b9 | aa00 c0f2 | 8b09 40f9 | 4c6d 2b8b | 8ce5 40f9 | ec00 00b4 
+  0x000000010aa877ec: 88c3 45b9 | 6800 0034 | 881d 40f9 | 0001 1fd6 | 8829 40f9 | 0001 1fd6 | 3f68 0014 
+[/MachCode]
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x0000600003eacea0, length=36, elements={
+0x000000012e87be00, 0x000000012e876c00, 0x000000012e877400, 0x000000013e80cc00,
+0x000000013e80d400, 0x000000012e877c00, 0x000000013e816600, 0x000000012e87c600,
+0x000000013e862200, 0x000000011d008200, 0x000000013f21f200, 0x000000012e87d400,
+0x000000012e8c1200, 0x000000012e8c3200, 0x000000013e867000, 0x000000012e8c4a00,
+0x0000000100809000, 0x000000012eadc600, 0x000000013f474400, 0x000000012e950800,
+0x000000013e865800, 0x000000011d8e5c00, 0x000000011d350e00, 0x000000012c011600,
+0x000000012c010000, 0x000000012c01f600, 0x000000011d352000, 0x000000011d352800,
+0x000000011d36c600, 0x000000011f81f400, 0x000000011f008e00, 0x000000012c01fe00,
+0x000000012c020600, 0x000000012c01d400, 0x000000012c01dc00, 0x000000011f810400
+}
+
+Java Threads: ( => current thread )
+  0x000000012e87be00 JavaThread "Reference Handler"          daemon [_thread_blocked, id=32259, stack(0x0000000170f88000,0x000000017118b000) (2060K)]
+  0x000000012e876c00 JavaThread "Finalizer"                  daemon [_thread_blocked, id=23555, stack(0x0000000171194000,0x0000000171397000) (2060K)]
+  0x000000012e877400 JavaThread "Signal Dispatcher"          daemon [_thread_blocked, id=31747, stack(0x00000001713a0000,0x00000001715a3000) (2060K)]
+  0x000000013e80cc00 JavaThread "Service Thread"             daemon [_thread_blocked, id=24067, stack(0x00000001715ac000,0x00000001717af000) (2060K)]
+  0x000000013e80d400 JavaThread "Monitor Deflation Thread"   daemon [_thread_blocked, id=31491, stack(0x00000001717b8000,0x00000001719bb000) (2060K)]
+  0x000000012e877c00 JavaThread "C1 CompilerThread0"         daemon [_thread_blocked, id=24835, stack(0x00000001719c4000,0x0000000171bc7000) (2060K)]
+  0x000000013e816600 JavaThread "Common-Cleaner"             daemon [_thread_blocked, id=30979, stack(0x0000000171ddc000,0x0000000171fdf000) (2060K)]
+  0x000000012e87c600 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_blocked, id=30467, stack(0x0000000171fe8000,0x00000001721eb000) (2060K)]
+  0x000000013e862200 JavaThread "JDWP Event Helper Thread"   daemon [_thread_blocked, id=30211, stack(0x00000001721f4000,0x00000001723f7000) (2060K)]
+  0x000000011d008200 JavaThread "JDWP Command Reader"        daemon [_thread_in_native, id=29699, stack(0x0000000172400000,0x0000000172603000) (2060K)]
+  0x000000013f21f200 JavaThread "Notification Thread"        daemon [_thread_blocked, id=33795, stack(0x0000000173a84000,0x0000000173c87000) (2060K)]
+  0x000000012e87d400 JavaThread "RMI TCP Accept-0"           daemon [_thread_in_native, id=42499, stack(0x0000000173c90000,0x0000000173e93000) (2060K)]
+  0x000000012e8c1200 JavaThread "RMI TCP Accept-49424"       daemon [_thread_in_native, id=42243, stack(0x0000000173e9c000,0x000000017409f000) (2060K)]
+  0x000000012e8c3200 JavaThread "RMI TCP Accept-0"           daemon [_thread_in_native, id=41731, stack(0x00000001740a8000,0x00000001742ab000) (2060K)]
+  0x000000013e867000 JavaThread "RMI Scheduler(0)"           daemon [_thread_blocked, id=34819, stack(0x00000001744c0000,0x00000001746c3000) (2060K)]
+  0x000000012e8c4a00 JavaThread "RMI TCP Connection(idle)"   daemon [_thread_blocked, id=41219, stack(0x00000001746cc000,0x00000001748cf000) (2060K)]
+  0x0000000100809000 JavaThread "JMX server connection timeout 40" daemon [_thread_blocked, id=40963, stack(0x00000001748d8000,0x0000000174adb000) (2060K)]
+  0x000000012eadc600 JavaThread "Catalina-utility-1"                [_thread_blocked, id=39943, stack(0x0000000174efc000,0x00000001750ff000) (2060K)]
+  0x000000013f474400 JavaThread "Catalina-utility-2"                [_thread_blocked, id=36355, stack(0x0000000175108000,0x000000017530b000) (2060K)]
+  0x000000012e950800 JavaThread "container-0"                       [_thread_blocked, id=39427, stack(0x0000000175314000,0x0000000175517000) (2060K)]
+  0x000000013e865800 JavaThread "mysql-cj-abandoned-connection-cleanup" daemon [_thread_blocked, id=36867, stack(0x0000000175520000,0x0000000175723000) (2060K)]
+  0x000000011d8e5c00 JavaThread "HikariPool-1 housekeeper"   daemon [_thread_blocked, id=37379, stack(0x000000017572c000,0x000000017592f000) (2060K)]
+  0x000000011d350e00 JavaThread "java-sdk-http-connection-reaper" daemon [_thread_blocked, id=38147, stack(0x0000000175b44000,0x0000000175d47000) (2060K)]
+  0x000000012c011600 JavaThread "http-nio-8081-exec-1"       daemon [_thread_blocked, id=38915, stack(0x0000000175d50000,0x0000000175f53000) (2060K)]
+  0x000000012c010000 JavaThread "http-nio-8081-exec-2"       daemon [_thread_blocked, id=43523, stack(0x0000000175f5c000,0x000000017615f000) (2060K)]
+  0x000000012c01f600 JavaThread "http-nio-8081-exec-3"       daemon [_thread_blocked, id=65027, stack(0x0000000176168000,0x000000017636b000) (2060K)]
+  0x000000011d352000 JavaThread "http-nio-8081-exec-4"       daemon [_thread_blocked, id=43779, stack(0x0000000176374000,0x0000000176577000) (2060K)]
+  0x000000011d352800 JavaThread "http-nio-8081-exec-5"       daemon [_thread_blocked, id=44291, stack(0x0000000176580000,0x0000000176783000) (2060K)]
+  0x000000011d36c600 JavaThread "http-nio-8081-exec-6"       daemon [_thread_blocked, id=64259, stack(0x000000017678c000,0x000000017698f000) (2060K)]
+  0x000000011f81f400 JavaThread "http-nio-8081-exec-7"       daemon [_thread_blocked, id=63747, stack(0x0000000176998000,0x0000000176b9b000) (2060K)]
+=>0x000000011f008e00 JavaThread "http-nio-8081-exec-8"       daemon [_thread_in_Java, id=63235, stack(0x0000000176ba4000,0x0000000176da7000) (2060K)]
+  0x000000012c01fe00 JavaThread "http-nio-8081-exec-9"       daemon [_thread_blocked, id=44547, stack(0x0000000176db0000,0x0000000176fb3000) (2060K)]
+  0x000000012c020600 JavaThread "http-nio-8081-exec-10"      daemon [_thread_blocked, id=45059, stack(0x0000000176fbc000,0x00000001771bf000) (2060K)]
+  0x000000012c01d400 JavaThread "http-nio-8081-Poller"       daemon [_thread_in_native, id=62723, stack(0x00000001771c8000,0x00000001773cb000) (2060K)]
+  0x000000012c01dc00 JavaThread "http-nio-8081-Acceptor"     daemon [_thread_in_native, id=45571, stack(0x00000001773d4000,0x00000001775d7000) (2060K)]
+  0x000000011f810400 JavaThread "DestroyJavaVM"                     [_thread_blocked, id=8451, stack(0x000000016fe10000,0x0000000170013000) (2060K)]
+Total: 36
+
+Other Threads:
+  0x000000011e6077b0 VMThread "VM Thread"                           [id=18179, stack(0x0000000170c64000,0x0000000170e67000) (2060K)]
+  0x000000011e6051a0 WatcherThread "VM Periodic Task Thread"        [id=17155, stack(0x0000000170a58000,0x0000000170c5b000) (2060K)]
+  0x000000012e6067e0 WorkerThread "GC Thread#0"                     [id=14595, stack(0x000000017001c000,0x000000017021f000) (2060K)]
+  0x0000000100304f90 WorkerThread "GC Thread#1"                     [id=29187, stack(0x000000017260c000,0x000000017280f000) (2060K)]
+  0x0000000100305500 WorkerThread "GC Thread#2"                     [id=26115, stack(0x0000000172818000,0x0000000172a1b000) (2060K)]
+  0x000000012e615320 WorkerThread "GC Thread#3"                     [id=26371, stack(0x0000000172a24000,0x0000000172c27000) (2060K)]
+  0x000000012e615890 WorkerThread "GC Thread#4"                     [id=26627, stack(0x0000000172c30000,0x0000000172e33000) (2060K)]
+  0x000000012e6161f0 WorkerThread "GC Thread#5"                     [id=28419, stack(0x0000000172e3c000,0x000000017303f000) (2060K)]
+  0x000000012e616b50 WorkerThread "GC Thread#6"                     [id=27139, stack(0x0000000173048000,0x000000017324b000) (2060K)]
+  0x000000012e6174b0 WorkerThread "GC Thread#7"                     [id=27907, stack(0x0000000173254000,0x0000000173457000) (2060K)]
+  0x000000012e617e10 WorkerThread "GC Thread#8"                     [id=32771, stack(0x0000000173460000,0x0000000173663000) (2060K)]
+  0x000000012e618770 WorkerThread "GC Thread#9"                     [id=33027, stack(0x000000017366c000,0x000000017386f000) (2060K)]
+  0x000000012e6190d0 WorkerThread "GC Thread#10"                    [id=43011, stack(0x0000000173878000,0x0000000173a7b000) (2060K)]
+  0x000000012e606f80 ConcurrentGCThread "G1 Main Marker"            [id=12803, stack(0x0000000170228000,0x000000017042b000) (2060K)]
+  0x000000012e6078f0 WorkerThread "G1 Conc#0"                       [id=13571, stack(0x0000000170434000,0x0000000170637000) (2060K)]
+  0x0000000100357020 WorkerThread "G1 Conc#1"                       [id=40455, stack(0x0000000174ae4000,0x0000000174ce7000) (2060K)]
+  0x0000000100357490 WorkerThread "G1 Conc#2"                       [id=35843, stack(0x0000000174cf0000,0x0000000174ef3000) (2060K)]
+  0x000000012e873600 ConcurrentGCThread "G1 Refine#0"               [id=16387, stack(0x0000000170640000,0x0000000170843000) (2060K)]
+  0x000000012e60a650 ConcurrentGCThread "G1 Service"                [id=21507, stack(0x000000017084c000,0x0000000170a4f000) (2060K)]
+Total: 19
+
+Threads with active compile tasks:
+Total: 0
+
+VM state: not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap address: 0x00000005c0000000, size: 9216 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+
+CDS archive(s) mapped at: [0x0000000500000000-0x0000000500ca4000-0x0000000500ca4000), size 13254656, SharedBaseAddress: 0x0000000500000000, ArchiveRelocationMode: 1.
+Compressed class space mapped at: 0x0000000501000000-0x0000000541000000, reserved size: 1073741824
+Narrow klass base: 0x0000000500000000, Narrow klass shift: 0, Narrow klass range: 0x100000000
+
+GC Precious Log:
+ CardTable entry size: 512
+ Card Set container configuration: InlinePtr #cards 4 size 8 Array Of Cards #cards 64 size 144 Howl #buckets 8 coarsen threshold 14745 Howl Bitmap #cards 2048 size 272 coarsen threshold 1843 Card regions per heap region 1 cards per card region 16384
+ CPUs: 14 total, 14 available
+ Memory: 36864M
+ Large Page Support: Disabled
+ NUMA Support: Disabled
+ Compressed Oops: Enabled (Zero based)
+ Heap Region Size: 8M
+ Heap Min Capacity: 8M
+ Heap Initial Capacity: 576M
+ Heap Max Capacity: 9G
+ Pre-touch: Disabled
+ Parallel Workers: 11
+ Concurrent Workers: 3
+ Concurrent Refinement Workers: 11
+ Periodic GC: Disabled
+
+Heap:
+ garbage-first heap   total 221184K, used 112492K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 9 young (73728K), 2 survivors (16384K)
+ Metaspace       used 82184K, committed 83008K, reserved 1179648K
+  class space    used 11679K, committed 12032K, reserved 1048576K
+
+Heap Regions: E=young(eden), S=young(survivor), O=old, HS=humongous(starts), HC=humongous(continues), CS=collection set, F=free, TAMS=top-at-mark-start, PB=parsable bottom
+|   0|0x00000005c0000000, 0x00000005c0800000, 0x00000005c0800000|100%| O|  |TAMS 0x00000005c0000000| PB 0x00000005c0000000| Untracked 
+|   1|0x00000005c0800000, 0x00000005c1000000, 0x00000005c1000000|100%| O|  |TAMS 0x00000005c0800000| PB 0x00000005c0800000| Untracked 
+|   2|0x00000005c1000000, 0x00000005c1800000, 0x00000005c1800000|100%| O|  |TAMS 0x00000005c1000000| PB 0x00000005c1000000| Untracked 
+|   3|0x00000005c1800000, 0x00000005c1dcd120, 0x00000005c2000000| 72%| O|  |TAMS 0x00000005c1800000| PB 0x00000005c1800000| Untracked 
+|   4|0x00000005c2000000, 0x00000005c2000000, 0x00000005c2800000|  0%| F|  |TAMS 0x00000005c2000000| PB 0x00000005c2000000| Untracked 
+|   5|0x00000005c2800000, 0x00000005c3000000, 0x00000005c3000000|100%| O|  |TAMS 0x00000005c2800000| PB 0x00000005c2800000| Untracked 
+|   6|0x00000005c3000000, 0x00000005c3000000, 0x00000005c3800000|  0%| F|  |TAMS 0x00000005c3000000| PB 0x00000005c3000000| Untracked 
+|   7|0x00000005c3800000, 0x00000005c4000000, 0x00000005c4000000|100%| O|  |TAMS 0x00000005c3800000| PB 0x00000005c3800000| Untracked 
+|   8|0x00000005c4000000, 0x00000005c4000000, 0x00000005c4800000|  0%| F|  |TAMS 0x00000005c4000000| PB 0x00000005c4000000| Untracked 
+|   9|0x00000005c4800000, 0x00000005c4a86430, 0x00000005c5000000| 31%| O|  |TAMS 0x00000005c4800000| PB 0x00000005c4800000| Untracked 
+|  10|0x00000005c5000000, 0x00000005c5000000, 0x00000005c5800000|  0%| F|  |TAMS 0x00000005c5000000| PB 0x00000005c5000000| Untracked 
+|  11|0x00000005c5800000, 0x00000005c5d87ac0, 0x00000005c6000000| 69%| S|CS|TAMS 0x00000005c5800000| PB 0x00000005c5800000| Complete 
+|  12|0x00000005c6000000, 0x00000005c6800000, 0x00000005c6800000|100%| S|CS|TAMS 0x00000005c6000000| PB 0x00000005c6000000| Complete 
+|  13|0x00000005c6800000, 0x00000005c6800000, 0x00000005c7000000|  0%| F|  |TAMS 0x00000005c6800000| PB 0x00000005c6800000| Untracked 
+|  14|0x00000005c7000000, 0x00000005c7000000, 0x00000005c7800000|  0%| F|  |TAMS 0x00000005c7000000| PB 0x00000005c7000000| Untracked 
+|  15|0x00000005c7800000, 0x00000005c7800000, 0x00000005c8000000|  0%| F|  |TAMS 0x00000005c7800000| PB 0x00000005c7800000| Untracked 
+|  16|0x00000005c8000000, 0x00000005c8000000, 0x00000005c8800000|  0%| F|  |TAMS 0x00000005c8000000| PB 0x00000005c8000000| Untracked 
+|  17|0x00000005c8800000, 0x00000005c8800000, 0x00000005c9000000|  0%| F|  |TAMS 0x00000005c8800000| PB 0x00000005c8800000| Untracked 
+|  18|0x00000005c9000000, 0x00000005c9000000, 0x00000005c9800000|  0%| F|  |TAMS 0x00000005c9000000| PB 0x00000005c9000000| Untracked 
+|  19|0x00000005c9800000, 0x00000005c9800000, 0x00000005ca000000|  0%| F|  |TAMS 0x00000005c9800000| PB 0x00000005c9800000| Untracked 
+|  20|0x00000005ca000000, 0x00000005ca654828, 0x00000005ca800000| 79%| E|  |TAMS 0x00000005ca000000| PB 0x00000005ca000000| Complete 
+|  21|0x00000005ca800000, 0x00000005cb000000, 0x00000005cb000000|100%| E|CS|TAMS 0x00000005ca800000| PB 0x00000005ca800000| Complete 
+|  22|0x00000005cb000000, 0x00000005cb800000, 0x00000005cb800000|100%| E|CS|TAMS 0x00000005cb000000| PB 0x00000005cb000000| Complete 
+|  23|0x00000005cb800000, 0x00000005cc000000, 0x00000005cc000000|100%| E|CS|TAMS 0x00000005cb800000| PB 0x00000005cb800000| Complete 
+|  24|0x00000005cc000000, 0x00000005cc800000, 0x00000005cc800000|100%| E|CS|TAMS 0x00000005cc000000| PB 0x00000005cc000000| Complete 
+|  71|0x00000005e3800000, 0x00000005e4000000, 0x00000005e4000000|100%| E|CS|TAMS 0x00000005e3800000| PB 0x00000005e3800000| Complete 
+|1151|0x00000007ff800000, 0x0000000800000000, 0x0000000800000000|100%| E|CS|TAMS 0x00000007ff800000| PB 0x00000007ff800000| Complete 
+
+Card table byte_map: [0x000000010ec60000,0x000000010fe60000] _byte_map_base: 0x000000010be60000
+
+Marking Bits: (CMBitMap*) 0x000000012e823010
+ Bits: [0x000000010fe60000, 0x0000000118e60000)
+
+Polling page: 0x0000000100090000
+
+Metaspace:
+
+Usage:
+  Non-class:     68.85 MB used.
+      Class:     11.41 MB used.
+       Both:     80.26 MB used.
+
+Virtual space:
+  Non-class space:      128.00 MB reserved,      69.31 MB ( 54%) committed,  2 nodes.
+      Class space:        1.00 GB reserved,      11.75 MB (  1%) committed,  1 nodes.
+             Both:        1.12 GB reserved,      81.06 MB (  7%) committed. 
+
+Chunk freelists:
+   Non-Class:  10.61 MB
+       Class:  4.07 MB
+        Both:  14.68 MB
+
+MaxMetaspaceSize: unlimited
+CompressedClassSpaceSize: 1.00 GB
+Initial GC threshold: 21.00 MB
+Current GC threshold: 100.31 MB
+CDS: on
+ - commit_granule_bytes: 65536.
+ - commit_granule_words: 8192.
+ - virtual_space_node_default_size: 8388608.
+ - enlarge_chunks_in_place: 1.
+ - use_allocation_guard: 0.
+
+
+Internal statistics:
+
+num_allocs_failed_limit: 18.
+num_arena_births: 1182.
+num_arena_deaths: 0.
+num_vsnodes_births: 3.
+num_vsnodes_deaths: 0.
+num_space_committed: 1297.
+num_space_uncommitted: 0.
+num_chunks_returned_to_freelist: 18.
+num_chunks_taken_from_freelist: 4026.
+num_chunk_merges: 18.
+num_chunk_splits: 2954.
+num_chunks_enlarged: 2285.
+num_inconsistent_stats: 0.
+
+CodeCache: size=49152Kb used=15087Kb max_used=15641Kb free=34064Kb
+ bounds [0x000000010aa60000, 0x000000010b9d0000, 0x000000010da60000]
+ total_blobs=9102 nmethods=8337 adapters=692
+ compilation: enabled
+              stopped_count=0, restarted_count=0
+ full_count=0
+
+Compilation events (20 events):
+Event: 333.542 Thread 0x000000012e877c00 nmethod 8644 0x000000010b8ad290 code [0x000000010b8ad400, 0x000000010b8ad4a8]
+Event: 333.542 Thread 0x000000012e877c00 8649       1       org.apache.tomcat.util.http.MimeHeaders::size (5 bytes)
+Event: 333.542 Thread 0x000000012f8a7800 nmethod 8641 0x000000010b8acf90 code [0x000000010b8ad100, 0x000000010b8ad1a8]
+Event: 333.542 Thread 0x000000012f8a7800 8650       1       org.springframework.util.LinkedCaseInsensitiveMap::getLocale (5 bytes)
+Event: 333.542 Thread 0x000000012e877c00 nmethod 8649 0x000000010b8acc90 code [0x000000010b8ace00, 0x000000010b8acea8]
+Event: 333.542 Thread 0x000000012f8a7800 nmethod 8650 0x000000010b8ac990 code [0x000000010b8acb00, 0x000000010b8acba8]
+Event: 341.326 Thread 0x000000012e877c00 8652       1       org.apache.catalina.webresources.Cache$$Lambda/0x0000000501bc4a78::applyAsLong (8 bytes)
+Event: 341.326 Thread 0x000000012e877c00 nmethod 8652 0x000000010b8ac610 code [0x000000010b8ac780, 0x000000010b8ac890]
+Event: 347.444 Thread 0x000000012e877c00 8653       1       org.apache.tomcat.util.http.MimeHeaders::createHeader (158 bytes)
+Event: 347.446 Thread 0x000000012e877c00 nmethod 8653 0x000000010b8ab710 code [0x000000010b8ab940, 0x000000010b8ac1b8]
+Event: 347.446 Thread 0x000000012e877c00 8654       1       org.apache.tomcat.util.buf.ByteChunk::getBytes (5 bytes)
+Event: 347.446 Thread 0x000000012e877c00 nmethod 8654 0x000000010b8ab410 code [0x000000010b8ab580, 0x000000010b8ab658]
+Event: 347.446 Thread 0x000000012e877c00 8655       1       org.apache.tomcat.util.http.parser.HttpParser$DomainParseState::mayContinue (5 bytes)
+Event: 347.446 Thread 0x000000012e877c00 nmethod 8655 0x000000010b8ab110 code [0x000000010b8ab280, 0x000000010b8ab328]
+Event: 347.446 Thread 0x000000012e877c00 8656       1       org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition::getContent (5 bytes)
+Event: 347.446 Thread 0x000000012e877c00 nmethod 8656 0x000000010b8aae10 code [0x000000010b8aaf80, 0x000000010b8ab028]
+Event: 347.446 Thread 0x000000012e877c00 8657       1       org.springframework.web.servlet.mvc.condition.ProducesRequestCondition::isEmpty (10 bytes)
+Event: 347.447 Thread 0x000000012e877c00 nmethod 8657 0x000000010b8aaa90 code [0x000000010b8aac40, 0x000000010b8aad60]
+Event: 347.447 Thread 0x000000012e877c00 8658       1       jakarta.servlet.ServletRequestWrapper::removeAttribute (11 bytes)
+Event: 347.447 Thread 0x000000012e877c00 nmethod 8658 0x000000010b8aa710 code [0x000000010b8aa8c0, 0x000000010b8aa9e8]
+
+GC Heap History (20 events):
+Event: 0.583 GC heap before
+{Heap before GC invocations=3 (full 0):
+ garbage-first heap   total 598016K, used 65725K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 5 young (40960K), 1 survivors (8192K)
+ Metaspace       used 11805K, committed 12160K, reserved 1114112K
+  class space    used 1456K, committed 1600K, reserved 1048576K
+}
+Event: 0.584 GC heap after
+{Heap after GC invocations=4 (full 0):
+ garbage-first heap   total 598016K, used 34236K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 1 young (8192K), 1 survivors (8192K)
+ Metaspace       used 11805K, committed 12160K, reserved 1114112K
+  class space    used 1456K, committed 1600K, reserved 1048576K
+}
+Event: 0.750 GC heap before
+{Heap before GC invocations=4 (full 0):
+ garbage-first heap   total 598016K, used 124348K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 14 young (114688K), 1 survivors (8192K)
+ Metaspace       used 21143K, committed 21504K, reserved 1114112K
+  class space    used 2703K, committed 2880K, reserved 1048576K
+}
+Event: 0.752 GC heap after
+{Heap after GC invocations=5 (full 0):
+ garbage-first heap   total 598016K, used 37575K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 1 young (8192K), 1 survivors (8192K)
+ Metaspace       used 21143K, committed 21504K, reserved 1114112K
+  class space    used 2703K, committed 2880K, reserved 1048576K
+}
+Event: 1.194 GC heap before
+{Heap before GC invocations=6 (full 0):
+ garbage-first heap   total 196608K, used 185031K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 19 young (155648K), 1 survivors (8192K)
+ Metaspace       used 31562K, committed 32192K, reserved 1114112K
+  class space    used 4190K, committed 4480K, reserved 1048576K
+}
+Event: 1.197 GC heap after
+{Heap after GC invocations=7 (full 0):
+ garbage-first heap   total 262144K, used 44108K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 2 young (16384K), 2 survivors (16384K)
+ Metaspace       used 31562K, committed 32192K, reserved 1114112K
+  class space    used 4190K, committed 4480K, reserved 1048576K
+}
+Event: 1.293 GC heap before
+{Heap before GC invocations=7 (full 0):
+ garbage-first heap   total 262144K, used 85068K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 8 young (65536K), 2 survivors (16384K)
+ Metaspace       used 35417K, committed 35968K, reserved 1114112K
+  class space    used 4733K, committed 4992K, reserved 1048576K
+}
+Event: 1.297 GC heap after
+{Heap after GC invocations=8 (full 0):
+ garbage-first heap   total 262144K, used 44808K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 2 young (16384K), 2 survivors (16384K)
+ Metaspace       used 35417K, committed 35968K, reserved 1114112K
+  class space    used 4733K, committed 4992K, reserved 1048576K
+}
+Event: 1.307 GC heap before
+{Heap before GC invocations=8 (full 0):
+ garbage-first heap   total 262144K, used 44808K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 3 young (24576K), 2 survivors (16384K)
+ Metaspace       used 35741K, committed 36288K, reserved 1114112K
+  class space    used 4795K, committed 5056K, reserved 1048576K
+}
+Event: 1.309 GC heap after
+{Heap after GC invocations=9 (full 0):
+ garbage-first heap   total 262144K, used 45010K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 2 young (16384K), 2 survivors (16384K)
+ Metaspace       used 35741K, committed 36288K, reserved 1114112K
+  class space    used 4795K, committed 5056K, reserved 1048576K
+}
+Event: 1.657 GC heap before
+{Heap before GC invocations=10 (full 0):
+ garbage-first heap   total 221184K, used 184274K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 19 young (155648K), 2 survivors (16384K)
+ Metaspace       used 52364K, committed 52928K, reserved 1114112K
+  class space    used 7029K, committed 7296K, reserved 1048576K
+}
+Event: 1.661 GC heap after
+{Heap after GC invocations=11 (full 0):
+ garbage-first heap   total 221184K, used 48596K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 2 young (16384K), 2 survivors (16384K)
+ Metaspace       used 52364K, committed 52928K, reserved 1114112K
+  class space    used 7029K, committed 7296K, reserved 1048576K
+}
+Event: 1.889 GC heap before
+{Heap before GC invocations=11 (full 0):
+ garbage-first heap   total 221184K, used 130516K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 13 young (106496K), 2 survivors (16384K)
+ Metaspace       used 60237K, committed 60928K, reserved 1114112K
+  class space    used 8323K, committed 8576K, reserved 1048576K
+}
+Event: 1.894 GC heap after
+{Heap after GC invocations=12 (full 0):
+ garbage-first heap   total 221184K, used 50910K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 1 young (8192K), 1 survivors (8192K)
+ Metaspace       used 60237K, committed 60928K, reserved 1114112K
+  class space    used 8323K, committed 8576K, reserved 1048576K
+}
+Event: 1.960 GC heap before
+{Heap before GC invocations=12 (full 0):
+ garbage-first heap   total 221184K, used 50910K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 2 young (16384K), 1 survivors (8192K)
+ Metaspace       used 60605K, committed 61248K, reserved 1114112K
+  class space    used 8368K, committed 8640K, reserved 1048576K
+}
+Event: 1.962 GC heap after
+{Heap after GC invocations=13 (full 0):
+ garbage-first heap   total 270336K, used 51378K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 1 young (8192K), 1 survivors (8192K)
+ Metaspace       used 60605K, committed 61248K, reserved 1114112K
+  class space    used 8368K, committed 8640K, reserved 1048576K
+}
+Event: 2.341 GC heap before
+{Heap before GC invocations=14 (full 0):
+ garbage-first heap   total 221184K, used 198834K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 19 young (155648K), 1 survivors (8192K)
+ Metaspace       used 70140K, committed 70848K, reserved 1114112K
+  class space    used 9907K, committed 10240K, reserved 1048576K
+}
+Event: 2.345 GC heap after
+{Heap after GC invocations=15 (full 0):
+ garbage-first heap   total 221184K, used 59383K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 2 young (16384K), 2 survivors (16384K)
+ Metaspace       used 70140K, committed 70848K, reserved 1114112K
+  class space    used 9907K, committed 10240K, reserved 1048576K
+}
+Event: 2.678 GC heap before
+{Heap before GC invocations=15 (full 0):
+ garbage-first heap   total 221184K, used 174071K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 16 young (131072K), 2 survivors (16384K)
+ Metaspace       used 77602K, committed 78400K, reserved 1179648K
+  class space    used 11022K, committed 11392K, reserved 1048576K
+}
+Event: 2.683 GC heap after
+{Heap after GC invocations=16 (full 0):
+ garbage-first heap   total 221184K, used 63340K [0x00000005c0000000, 0x0000000800000000)
+  region size 8192K, 2 young (16384K), 2 survivors (16384K)
+ Metaspace       used 77602K, committed 78400K, reserved 1179648K
+  class space    used 11022K, committed 11392K, reserved 1048576K
+}
+
+Dll operation events (20 events):
+Event: 1.064 Loading shared library /System/Library/Java/Extensions/libtcnative-1.dylib failed, dlopen(/System/Library/Java/Extensions/libtcnative-1.dylib, 0x0001): tried: '/System/Library/Java/Extensions/libtcnative-1.dylib' (no such file), '/System/Volumes/Preboot/C
+Event: 1.064 Loading shared library /System/Library/Java/Extensions/libtcnative-1.jnilib failed, dlopen(/System/Library/Java/Extensions/libtcnative-1.jnilib, 0x0001): tried: '/System/Library/Java/Extensions/libtcnative-1.jnilib' (no such file), '/System/Volumes/Preboo
+Event: 1.064 Loading shared library /usr/lib/java/libtcnative-1.dylib failed, dlopen(/usr/lib/java/libtcnative-1.dylib, 0x0001): tried: '/usr/lib/java/libtcnative-1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/java/libtcnative-1.dylib' (no such
+Event: 1.064 Loading shared library /usr/lib/java/libtcnative-1.jnilib failed, dlopen(/usr/lib/java/libtcnative-1.jnilib, 0x0001): tried: '/usr/lib/java/libtcnative-1.jnilib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/java/libtcnative-1.jnilib' (no 
+Event: 1.064 Loading shared library /Users/thetnandaraung/Workspace/voucher-management/libtcnative-1.dylib failed, dlopen(/Users/thetnandaraung/Workspace/voucher-management/libtcnative-1.dylib, 0x0001): tried: '/Users/thetnandaraung/Workspace/voucher-management/libtcn
+Event: 1.065 Loading shared library /Users/thetnandaraung/Workspace/voucher-management/libtcnative-1.jnilib failed, dlopen(/Users/thetnandaraung/Workspace/voucher-management/libtcnative-1.jnilib, 0x0001): tried: '/Users/thetnandaraung/Workspace/voucher-management/libt
+Event: 1.065 Loading shared library /Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/liblibtcnative-1.dylib failed, dlopen(/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/liblibtcnative-1.dylib, 0x0001): tried: '/Library/Java/JavaVirtualMa
+Event: 1.065 Loading shared library /Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/liblibtcnative-1.jnilib failed, dlopen(/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/liblibtcnative-1.jnilib, 0x0001): tried: '/Library/Java/JavaVirtual
+Event: 1.065 Loading shared library /Users/thetnandaraung/Library/Java/Extensions/liblibtcnative-1.dylib failed, dlopen(/Users/thetnandaraung/Library/Java/Extensions/liblibtcnative-1.dylib, 0x0001): tried: '/Users/thetnandaraung/Library/Java/Extensions/liblibtcnative-
+Event: 1.065 Loading shared library /Users/thetnandaraung/Library/Java/Extensions/liblibtcnative-1.jnilib failed, dlopen(/Users/thetnandaraung/Library/Java/Extensions/liblibtcnative-1.jnilib, 0x0001): tried: '/Users/thetnandaraung/Library/Java/Extensions/liblibtcnativ
+Event: 1.065 Loading shared library /Library/Java/Extensions/liblibtcnative-1.dylib failed, dlopen(/Library/Java/Extensions/liblibtcnative-1.dylib, 0x0001): tried: '/Library/Java/Extensions/liblibtcnative-1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/
+Event: 1.065 Loading shared library /Library/Java/Extensions/liblibtcnative-1.jnilib failed, dlopen(/Library/Java/Extensions/liblibtcnative-1.jnilib, 0x0001): tried: '/Library/Java/Extensions/liblibtcnative-1.jnilib' (no such file), '/System/Volumes/Preboot/Cryptexes/
+Event: 1.065 Loading shared library /Network/Library/Java/Extensions/liblibtcnative-1.dylib failed, dlopen(/Network/Library/Java/Extensions/liblibtcnative-1.dylib, 0x0001): tried: '/Network/Library/Java/Extensions/liblibtcnative-1.dylib' (no such file), '/System/Volum
+Event: 1.065 Loading shared library /Network/Library/Java/Extensions/liblibtcnative-1.jnilib failed, dlopen(/Network/Library/Java/Extensions/liblibtcnative-1.jnilib, 0x0001): tried: '/Network/Library/Java/Extensions/liblibtcnative-1.jnilib' (no such file), '/System/Vo
+Event: 1.065 Loading shared library /System/Library/Java/Extensions/liblibtcnative-1.dylib failed, dlopen(/System/Library/Java/Extensions/liblibtcnative-1.dylib, 0x0001): tried: '/System/Library/Java/Extensions/liblibtcnative-1.dylib' (no such file), '/System/Volumes/
+Event: 1.065 Loading shared library /System/Library/Java/Extensions/liblibtcnative-1.jnilib failed, dlopen(/System/Library/Java/Extensions/liblibtcnative-1.jnilib, 0x0001): tried: '/System/Library/Java/Extensions/liblibtcnative-1.jnilib' (no such file), '/System/Volum
+Event: 1.065 Loading shared library /usr/lib/java/liblibtcnative-1.dylib failed, dlopen(/usr/lib/java/liblibtcnative-1.dylib, 0x0001): tried: '/usr/lib/java/liblibtcnative-1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/java/liblibtcnative-1.dyl
+Event: 1.066 Loading shared library /usr/lib/java/liblibtcnative-1.jnilib failed, dlopen(/usr/lib/java/liblibtcnative-1.jnilib, 0x0001): tried: '/usr/lib/java/liblibtcnative-1.jnilib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/java/liblibtcnative-1.
+Event: 1.066 Loading shared library /Users/thetnandaraung/Workspace/voucher-management/liblibtcnative-1.dylib failed, dlopen(/Users/thetnandaraung/Workspace/voucher-management/liblibtcnative-1.dylib, 0x0001): tried: '/Users/thetnandaraung/Workspace/voucher-management/
+Event: 1.066 Loading shared library /Users/thetnandaraung/Workspace/voucher-management/liblibtcnative-1.jnilib failed, dlopen(/Users/thetnandaraung/Workspace/voucher-management/liblibtcnative-1.jnilib, 0x0001): tried: '/Users/thetnandaraung/Workspace/voucher-managemen
+
+Deoptimization events (20 events):
+Event: 173.856 Thread 0x000000012c010000 DEOPT PACKING pc=0x000000010ae7a864 sp=0x0000000176158690
+Event: 173.856 Thread 0x000000012c010000 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176158350 mode 1
+Event: 173.856 Thread 0x000000012c010000 DEOPT PACKING pc=0x000000010ae616ec sp=0x0000000176158ec0
+Event: 173.856 Thread 0x000000012c010000 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176158b90 mode 1
+Event: 173.856 Thread 0x000000012c010000 DEOPT PACKING pc=0x000000010ae613e8 sp=0x0000000176158f50
+Event: 173.856 Thread 0x000000012c010000 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176158c30 mode 1
+Event: 173.856 Thread 0x000000012c010000 DEOPT PACKING pc=0x000000010ae7b900 sp=0x0000000176158600
+Event: 173.856 Thread 0x000000012c010000 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176158260 mode 1
+Event: 173.856 Thread 0x000000012c010000 DEOPT PACKING pc=0x000000010ae7a864 sp=0x0000000176158690
+Event: 173.856 Thread 0x000000012c010000 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176158350 mode 1
+Event: 173.856 Thread 0x000000012c010000 DEOPT PACKING pc=0x000000010ae616ec sp=0x0000000176158ec0
+Event: 173.856 Thread 0x000000012c010000 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176158b90 mode 1
+Event: 173.856 Thread 0x000000012c010000 DEOPT PACKING pc=0x000000010ae613e8 sp=0x0000000176158f50
+Event: 173.856 Thread 0x000000012c010000 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176158c30 mode 1
+Event: 227.631 Thread 0x000000012c01f600 DEOPT PACKING pc=0x000000010b04d304 sp=0x00000001763662c0
+Event: 227.631 Thread 0x000000012c01f600 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176366020 mode 1
+Event: 227.631 Thread 0x000000012c01f600 DEOPT PACKING pc=0x000000010b336d1c sp=0x00000001763663e0
+Event: 227.631 Thread 0x000000012c01f600 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x00000001763660c0 mode 1
+Event: 383.080 Thread 0x000000011f008e00 DEOPT PACKING pc=0x000000010b1888c8 sp=0x0000000176da2dc0
+Event: 383.080 Thread 0x000000011f008e00 DEOPT UNPACKING pc=0x000000010aaa2e7c sp=0x0000000176da2a80 mode 0
+
+Classes loaded (20 events):
+Event: 10.430 Loading class sun/nio/cs/ThreadLocalCoders$2
+Event: 10.430 Loading class sun/nio/cs/ThreadLocalCoders$2 done
+Event: 10.524 Loading class jdk/internal/reflect/MethodHandleBooleanFieldAccessorImpl
+Event: 10.525 Loading class jdk/internal/reflect/MethodHandleBooleanFieldAccessorImpl done
+Event: 10.527 Loading class jdk/internal/reflect/MethodHandleDoubleFieldAccessorImpl
+Event: 10.527 Loading class jdk/internal/reflect/MethodHandleDoubleFieldAccessorImpl done
+Event: 10.532 Loading class java/time/format/DateTimeFormatterBuilder$ZoneTextPrinterParser
+Event: 10.532 Loading class java/time/format/DateTimeFormatterBuilder$ZoneTextPrinterParser done
+Event: 10.532 Loading class java/time/format/DateTimeFormatterBuilder$ReducedPrinterParser
+Event: 10.532 Loading class java/time/format/DateTimeFormatterBuilder$ReducedPrinterParser done
+Event: 10.537 Loading class java/util/OptionalLong
+Event: 10.537 Loading class java/util/OptionalLong done
+Event: 10.537 Loading class java/util/OptionalDouble
+Event: 10.537 Loading class java/util/OptionalDouble done
+Event: 10.537 Loading class java/util/stream/LongStream
+Event: 10.537 Loading class java/util/stream/LongStream done
+Event: 10.537 Loading class java/util/stream/DoubleStream
+Event: 10.537 Loading class java/util/stream/DoubleStream done
+Event: 38.502 Loading class java/util/ArrayList$SubList$2
+Event: 38.502 Loading class java/util/ArrayList$SubList$2 done
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (4 events):
+Event: 78.042 Thread 0x000000011e6077b0 redefined class name=sg.edu.nus.iss.springboot.voucher.management.controller.FeedController, count=1
+Event: 240.536 Thread 0x000000011e6077b0 redefined class name=sg.edu.nus.iss.springboot.voucher.management.controller.FeedController, count=2
+Event: 259.429 Thread 0x000000011e6077b0 redefined class name=sg.edu.nus.iss.springboot.voucher.management.controller.FeedController, count=3
+Event: 383.089 Thread 0x000000011e6077b0 redefined class name=sg.edu.nus.iss.springboot.voucher.management.controller.FeedController, count=4
+
+Internal exceptions (20 events):
+Event: 2.621 Thread 0x000000012e808200 Exception <a 'java/lang/NoSuchMethodError'{0x00000005c868eaa8}: 'void java.lang.invoke.DirectMethodHandle$Holder.invokeVirtual(java.lang.Object, java.lang.Object, long)'> (0x00000005c868eaa8) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 2.639 Thread 0x000000012e808200 Exception <a 'java/lang/NoSuchMethodError'{0x00000005c7ea4510}: 'int java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)'> (0x00000005c7ea4510) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 2.649 Thread 0x000000012e808200 Exception <a 'java/lang/IncompatibleClassChangeError'{0x00000005c7148278}: Found class java.lang.Object, but interface was expected> (0x00000005c7148278) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 840]
+Event: 2.670 Thread 0x000000012e808200 Exception <a 'java/lang/NoSuchMethodError'{0x00000005c77c1160}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.newInvokeSpecial(java.lang.Object, java.lang.Object, int, java.lang.Object, java.lang.Object)'> (0x00000005c77c1160) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 2.670 Thread 0x000000012e808200 Exception <a 'java/lang/NoSuchMethodError'{0x00000005c77cbc30}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeSpecial(java.lang.Object, java.lang.Object, int, java.lang.Object, int, java.lang.Object)'> (0x00000005c77cbc30) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 2.670 Thread 0x000000012e808200 Exception <a 'java/lang/NoSuchMethodError'{0x00000005c77d2d78}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.newInvokeSpecial(java.lang.Object, java.lang.Object, int, java.lang.Object, int)'> (0x00000005c77d2d78) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 2.670 Thread 0x000000012e808200 Exception <a 'java/lang/NoSuchMethodError'{0x00000005c77d6be8}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeSpecial(java.lang.Object, java.lang.Object, java.lang.Object, int, java.lang.Object, int)'> (0x00000005c77d6be8) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 10.428 Thread 0x000000012c011600 Exception <a 'java/lang/NoSuchMethodError'{0x00000007fffcce28}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeSpecial(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, long)'> (0x00000007fffcce28) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 10.428 Thread 0x000000012c011600 Exception <a 'java/lang/NoSuchMethodError'{0x00000007fffd05e8}: 'java.lang.Object java.lang.invoke.Invokers$Holder.linkToTargetMethod(java.lang.Object, java.lang.Object, java.lang.Object, long, java.lang.Object)'> (0x00000007fffd05e8) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 10.517 Thread 0x000000012c011600 Exception <a 'java/lang/NoSuchMethodError'{0x00000005cbe7d908}: 'void java.lang.invoke.DirectMethodHandle$Holder.invokeSpecialIFC(java.lang.Object, java.lang.Object, int, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)'> (0x00000005cbe7d908) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 10.525 Thread 0x000000012c011600 Exception <a 'java/lang/NoSuchMethodError'{0x00000005cb055940}: 'void java.lang.invoke.Invokers$Holder.invokeExact_MT(java.lang.Object, java.lang.Object, int, java.lang.Object)'> (0x00000005cb055940) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 10.527 Thread 0x000000012c011600 Exception <a 'java/lang/NoSuchMethodError'{0x00000005cb0e77f0}: 'double java.lang.invoke.DelegatingMethodHandle$Holder.reinvoke_L(java.lang.Object, java.lang.Object)'> (0x00000005cb0e77f0) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 10.527 Thread 0x000000012c011600 Exception <a 'java/lang/NoSuchMethodError'{0x00000005cb0f2258}: 'void java.lang.invoke.DelegatingMethodHandle$Holder.reinvoke_L(java.lang.Object, java.lang.Object, double)'> (0x00000005cb0f2258) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 10.530 Thread 0x000000012c011600 Exception <a 'java/lang/IncompatibleClassChangeError'{0x00000005cb1640e0}: Found class java.lang.Object, but interface was expected> (0x00000005cb1640e0) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 840]
+Event: 25.970 Thread 0x000000012c01f600 Exception <a 'java/lang/NoSuchMethodError'{0x00000005cb6d6080}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeInterface(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)'> (0x00000005cb6d6080) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 25.991 Thread 0x000000012c01f600 Exception <a 'java/lang/NoSuchMethodError'{0x00000005cb7ac800}: 'double java.lang.invoke.DirectMethodHandle$Holder.invokeVirtual(java.lang.Object, java.lang.Object)'> (0x00000005cb7ac800) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 38.502 Thread 0x000000011d352000 Exception <a 'java/lang/NoSuchMethodError'{0x00000005ca81f978}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeStatic(java.lang.Object, int, int)'> (0x00000005ca81f978) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 173.850 Thread 0x000000012c010000 Exception <a 'java/lang/NoSuchMethodError'{0x00000005ca12d8a8}: 'int java.lang.invoke.Invokers$Holder.invokeExact_MT(java.lang.Object, java.lang.Object, java.lang.Object)'> (0x00000005ca12d8a8) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 173.856 Thread 0x000000012c010000 Exception <a 'java/lang/NoSuchMethodError'{0x00000005ca267b90}: 'double java.lang.invoke.Invokers$Holder.invokeExact_MT(java.lang.Object, java.lang.Object, java.lang.Object)'> (0x00000005ca267b90) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+Event: 173.861 Thread 0x000000012c010000 Exception <a 'java/lang/NoSuchMethodError'{0x00000005ca37b6e8}: 'int java.lang.invoke.DirectMethodHandle$Holder.invokeStatic(java.lang.Object, java.lang.Object, int, int)'> (0x00000005ca37b6e8) 
+thrown [open/src/hotspot/share/interpreter/linkResolver.cpp, line 773]
+
+ZGC Phase Switch (0 events):
+No events
+
+VM Operations (20 events):
+Event: 359.489 Executing VM operation: get/set locals
+Event: 359.489 Executing VM operation: get/set locals done
+Event: 359.490 Executing VM operation: get/set locals
+Event: 359.490 Executing VM operation: get/set locals done
+Event: 359.490 Executing VM operation: get/set locals
+Event: 359.490 Executing VM operation: get/set locals done
+Event: 359.502 Executing VM operation: get/set locals
+Event: 359.502 Executing VM operation: get/set locals done
+Event: 359.502 Executing VM operation: get/set locals
+Event: 359.502 Executing VM operation: get/set locals done
+Event: 383.080 Executing VM operation: ChangeSingleStep
+Event: 383.080 Executing VM operation: ChangeSingleStep done
+Event: 383.080 Executing VM operation: ChangeSingleStep
+Event: 383.080 Executing VM operation: ChangeSingleStep done
+Event: 383.086 Executing VM operation: RedefineClasses
+Event: 383.097 Executing VM operation: RedefineClasses done
+Event: 383.105 Executing VM operation: ChangeBreakpoints
+Event: 383.106 Executing VM operation: ChangeBreakpoints done
+Event: 383.111 Executing VM operation: ChangeSingleStep
+Event: 383.111 Executing VM operation: ChangeSingleStep done
+
+Events (20 events):
+Event: 10.398 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 3
+Event: 10.398 Thread 0x000000012e878400 Thread exited: 0x000000012e878400
+Event: 75.515 Protecting memory [0x00000001742b4000,0x00000001742c0000] with protection modes 3
+Event: 75.515 Thread 0x000000013eb63e00 Thread exited: 0x000000013eb63e00
+Event: 173.824 Thread 0x000000012f809600 Thread added: 0x000000012f809600
+Event: 173.824 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 0
+Event: 178.878 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 3
+Event: 178.878 Thread 0x000000012f809600 Thread exited: 0x000000012f809600
+Event: 186.165 Thread 0x000000012d0acc00 Thread added: 0x000000012d0acc00
+Event: 186.165 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 0
+Event: 191.689 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 3
+Event: 191.689 Thread 0x000000012d0acc00 Thread exited: 0x000000012d0acc00
+Event: 227.614 Thread 0x000000012f80a400 Thread added: 0x000000012f80a400
+Event: 227.614 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 0
+Event: 232.644 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 3
+Event: 232.644 Thread 0x000000012f80a400 Thread exited: 0x000000012f80a400
+Event: 333.541 Thread 0x000000012f8a7800 Thread added: 0x000000012f8a7800
+Event: 333.541 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 0
+Event: 338.547 Protecting memory [0x0000000171bd0000,0x0000000171bdc000] with protection modes 3
+Event: 338.547 Thread 0x000000012f8a7800 Thread exited: 0x000000012f8a7800
+
+
+Dynamic libraries:
+0x0000000100500000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libjli.dylib
+0x000000019d13d000 	/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
+0x0000000186cc1000 	/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+0x0000000189cf5000 	/System/Library/Frameworks/CoreData.framework/Versions/A/CoreData
+0x00000001845cd000 	/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+0x000000018fcd1000 	/usr/lib/libSystem.B.dylib
+0x0000000187fdc000 	/System/Library/PrivateFrameworks/UIFoundation.framework/Versions/A/UIFoundation
+0x00000001f9ed2000 	/System/Library/PrivateFrameworks/CollectionViewCore.framework/Versions/A/CollectionViewCore
+0x0000000196e75000 	/System/Library/PrivateFrameworks/RemoteViewServices.framework/Versions/A/RemoteViewServices
+0x000000018dd74000 	/System/Library/PrivateFrameworks/XCTTargetBootstrap.framework/Versions/A/XCTTargetBootstrap
+0x00000001922ba000 	/System/Library/PrivateFrameworks/InternationalSupport.framework/Versions/A/InternationalSupport
+0x0000000192342000 	/System/Library/PrivateFrameworks/UserActivity.framework/Versions/A/UserActivity
+0x000000021c19a000 	/System/Library/PrivateFrameworks/WindowManagement.framework/Versions/A/WindowManagement
+0x0000000184257000 	/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+0x000000019175c000 	/usr/lib/libspindump.dylib
+0x0000000188191000 	/System/Library/Frameworks/UniformTypeIdentifiers.framework/Versions/A/UniformTypeIdentifiers
+0x000000018bccb000 	/usr/lib/libapp_launch_measurement.dylib
+0x000000018b0dd000 	/System/Library/PrivateFrameworks/CoreAnalytics.framework/Versions/A/CoreAnalytics
+0x000000018bcd2000 	/System/Library/PrivateFrameworks/CoreAutoLayout.framework/Versions/A/CoreAutoLayout
+0x000000018d59e000 	/System/Library/Frameworks/Metal.framework/Versions/A/Metal
+0x000000018e4e4000 	/usr/lib/liblangid.dylib
+0x000000018dd7a000 	/System/Library/PrivateFrameworks/CoreSVG.framework/Versions/A/CoreSVG
+0x0000000188b4b000 	/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight
+0x0000000188fe1000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics
+0x00000001975bd000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate
+0x00000001915ba000 	/System/Library/PrivateFrameworks/IconServices.framework/Versions/A/IconServices
+0x000000018d57c000 	/System/Library/Frameworks/IOSurface.framework/Versions/A/IOSurface
+0x000000018b10c000 	/usr/lib/libDiagnosticMessagesClient.dylib
+0x000000018fc14000 	/usr/lib/libz.1.dylib
+0x000000019acab000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices
+0x000000018dd5c000 	/System/Library/PrivateFrameworks/DFRFoundation.framework/Versions/A/DFRFoundation
+0x000000018652d000 	/usr/lib/libicucore.A.dylib
+0x000000019331f000 	/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox
+0x00000001922c7000 	/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore
+0x00000001ab515000 	/System/Library/PrivateFrameworks/TextInput.framework/Versions/A/TextInput
+0x0000000188a9e000 	/usr/lib/libMobileGestalt.dylib
+0x000000018da9c000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/HIToolbox
+0x000000018b5de000 	/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore
+0x000000018616b000 	/System/Library/Frameworks/Security.framework/Versions/A/Security
+0x0000000196eb5000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SpeechRecognition.framework/Versions/A/SpeechRecognition
+0x000000018b9f9000 	/System/Library/PrivateFrameworks/CoreUI.framework/Versions/A/CoreUI
+0x0000000185a78000 	/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio
+0x000000018b1f0000 	/System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+0x0000000191bb2000 	/System/Library/PrivateFrameworks/MultitouchSupport.framework/Versions/A/MultitouchSupport
+0x0000000188a9c000 	/usr/lib/libenergytrace.dylib
+0x00000001a1111000 	/System/Library/PrivateFrameworks/RenderBox.framework/Versions/A/RenderBox
+0x0000000186b77000 	/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x00000001972b9000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+0x000000018bc57000 	/System/Library/PrivateFrameworks/PerformanceAnalysis.framework/Versions/A/PerformanceAnalysis
+0x00000001ebb24000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL
+0x000000018bd1c000 	/usr/lib/libxml2.2.dylib
+0x000000018f111000 	/System/Library/PrivateFrameworks/MobileKeyBag.framework/Versions/A/MobileKeyBag
+0x000000018306c000 	/usr/lib/libobjc.A.dylib
+0x0000000183356000 	/usr/lib/libc++.1.dylib
+0x0000000197236000 	/System/Library/Frameworks/Accessibility.framework/Versions/A/Accessibility
+0x00000001896be000 	/System/Library/Frameworks/ColorSync.framework/Versions/A/ColorSync
+0x00000001834a2000 	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x000000018e0cf000 	/System/Library/Frameworks/CoreImage.framework/Versions/A/CoreImage
+0x0000000185883000 	/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText
+0x00000001f0326000 	/System/Library/Frameworks/CoreTransferable.framework/Versions/A/CoreTransferable
+0x00000001f0808000 	/System/Library/Frameworks/DeveloperToolsSupport.framework/Versions/A/DeveloperToolsSupport
+0x000000018ddb5000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO
+0x00000001f4755000 	/System/Library/Frameworks/Symbols.framework/Versions/A/Symbols
+0x000000018fcd7000 	/System/Library/PrivateFrameworks/SoftLinking.framework/Versions/A/SoftLinking
+0x0000000192cf1000 	/usr/lib/swift/libswiftCore.dylib
+0x00000001a8246000 	/usr/lib/swift/libswiftCoreFoundation.dylib
+0x00000001a5ed7000 	/usr/lib/swift/libswiftCoreGraphics.dylib
+0x00000001a8292000 	/usr/lib/swift/libswiftCoreImage.dylib
+0x00000001a5ede000 	/usr/lib/swift/libswiftDarwin.dylib
+0x000000019892c000 	/usr/lib/swift/libswiftDispatch.dylib
+0x00000001a8293000 	/usr/lib/swift/libswiftIOKit.dylib
+0x00000001b3c4f000 	/usr/lib/swift/libswiftMetal.dylib
+0x00000001c05d1000 	/usr/lib/swift/libswiftOSLog.dylib
+0x000000019b117000 	/usr/lib/swift/libswiftObjectiveC.dylib
+0x00000001b786f000 	/usr/lib/swift/libswiftQuartzCore.dylib
+0x00000001bb8c2000 	/usr/lib/swift/libswiftUniformTypeIdentifiers.dylib
+0x00000001a825c000 	/usr/lib/swift/libswiftXPC.dylib
+0x0000000224492000 	/usr/lib/swift/libswift_Concurrency.dylib
+0x000000019b11b000 	/usr/lib/swift/libswiftos.dylib
+0x00000001ab479000 	/usr/lib/swift/libswiftsimd.dylib
+0x000000018fe84000 	/usr/lib/libcompression.dylib
+0x0000000192214000 	/System/Library/PrivateFrameworks/TextureIO.framework/Versions/A/TextureIO
+0x000000019126d000 	/usr/lib/libate.dylib
+0x000000018fccb000 	/usr/lib/system/libcache.dylib
+0x000000018fc86000 	/usr/lib/system/libcommonCrypto.dylib
+0x000000018fcb2000 	/usr/lib/system/libcompiler_rt.dylib
+0x000000018fca8000 	/usr/lib/system/libcopyfile.dylib
+0x00000001831b7000 	/usr/lib/system/libcorecrypto.dylib
+0x000000018328d000 	/usr/lib/system/libdispatch.dylib
+0x0000000183448000 	/usr/lib/system/libdyld.dylib
+0x000000018fcc1000 	/usr/lib/system/libkeymgr.dylib
+0x000000018fc5e000 	/usr/lib/system/libmacho.dylib
+0x000000018f1f7000 	/usr/lib/system/libquarantine.dylib
+0x000000018fcbe000 	/usr/lib/system/libremovefile.dylib
+0x0000000188b12000 	/usr/lib/system/libsystem_asl.dylib
+0x0000000183150000 	/usr/lib/system/libsystem_blocks.dylib
+0x00000001832d7000 	/usr/lib/system/libsystem_c.dylib
+0x000000018fcb6000 	/usr/lib/system/libsystem_collections.dylib
+0x000000018e4d2000 	/usr/lib/system/libsystem_configuration.dylib
+0x000000018d552000 	/usr/lib/system/libsystem_containermanager.dylib
+0x000000018f8fd000 	/usr/lib/system/libsystem_coreservices.dylib
+0x00000001867e6000 	/usr/lib/system/libsystem_darwin.dylib
+0x00000002247be000 	/usr/lib/system/libsystem_darwindirectory.dylib
+0x000000018fcc2000 	/usr/lib/system/libsystem_dnssd.dylib
+0x00000001832d4000 	/usr/lib/system/libsystem_featureflags.dylib
+0x0000000183475000 	/usr/lib/system/libsystem_info.dylib
+0x000000018fc23000 	/usr/lib/system/libsystem_m.dylib
+0x0000000183256000 	/usr/lib/system/libsystem_malloc.dylib
+0x0000000188a82000 	/usr/lib/system/libsystem_networkextension.dylib
+0x0000000186c59000 	/usr/lib/system/libsystem_notify.dylib
+0x000000018e4d7000 	/usr/lib/system/libsystem_sandbox.dylib
+0x000000018fcbb000 	/usr/lib/system/libsystem_secinit.dylib
+0x0000000183400000 	/usr/lib/system/libsystem_kernel.dylib
+0x000000018346e000 	/usr/lib/system/libsystem_platform.dylib
+0x000000018343b000 	/usr/lib/system/libsystem_pthread.dylib
+0x000000018a4e7000 	/usr/lib/system/libsystem_symptoms.dylib
+0x000000018319c000 	/usr/lib/system/libsystem_trace.dylib
+0x000000018fc94000 	/usr/lib/system/libunwind.dylib
+0x0000000183155000 	/usr/lib/system/libxpc.dylib
+0x00000001833e4000 	/usr/lib/libc++abi.dylib
+0x000000018fca0000 	/usr/lib/liboah.dylib
+0x0000000191120000 	/usr/lib/liblzma.5.dylib
+0x000000018fcd3000 	/usr/lib/libfakelink.dylib
+0x00000001886ae000 	/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+0x000000018fd27000 	/usr/lib/libarchive.2.dylib
+0x00000001951a0000 	/System/Library/Frameworks/Combine.framework/Versions/A/Combine
+0x00000001f9ee6000 	/System/Library/PrivateFrameworks/CollectionsInternal.framework/Versions/A/CollectionsInternal
+0x000000020f62e000 	/System/Library/PrivateFrameworks/ReflectionInternal.framework/Versions/A/ReflectionInternal
+0x000000020fbdb000 	/System/Library/PrivateFrameworks/RuntimeInternal.framework/Versions/A/RuntimeInternal
+0x00000002245db000 	/usr/lib/swift/libswift_StringProcessing.dylib
+0x0000000186af6000 	/System/Library/PrivateFrameworks/CoreServicesInternal.framework/Versions/A/CoreServicesInternal
+0x000000018f21e000 	/usr/lib/libbsm.0.dylib
+0x000000018fc66000 	/usr/lib/system/libkxld.dylib
+0x000000018bc93000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/FSEvents
+0x00000001867f1000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+0x000000018b155000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+0x000000018f903000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+0x000000018fdb0000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+0x000000018a469000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+0x000000018397a000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+0x00000001910c9000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+0x000000018bca0000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SharedFileList.framework/Versions/A/SharedFileList
+0x000000018fe4f000 	/usr/lib/libapple_nghttp2.dylib
+0x000000018a0eb000 	/usr/lib/libsqlite3.dylib
+0x000000018a4f0000 	/System/Library/Frameworks/Network.framework/Versions/A/Network
+0x0000000222f29000 	/usr/lib/libCoreEntitlements.dylib
+0x000000020a9a7000 	/System/Library/PrivateFrameworks/MessageSecurity.framework/Versions/A/MessageSecurity
+0x000000018a0d1000 	/System/Library/PrivateFrameworks/ProtocolBuffer.framework/Versions/A/ProtocolBuffer
+0x000000018f82c000 	/System/Library/PrivateFrameworks/AppleFSCompression.framework/Versions/A/AppleFSCompression
+0x000000018f206000 	/usr/lib/libcoretls.dylib
+0x0000000191139000 	/usr/lib/libcoretls_cfhelpers.dylib
+0x000000018fe7e000 	/usr/lib/libpam.2.dylib
+0x00000001911aa000 	/usr/lib/libxar.1.dylib
+0x0000000191591000 	/usr/lib/libheimdal-asn1.dylib
+0x00000001886ad000 	/usr/lib/libnetwork.dylib
+0x000000018fcd8000 	/usr/lib/libpcap.A.dylib
+0x000000018a4dd000 	/usr/lib/libdns_services.dylib
+0x000000018e4df000 	/System/Library/PrivateFrameworks/AppleSystemInfo.framework/Versions/A/AppleSystemInfo
+0x000000018ef07000 	/System/Library/PrivateFrameworks/IOMobileFramebuffer.framework/Versions/A/IOMobileFramebuffer
+0x000000022452f000 	/usr/lib/swift/libswift_RegexParser.dylib
+0x000000018f8f0000 	/usr/lib/libbz2.1.0.dylib
+0x000000018f1fa000 	/usr/lib/libCheckFix.dylib
+0x0000000188b2a000 	/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC
+0x000000018e4e6000 	/System/Library/PrivateFrameworks/CoreNLP.framework/Versions/A/CoreNLP
+0x000000018b10e000 	/System/Library/PrivateFrameworks/MetadataUtilities.framework/Versions/A/MetadataUtilities
+0x000000018f230000 	/usr/lib/libmecab.dylib
+0x00000001842ea000 	/usr/lib/libCRFSuite.dylib
+0x000000018f28c000 	/usr/lib/libgermantok.dylib
+0x000000018fe27000 	/usr/lib/libThaiTokenizer.dylib
+0x000000018b1f9000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
+0x0000000197290000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
+0x00000001911f1000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
+0x000000018ede3000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
+0x0000000183d79000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+0x000000018ff57000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+0x000000018f28f000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLinearAlgebra.dylib
+0x000000018fe69000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparseBLAS.dylib
+0x000000018ff52000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libQuadrature.dylib
+0x000000018e608000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBNNS.dylib
+0x00000001841f0000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparse.dylib
+0x000000020921d000 	/System/Library/PrivateFrameworks/MIL.framework/Versions/A/MIL
+0x000000018fd0e000 	/usr/lib/libiconv.2.dylib
+0x000000018fc5a000 	/usr/lib/libcharset.1.dylib
+0x000000018bc73000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/Frameworks/CFOpenDirectory.framework/Versions/A/CFOpenDirectory
+0x000000018bc63000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/OpenDirectory
+0x000000019113b000 	/System/Library/PrivateFrameworks/APFS.framework/Versions/A/APFS
+0x000000018f137000 	/System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation
+0x00000001911b9000 	/usr/lib/libutil.dylib
+0x0000000207452000 	/System/Library/PrivateFrameworks/InstalledContentLibrary.framework/Versions/A/InstalledContentLibrary
+0x0000000186b36000 	/System/Library/PrivateFrameworks/CoreServicesStore.framework/Versions/A/CoreServicesStore
+0x00000001f7a9a000 	/System/Library/PrivateFrameworks/AppleMobileFileIntegrity.framework/Versions/A/AppleMobileFileIntegrity
+0x00000001a8224000 	/usr/lib/libmis.dylib
+0x00000001b7d36000 	/System/Library/PrivateFrameworks/MobileSystemServices.framework/Versions/A/MobileSystemServices
+0x00000001e8f8c000 	/System/Library/PrivateFrameworks/ConfigProfileHelper.framework/Versions/A/ConfigProfileHelper
+0x000000018fe29000 	/System/Library/PrivateFrameworks/AppleSauce.framework/Versions/A/AppleSauce
+0x0000000185215000 	/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling
+0x00000001911bd000 	/usr/lib/libxslt.1.dylib
+0x000000018fd15000 	/usr/lib/libcmph.dylib
+0x000000018eed4000 	/System/Library/PrivateFrameworks/CoreEmoji.framework/Versions/A/CoreEmoji
+0x000000018e602000 	/System/Library/PrivateFrameworks/LinguisticData.framework/Versions/A/LinguisticData
+0x0000000184103000 	/System/Library/PrivateFrameworks/Lexicon.framework/Versions/A/Lexicon
+0x000000018f1c5000 	/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/BackgroundTaskManagement
+0x0000000223112000 	/usr/lib/libTLE.dylib
+0x0000000191a78000 	/System/Library/PrivateFrameworks/AppleJPEG.framework/Versions/A/AppleJPEG
+0x0000000191576000 	/usr/lib/libexpat.1.dylib
+0x0000000192072000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libPng.dylib
+0x000000019209d000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libTIFF.dylib
+0x0000000192188000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libGIF.dylib
+0x0000000191abe000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJP2.dylib
+0x000000019212d000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJPEG.dylib
+0x0000000192124000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libRadiance.dylib
+0x000000018d937000 	/System/Library/PrivateFrameworks/FontServices.framework/libFontParser.dylib
+0x000000018a407000 	/System/Library/PrivateFrameworks/RunningBoardServices.framework/Versions/A/RunningBoardServices
+0x000000019d9d1000 	/System/Library/PrivateFrameworks/IOSurfaceAccelerator.framework/Versions/A/IOSurfaceAccelerator
+0x0000000191bae000 	/System/Library/PrivateFrameworks/WatchdogClient.framework/Versions/A/WatchdogClient
+0x00000001853f8000 	/System/Library/Frameworks/CoreDisplay.framework/Versions/A/CoreDisplay
+0x000000018d7f0000 	/System/Library/Frameworks/CoreMedia.framework/Versions/A/CoreMedia
+0x000000018d594000 	/System/Library/PrivateFrameworks/IOAccelerator.framework/Versions/A/IOAccelerator
+0x000000018be06000 	/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo
+0x000000018fe7c000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/MetalPerformanceShaders
+0x0000000191bf1000 	/System/Library/Frameworks/VideoToolbox.framework/Versions/A/VideoToolbox
+0x000000018bea1000 	/System/Library/PrivateFrameworks/UserManagement.framework/Versions/A/UserManagement
+0x000000018a336000 	/System/Library/PrivateFrameworks/BaseBoard.framework/Versions/A/BaseBoard
+0x000000018e4dd000 	/System/Library/PrivateFrameworks/AggregateDictionary.framework/Versions/A/AggregateDictionary
+0x00000001f7a1a000 	/System/Library/PrivateFrameworks/AppleKeyStore.framework/Versions/A/AppleKeyStore
+0x000000019211f000 	/System/Library/PrivateFrameworks/GPUWrangler.framework/Versions/A/GPUWrangler
+0x00000001920ff000 	/System/Library/PrivateFrameworks/IOPresentment.framework/Versions/A/IOPresentment
+0x0000000192127000 	/System/Library/PrivateFrameworks/DSExternalDisplay.framework/Versions/A/DSExternalDisplay
+0x00000002035c4000 	/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/libllvm-flatbuffers.dylib
+0x00000001ebb17000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreFSCache.dylib
+0x00000002007fc000 	/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/libGPUCompilerUtils.dylib
+0x000000019218e000 	/System/Library/PrivateFrameworks/CMCaptureCore.framework/Versions/A/CMCaptureCore
+0x00000001f090d000 	/System/Library/Frameworks/ExtensionFoundation.framework/Versions/A/ExtensionFoundation
+0x0000000199168000 	/System/Library/PrivateFrameworks/CoreTime.framework/Versions/A/CoreTime
+0x0000000191747000 	/System/Library/PrivateFrameworks/AppServerSupport.framework/Versions/A/AppServerSupport
+0x0000000193c9f000 	/System/Library/PrivateFrameworks/perfdata.framework/Versions/A/perfdata
+0x000000018551c000 	/System/Library/PrivateFrameworks/AudioToolboxCore.framework/Versions/A/AudioToolboxCore
+0x000000018d7c6000 	/System/Library/PrivateFrameworks/caulk.framework/Versions/A/caulk
+0x000000019351a000 	/usr/lib/libAudioStatistics.dylib
+0x00000001a7580000 	/System/Library/PrivateFrameworks/SystemPolicy.framework/Versions/A/SystemPolicy
+0x00000001937f2000 	/usr/lib/libSMC.dylib
+0x000000019cfcc000 	/System/Library/Frameworks/CoreMIDI.framework/Versions/A/CoreMIDI
+0x0000000192039000 	/usr/lib/libAudioToolboxUtility.dylib
+0x00000001a2db6000 	/System/Library/PrivateFrameworks/OSAServicesClient.framework/Versions/A/OSAServicesClient
+0x0000000193cad000 	/usr/lib/libperfcheck.dylib
+0x0000000191460000 	/System/Library/PrivateFrameworks/PlugInKit.framework/Versions/A/PlugInKit
+0x000000018f129000 	/System/Library/PrivateFrameworks/AssertionServices.framework/Versions/A/AssertionServices
+0x000000019c0e1000 	/System/Library/PrivateFrameworks/ASEProcessing.framework/Versions/A/ASEProcessing
+0x00000001c3988000 	/System/Library/PrivateFrameworks/Symbolication.framework/Versions/A/Symbolication
+0x000000020e69f000 	/System/Library/PrivateFrameworks/PhotosensitivityProcessing.framework/Versions/A/PhotosensitivityProcessing
+0x00000001916f9000 	/System/Library/PrivateFrameworks/GraphVisualizer.framework/Versions/A/GraphVisualizer
+0x00000001ebb79000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+0x00000001ebb38000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGFXShared.dylib
+0x00000001ebd11000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+0x00000001ebb41000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLImage.dylib
+0x00000001ebb35000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCVMSPluginSupport.dylib
+0x00000002230cb000 	/usr/lib/libRosetta.dylib
+0x00000001ebb1e000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreVMClient.dylib
+0x00000001febb6000 	/System/Library/PrivateFrameworks/FontServices.framework/Versions/A/FontServices
+0x0000000191705000 	/System/Library/PrivateFrameworks/OTSVG.framework/Versions/A/OTSVG
+0x000000018b9a7000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontRegistry.dylib
+0x0000000191751000 	/System/Library/PrivateFrameworks/FontServices.framework/libhvf.dylib
+0x00000001febb7000 	/System/Library/PrivateFrameworks/FontServices.framework/libXTFontStaticRegistryData.dylib
+0x000000018e454000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSCore.framework/Versions/A/MPSCore
+0x000000018f79f000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSImage.framework/Versions/A/MPSImage
+0x000000018f2a4000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSNeuralNetwork.framework/Versions/A/MPSNeuralNetwork
+0x000000018f692000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSMatrix.framework/Versions/A/MPSMatrix
+0x000000018f49e000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSRayIntersector.framework/Versions/A/MPSRayIntersector
+0x000000018f6c1000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSNDArray.framework/Versions/A/MPSNDArray
+0x00000001f1fe5000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSFunctions.framework/Versions/A/MPSFunctions
+0x00000001f1fc7000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSBenchmarkLoop.framework/Versions/A/MPSBenchmarkLoop
+0x0000000183c2e000 	/System/Library/PrivateFrameworks/MetalTools.framework/Versions/A/MetalTools
+0x00000001ac635000 	/System/Library/PrivateFrameworks/IOAccelMemoryInfo.framework/Versions/A/IOAccelMemoryInfo
+0x00000001b7c43000 	/System/Library/PrivateFrameworks/kperf.framework/Versions/A/kperf
+0x00000001a8238000 	/System/Library/PrivateFrameworks/GPURawCounter.framework/Versions/A/GPURawCounter
+0x0000000199058000 	/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/CoreSymbolication
+0x00000001a81f5000 	/System/Library/PrivateFrameworks/MallocStackLogging.framework/Versions/A/MallocStackLogging
+0x0000000191307000 	/System/Library/PrivateFrameworks/CrashReporterSupport.framework/Versions/A/CrashReporterSupport
+0x0000000199013000 	/System/Library/PrivateFrameworks/DebugSymbols.framework/Versions/A/DebugSymbols
+0x00000001b6f81000 	/System/Library/PrivateFrameworks/OSAnalytics.framework/Versions/A/OSAnalytics
+0x000000021a654000 	/System/Library/PrivateFrameworks/VideoToolboxParavirtualizationSupport.framework/Versions/A/VideoToolboxParavirtualizationSupport
+0x000000019152a000 	/System/Library/PrivateFrameworks/AppleVA.framework/Versions/A/AppleVA
+0x0000000193562000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
+0x000000018986d000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
+0x000000019219c000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
+0x000000019394b000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
+0x000000019393f000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSyncLegacy.framework/Versions/A/ColorSyncLegacy
+0x0000000193532000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
+0x0000000192158000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATSUI.framework/Versions/A/ATSUI
+0x00000001938d2000 	/usr/lib/libcups.2.dylib
+0x0000000193cbb000 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos
+0x0000000193ccc000 	/System/Library/Frameworks/GSS.framework/Versions/A/GSS
+0x00000001935e1000 	/usr/lib/libresolv.9.dylib
+0x0000000191762000 	/System/Library/PrivateFrameworks/Heimdal.framework/Versions/A/Heimdal
+0x000000019b083000 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Libraries/libHeimdalProxy.dylib
+0x0000000193d26000 	/System/Library/PrivateFrameworks/CommonAuth.framework/Versions/A/CommonAuth
+0x00000001ef70e000 	/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio
+0x00000001a2e05000 	/System/Library/PrivateFrameworks/AXCoreUtilities.framework/Versions/A/AXCoreUtilities
+0x000000019349e000 	/System/Library/PrivateFrameworks/AudioSession.framework/Versions/A/AudioSession
+0x0000000194f43000 	/System/Library/Frameworks/IOBluetooth.framework/Versions/A/IOBluetooth
+0x0000000191635000 	/System/Library/PrivateFrameworks/MediaExperience.framework/Versions/A/MediaExperience
+0x00000001932e1000 	/System/Library/PrivateFrameworks/AudioSession.framework/libSessionUtility.dylib
+0x0000000193957000 	/System/Library/PrivateFrameworks/AudioResourceArbitration.framework/Versions/A/AudioResourceArbitration
+0x0000000197fe6000 	/System/Library/PrivateFrameworks/PowerLog.framework/Versions/A/PowerLog
+0x0000000197f09000 	/System/Library/Frameworks/CoreBluetooth.framework/Versions/A/CoreBluetooth
+0x000000019b084000 	/System/Library/Frameworks/AudioUnit.framework/Versions/A/AudioUnit
+0x000000018ef94000 	/System/Library/PrivateFrameworks/CoreUtils.framework/Versions/A/CoreUtils
+0x00000001fd02c000 	/System/Library/PrivateFrameworks/CoreUtilsExtras.framework/Versions/A/CoreUtilsExtras
+0x00000002072e9000 	/System/Library/PrivateFrameworks/IO80211.framework/Versions/A/IO80211
+0x00000001a2e20000 	/usr/lib/libAccessibility.dylib
+0x0000000197609000 	/System/Library/Frameworks/MediaAccessibility.framework/Versions/A/MediaAccessibility
+0x0000000198b8f000 	/System/Library/PrivateFrameworks/FrontBoardServices.framework/Versions/A/FrontBoardServices
+0x000000019a661000 	/System/Library/PrivateFrameworks/BackBoardServices.framework/Versions/A/BackBoardServices
+0x0000000198c49000 	/System/Library/PrivateFrameworks/BoardServices.framework/Versions/A/BoardServices
+0x000000019159c000 	/System/Library/PrivateFrameworks/IconFoundation.framework/Versions/A/IconFoundation
+0x0000000196ea1000 	/System/Library/PrivateFrameworks/SpeechRecognitionCore.framework/Versions/A/SpeechRecognitionCore
+0x00000001c6d9a000 	/System/Library/Frameworks/OSLog.framework/Versions/A/OSLog
+0x00000001a8185000 	/System/Library/PrivateFrameworks/LoggingSupport.framework/Versions/A/LoggingSupport
+0x0000000101624000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/server/libjvm.dylib
+0x00000001000a4000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libjimage.dylib
+0x0000000100100000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libjdwp.dylib
+0x0000000100148000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libjava.dylib
+0x00000001000d0000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libinstrument.dylib
+0x0000000222dce000 	/usr/lib/i18n/libiconv_std.dylib
+0x0000000222db6000 	/usr/lib/i18n/libUTF8.dylib
+0x0000000222dd2000 	/usr/lib/i18n/libmapper_646.dylib
+0x0000000100238000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libdt_socket.dylib
+0x0000000100274000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libzip.dylib
+0x000000010029c000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libnio.dylib
+0x000000010024c000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libnet.dylib
+0x00000001002bc000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libmanagement.dylib
+0x00000001002d0000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libmanagement_ext.dylib
+0x0000000192c93000 	/usr/lib/libusrtcp.dylib
+0x00000001885e4000 	/usr/lib/libboringssl.dylib
+0x00000001002e4000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libextnet.dylib
+0x000000010041c000 	/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/libverify.dylib
+
+
+VM Arguments:
+jvm_args: -XX:+ShowCodeDetailsInExceptionMessages -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:49425 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=49424 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=localhost -Dspring.jmx.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -Dspring.application.admin.enabled=true -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active= -XX:TieredStopAtLevel=1 -Dspring.boot.project.name=voucher-management -javaagent:/Applications/Eclipse.app/Contents/Eclipse/configuration/org.eclipse.osgi/2389/0/.cp/lib/javaagent-shaded.jar -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 
+java_command: sg.edu.nus.iss.springboot.voucher.management.VoucherManagementApplication --spring.output.ansi.enabled=always
+java_class_path (initial): /Users/thetnandaraung/Workspace/voucher-management/target/classes:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/3.2.2/spring-boot-starter-data-jpa-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter-aop/3.2.2/spring-boot-starter-aop-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/aspectj/aspectjweaver/1.9.21/aspectjweaver-1.9.21.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/3.2.2/spring-boot-starter-jdbc-3.2.2.jar:/Users/thetnandaraung/.m2/repository/com/zaxxer/HikariCP/5.0.1/HikariCP-5.0.1.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-jdbc/6.1.3/spring-jdbc-6.1.3.jar:/Users/thetnandaraung/.m2/repository/org/hibernate/orm/hibernate-core/6.4.1.Final/hibernate-core-6.4.1.Final.jar:/Users/thetnandaraung/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.1.0/jakarta.persistence-api-3.1.0.jar:/Users/thetnandaraung/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/thetnandaraung/.m2/repository/org/jboss/logging/jboss-logging/3.5.3.Final/jboss-logging-3.5.3.Final.jar:/Users/thetnandaraung/.m2/repository/org/hibernate/common/hibernate-commons-annotations/6.0.6.Final/hibernate-commons-annotations-6.0.6.Final.jar:/Users/thetnandaraung/.m2/repository/io/smallrye/jandex/3.1.2/jandex-3.1.2.jar:/Users/thetnandaraung/.m2/repository/com/fasterxml/classmate/1.6.0/classmate-1.6.0.jar:/Users/thetnandaraung/.m2/repository/net/bytebuddy/byte-buddy/1.14.11/byte-buddy-1.14.11.jar:/Users/thetnandaraung/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.4/jaxb-runtime-4.0.4.jar:/Users/thetnandaraung/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.4/jaxb-core-4.0.4.jar:/Users/thetnandaraung/.m2/repository/org/eclipse/angus/angus-activation/2.0.1/angus-activation-2.0.1.jar:/Users/thetnandaraung/.m2/repository/org/glassfish/jaxb/txw2/4.0.4/txw2-4.0.4.jar:/Users/thetnandaraung/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/thetnandaraung/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/thetnandaraung/.m2/repository/org/antlr/antlr4-runtime/4.13.0/antlr4-runtime-4.13.0.jar:/Users/thetnandaraung/.m2/repository/org/springframework/data/spring-data-jpa/3.2.2/spring-data-jpa-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/data/spring-data-commons/3.2.2/spring-data-commons-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-orm/6.1.3/spring-orm-6.1.3.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-context/6.1.3/spring-context-6.1.3.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-tx/6.1.3/spring-tx-6.1.3.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-beans/6.1.3/spring-beans-6.1.3.jar:/Users/thetnandaraung/.m2/repository/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar:/Users/thetnandaraung/.m2/repository/org/slf4j/slf4j-api/2.0.11/slf4j-api-2.0.11.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-aspects/6.1.3/spring-aspects-6.1.3.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter-security/3.2.2/spring-boot-starter-security-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter/3.2.2/spring-boot-starter-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot/3.2.2/spring-boot-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.2.2/spring-boot-autoconfigure-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter-logging/3.2.2/spring-boot-starter-logging-3.2.2.jar:/Users/thetnandaraung/.m2/repository/ch/qos/logback/logback-classic/1.4.14/logback-classic-1.4.14.jar:/Users/thetnandaraung/.m2/repository/ch/qos/logback/logback-core/1.4.14/logback-core-1.4.14.jar:/Users/thetnandaraung/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.21.1/log4j-to-slf4j-2.21.1.jar:/Users/thetnandaraung/.m2/repository/org/apache/logging/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar:/Users/thetnandaraung/.m2/repository/org/slf4j/jul-to-slf4j/2.0.11/jul-to-slf4j-2.0.11.jar:/Users/thetnandaraung/.m2/repository/org/yaml/snakeyaml/2.2/snakeyaml-2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-aop/6.1.3/spring-aop-6.1.3.jar:/Users/thetnandaraung/.m2/repository/org/springframework/security/spring-security-config/6.2.1/spring-security-config-6.2.1.jar:/Users/thetnandaraung/.m2/repository/org/springframework/security/spring-security-core/6.2.1/spring-security-core-6.2.1.jar:/Users/thetnandaraung/.m2/repository/org/springframework/security/spring-security-crypto/6.2.1/spring-security-crypto-6.2.1.jar:/Users/thetnandaraung/.m2/repository/org/springframework/security/spring-security-web/6.2.1/spring-security-web-6.2.1.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-expression/6.1.3/spring-expression-6.1.3.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter-web/3.2.2/spring-boot-starter-web-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter-json/3.2.2/spring-boot-starter-json-3.2.2.jar:/Users/thetnandaraung/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.15.3/jackson-databind-2.15.3.jar:/Users/thetnandaraung/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.15.3/jackson-annotations-2.15.3.jar:/Users/thetnandaraung/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.15.3/jackson-core-2.15.3.jar:/Users/thetnandaraung/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.15.3/jackson-datatype-jdk8-2.15.3.jar:/Users/thetnandaraung/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.3/jackson-datatype-jsr310-2.15.3.jar:/Users/thetnandaraung/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.15.3/jackson-module-parameter-names-2.15.3.jar:/Users/thetnandaraung/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/3.2.2/spring-boot-starter-tomcat-3.2.2.jar:/Users/thetnandaraung/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.18/tomcat-embed-core-10.1.18.jar:/Users/thetnandaraung/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/10.1.18/tomcat-embed-el-10.1.18.jar:/Users/thetnandaraung/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/10.1.18/tomcat-embed-websocket-10.1.18.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-web/6.1.3/spring-web-6.1.3.jar:/Users/thetnandaraung/.m2/repository/io/micrometer/micrometer-observation/1.12.2/micrometer-observation-1.12.2.jar:/Users/thetnandaraung/.m2/repository/io/micrometer/micrometer-commons/1.12.2/micrometer-commons-1.12.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-webmvc/6.1.3/spring-webmvc-6.1.3.jar:/Users/thetnandaraung/.m2/repository/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk/1.12.655/aws-java-sdk-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-supplychain/1.12.655/aws-java-sdk-supplychain-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/jmespath-java/1.12.655/jmespath-java-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-networkmonitor/1.12.655/aws-java-sdk-networkmonitor-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-marketplaceagreement/1.12.655/aws-java-sdk-marketplaceagreement-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-marketplacedeployment/1.12.655/aws-java-sdk-marketplacedeployment-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cleanroomsml/1.12.655/aws-java-sdk-cleanroomsml-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-bedrockagent/1.12.655/aws-java-sdk-bedrockagent-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-qconnect/1.12.655/aws-java-sdk-qconnect-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-qbusiness/1.12.655/aws-java-sdk-qbusiness-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-bedrockagentruntime/1.12.655/aws-java-sdk-bedrockagentruntime-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-b2bi/1.12.655/aws-java-sdk-b2bi-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-workspacesthinclient/1.12.655/aws-java-sdk-workspacesthinclient-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-eksauth/1.12.655/aws-java-sdk-eksauth-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-freetier/1.12.655/aws-java-sdk-freetier-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-bcmdataexports/1.12.655/aws-java-sdk-bcmdataexports-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-repostspace/1.12.655/aws-java-sdk-repostspace-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-costoptimizationhub/1.12.655/aws-java-sdk-costoptimizationhub-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-inspectorscan/1.12.655/aws-java-sdk-inspectorscan-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-trustedadvisor/1.12.655/aws-java-sdk-trustedadvisor-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-launchwizard/1.12.655/aws-java-sdk-launchwizard-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-datazoneexternal/1.12.655/aws-java-sdk-datazoneexternal-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-bedrock/1.12.655/aws-java-sdk-bedrock-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-bedrockruntime/1.12.655/aws-java-sdk-bedrockruntime-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-neptunedata/1.12.655/aws-java-sdk-neptunedata-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-pcaconnectorad/1.12.655/aws-java-sdk-pcaconnectorad-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-managedblockchainquery/1.12.655/aws-java-sdk-managedblockchainquery-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-entityresolution/1.12.655/aws-java-sdk-entityresolution-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-medicalimaging/1.12.655/aws-java-sdk-medicalimaging-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appfabric/1.12.655/aws-java-sdk-appfabric-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-verifiedpermissions/1.12.655/aws-java-sdk-verifiedpermissions-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codegurusecurity/1.12.655/aws-java-sdk-codegurusecurity-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-paymentcryptography/1.12.655/aws-java-sdk-paymentcryptography-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-paymentcryptographydata/1.12.655/aws-java-sdk-paymentcryptographydata-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mediapackagev2/1.12.655/aws-java-sdk-mediapackagev2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-osis/1.12.655/aws-java-sdk-osis-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-vpclattice/1.12.655/aws-java-sdk-vpclattice-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ivsrealtime/1.12.655/aws-java-sdk-ivsrealtime-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-internetmonitor/1.12.655/aws-java-sdk-internetmonitor-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-tnb/1.12.655/aws-java-sdk-tnb-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudtraildata/1.12.655/aws-java-sdk-cloudtraildata-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cleanrooms/1.12.655/aws-java-sdk-cleanrooms-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kendraranking/1.12.655/aws-java-sdk-kendraranking-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-licensemanagerlinuxsubscriptions/1.12.655/aws-java-sdk-licensemanagerlinuxsubscriptions-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kinesisvideowebrtcstorage/1.12.655/aws-java-sdk-kinesisvideowebrtcstorage-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sagemakermetrics/1.12.655/aws-java-sdk-sagemakermetrics-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-pipes/1.12.655/aws-java-sdk-pipes-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sagemakergeospatial/1.12.655/aws-java-sdk-sagemakergeospatial-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-docdbelastic/1.12.655/aws-java-sdk-docdbelastic-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-omics/1.12.655/aws-java-sdk-omics-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-opensearchserverless/1.12.655/aws-java-sdk-opensearchserverless-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-securitylake/1.12.655/aws-java-sdk-securitylake-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-simspaceweaver/1.12.655/aws-java-sdk-simspaceweaver-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-arczonalshift/1.12.655/aws-java-sdk-arczonalshift-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-oam/1.12.655/aws-java-sdk-oam-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotroborunner/1.12.655/aws-java-sdk-iotroborunner-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-chimesdkvoice/1.12.655/aws-java-sdk-chimesdkvoice-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ssmsap/1.12.655/aws-java-sdk-ssmsap-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-scheduler/1.12.655/aws-java-sdk-scheduler-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-resourceexplorer2/1.12.655/aws-java-sdk-resourceexplorer2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-connectcases/1.12.655/aws-java-sdk-connectcases-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-migrationhuborchestrator/1.12.655/aws-java-sdk-migrationhuborchestrator-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotfleetwise/1.12.655/aws-java-sdk-iotfleetwise-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-controltower/1.12.655/aws-java-sdk-controltower-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-supportapp/1.12.655/aws-java-sdk-supportapp-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-private5g/1.12.655/aws-java-sdk-private5g-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-backupstorage/1.12.655/aws-java-sdk-backupstorage-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-licensemanagerusersubscriptions/1.12.655/aws-java-sdk-licensemanagerusersubscriptions-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iamrolesanywhere/1.12.655/aws-java-sdk-iamrolesanywhere-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-redshiftserverless/1.12.655/aws-java-sdk-redshiftserverless-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-connectcampaign/1.12.655/aws-java-sdk-connectcampaign-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mainframemodernization/1.12.655/aws-java-sdk-mainframemodernization-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-emrserverless/1.12.655/aws-java-sdk-emrserverless-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-chimesdkmediapipelines/1.12.655/aws-java-sdk-chimesdkmediapipelines-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ivschat/1.12.655/aws-java-sdk-ivschat-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-pinpointsmsvoicev2/1.12.655/aws-java-sdk-pinpointsmsvoicev2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-billingconductor/1.12.655/aws-java-sdk-billingconductor-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-keyspaces/1.12.655/aws-java-sdk-keyspaces-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-amplifyuibuilder/1.12.655/aws-java-sdk-amplifyuibuilder-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-backupgateway/1.12.655/aws-java-sdk-backupgateway-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-workspacesweb/1.12.655/aws-java-sdk-workspacesweb-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iottwinmaker/1.12.655/aws-java-sdk-iottwinmaker-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-recyclebin/1.12.655/aws-java-sdk-recyclebin-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudwatchrum/1.12.655/aws-java-sdk-cloudwatchrum-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudwatchevidently/1.12.655/aws-java-sdk-cloudwatchevidently-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-inspector2/1.12.655/aws-java-sdk-inspector2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-migrationhubrefactorspaces/1.12.655/aws-java-sdk-migrationhubrefactorspaces-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appconfigdata/1.12.655/aws-java-sdk-appconfigdata-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-drs/1.12.655/aws-java-sdk-drs-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-migrationhubstrategyrecommendations/1.12.655/aws-java-sdk-migrationhubstrategyrecommendations-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-resiliencehub/1.12.655/aws-java-sdk-resiliencehub-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-chimesdkmeetings/1.12.655/aws-java-sdk-chimesdkmeetings-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-panorama/1.12.655/aws-java-sdk-panorama-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-managedgrafana/1.12.655/aws-java-sdk-managedgrafana-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudcontrolapi/1.12.655/aws-java-sdk-cloudcontrolapi-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-account/1.12.655/aws-java-sdk-account-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-voiceid/1.12.655/aws-java-sdk-voiceid-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-connectwisdom/1.12.655/aws-java-sdk-connectwisdom-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kafkaconnect/1.12.655/aws-java-sdk-kafkaconnect-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-opensearch/1.12.655/aws-java-sdk-opensearch-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-memorydb/1.12.655/aws-java-sdk-memorydb-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-snowdevicemanagement/1.12.655/aws-java-sdk-snowdevicemanagement-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-chimesdkidentity/1.12.655/aws-java-sdk-chimesdkidentity-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-chimesdkmessaging/1.12.655/aws-java-sdk-chimesdkmessaging-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-route53recoverycluster/1.12.655/aws-java-sdk-route53recoverycluster-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-route53recoverycontrolconfig/1.12.655/aws-java-sdk-route53recoverycontrolconfig-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-route53recoveryreadiness/1.12.655/aws-java-sdk-route53recoveryreadiness-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-proton/1.12.655/aws-java-sdk-proton-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-apprunner/1.12.655/aws-java-sdk-apprunner-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-applicationcostprofiler/1.12.655/aws-java-sdk-applicationcostprofiler-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ssmcontacts/1.12.655/aws-java-sdk-ssmcontacts-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ssmincidents/1.12.655/aws-java-sdk-ssmincidents-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-finspacedata/1.12.655/aws-java-sdk-finspacedata-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-finspace/1.12.655/aws-java-sdk-finspace-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-nimblestudio/1.12.655/aws-java-sdk-nimblestudio-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lookoutequipment/1.12.655/aws-java-sdk-lookoutequipment-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mgn/1.12.655/aws-java-sdk-mgn-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lookoutmetrics/1.12.655/aws-java-sdk-lookoutmetrics-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-fis/1.12.655/aws-java-sdk-fis-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lexmodelsv2/1.12.655/aws-java-sdk-lexmodelsv2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lexruntimev2/1.12.655/aws-java-sdk-lexruntimev2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-wellarchitected/1.12.655/aws-java-sdk-wellarchitected-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-location/1.12.655/aws-java-sdk-location-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotdeviceadvisor/1.12.655/aws-java-sdk-iotdeviceadvisor-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotfleethub/1.12.655/aws-java-sdk-iotfleethub-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotwireless/1.12.655/aws-java-sdk-iotwireless-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-greengrassv2/1.12.655/aws-java-sdk-greengrassv2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-prometheus/1.12.655/aws-java-sdk-prometheus-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-auditmanager/1.12.655/aws-java-sdk-auditmanager-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-healthlake/1.12.655/aws-java-sdk-healthlake-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sagemakeredgemanager/1.12.655/aws-java-sdk-sagemakeredgemanager-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-emrcontainers/1.12.655/aws-java-sdk-emrcontainers-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-customerprofiles/1.12.655/aws-java-sdk-customerprofiles-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lookoutforvision/1.12.655/aws-java-sdk-lookoutforvision-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-connectcontactlens/1.12.655/aws-java-sdk-connectcontactlens-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-amplifybackend/1.12.655/aws-java-sdk-amplifybackend-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ecrpublic/1.12.655/aws-java-sdk-ecrpublic-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appintegrations/1.12.655/aws-java-sdk-appintegrations-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sagemakerfeaturestoreruntime/1.12.655/aws-java-sdk-sagemakerfeaturestoreruntime-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-devopsguru/1.12.655/aws-java-sdk-devopsguru-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mwaa/1.12.655/aws-java-sdk-mwaa-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-networkfirewall/1.12.655/aws-java-sdk-networkfirewall-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appregistry/1.12.655/aws-java-sdk-appregistry-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-gluedatabrew/1.12.655/aws-java-sdk-gluedatabrew-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-s3outposts/1.12.655/aws-java-sdk-s3outposts-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-timestreamquery/1.12.655/aws-java-sdk-timestreamquery-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-timestreamwrite/1.12.655/aws-java-sdk-timestreamwrite-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ssoadmin/1.12.655/aws-java-sdk-ssoadmin-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-redshiftdataapi/1.12.655/aws-java-sdk-redshiftdataapi-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appflow/1.12.655/aws-java-sdk-appflow-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-identitystore/1.12.655/aws-java-sdk-identitystore-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-braket/1.12.655/aws-java-sdk-braket-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ivs/1.12.655/aws-java-sdk-ivs-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-honeycode/1.12.655/aws-java-sdk-honeycode-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codeartifact/1.12.655/aws-java-sdk-codeartifact-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-macie2/1.12.655/aws-java-sdk-macie2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotsitewise/1.12.655/aws-java-sdk-iotsitewise-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-synthetics/1.12.655/aws-java-sdk-synthetics-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codestarconnections/1.12.655/aws-java-sdk-codestarconnections-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-detective/1.12.655/aws-java-sdk-detective-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kinesisvideosignalingchannels/1.12.655/aws-java-sdk-kinesisvideosignalingchannels-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ebs/1.12.655/aws-java-sdk-ebs-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-augmentedairuntime/1.12.655/aws-java-sdk-augmentedairuntime-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-outposts/1.12.655/aws-java-sdk-outposts-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codeguruprofiler/1.12.655/aws-java-sdk-codeguruprofiler-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codegurureviewer/1.12.655/aws-java-sdk-codegurureviewer-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-frauddetector/1.12.655/aws-java-sdk-frauddetector-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kendra/1.12.655/aws-java-sdk-kendra-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-networkmanager/1.12.655/aws-java-sdk-networkmanager-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-computeoptimizer/1.12.655/aws-java-sdk-computeoptimizer-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-accessanalyzer/1.12.655/aws-java-sdk-accessanalyzer-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-schemas/1.12.655/aws-java-sdk-schemas-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-imagebuilder/1.12.655/aws-java-sdk-imagebuilder-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-elasticinference/1.12.655/aws-java-sdk-elasticinference-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotsecuretunneling/1.12.655/aws-java-sdk-iotsecuretunneling-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appconfig/1.12.655/aws-java-sdk-appconfig-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-wafv2/1.12.655/aws-java-sdk-wafv2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-connectparticipant/1.12.655/aws-java-sdk-connectparticipant-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-migrationhubconfig/1.12.655/aws-java-sdk-migrationhubconfig-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-dataexchange/1.12.655/aws-java-sdk-dataexchange-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sesv2/1.12.655/aws-java-sdk-sesv2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-marketplacecatalog/1.12.655/aws-java-sdk-marketplacecatalog-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ssooidc/1.12.655/aws-java-sdk-ssooidc-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sso/1.12.655/aws-java-sdk-sso-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-savingsplans/1.12.655/aws-java-sdk-savingsplans-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codestarnotifications/1.12.655/aws-java-sdk-codestarnotifications-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-workmailmessageflow/1.12.655/aws-java-sdk-workmailmessageflow-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-qldbsession/1.12.655/aws-java-sdk-qldbsession-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-qldb/1.12.655/aws-java-sdk-qldb-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-forecastquery/1.12.655/aws-java-sdk-forecastquery-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-forecast/1.12.655/aws-java-sdk-forecast-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lakeformation/1.12.655/aws-java-sdk-lakeformation-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-eventbridge/1.12.655/aws-java-sdk-eventbridge-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ec2instanceconnect/1.12.655/aws-java-sdk-ec2instanceconnect-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-applicationinsights/1.12.655/aws-java-sdk-applicationinsights-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-servicequotas/1.12.655/aws-java-sdk-servicequotas-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-personalizeevents/1.12.655/aws-java-sdk-personalizeevents-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-personalize/1.12.655/aws-java-sdk-personalize-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-personalizeruntime/1.12.655/aws-java-sdk-personalizeruntime-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ioteventsdata/1.12.655/aws-java-sdk-ioteventsdata-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotevents/1.12.655/aws-java-sdk-iotevents-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotthingsgraph/1.12.655/aws-java-sdk-iotthingsgraph-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-groundstation/1.12.655/aws-java-sdk-groundstation-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mediapackagevod/1.12.655/aws-java-sdk-mediapackagevod-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-managedblockchain/1.12.655/aws-java-sdk-managedblockchain-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-textract/1.12.655/aws-java-sdk-textract-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-worklink/1.12.655/aws-java-sdk-worklink-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-backup/1.12.655/aws-java-sdk-backup-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-docdb/1.12.655/aws-java-sdk-docdb-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-apigatewayv2/1.12.655/aws-java-sdk-apigatewayv2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-apigatewaymanagementapi/1.12.655/aws-java-sdk-apigatewaymanagementapi-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kafka/1.12.655/aws-java-sdk-kafka-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appmesh/1.12.655/aws-java-sdk-appmesh-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-licensemanager/1.12.655/aws-java-sdk-licensemanager-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-securityhub/1.12.655/aws-java-sdk-securityhub-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-fsx/1.12.655/aws-java-sdk-fsx-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mediaconnect/1.12.655/aws-java-sdk-mediaconnect-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kinesisanalyticsv2/1.12.655/aws-java-sdk-kinesisanalyticsv2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-comprehendmedical/1.12.655/aws-java-sdk-comprehendmedical-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-globalaccelerator/1.12.655/aws-java-sdk-globalaccelerator-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-transfer/1.12.655/aws-java-sdk-transfer-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-datasync/1.12.655/aws-java-sdk-datasync-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-robomaker/1.12.655/aws-java-sdk-robomaker-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-amplify/1.12.655/aws-java-sdk-amplify-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-quicksight/1.12.655/aws-java-sdk-quicksight-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-rdsdata/1.12.655/aws-java-sdk-rdsdata-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-route53resolver/1.12.655/aws-java-sdk-route53resolver-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ram/1.12.655/aws-java-sdk-ram-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-s3control/1.12.655/aws-java-sdk-s3control-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-pinpointsmsvoice/1.12.655/aws-java-sdk-pinpointsmsvoice-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-pinpointemail/1.12.655/aws-java-sdk-pinpointemail-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-chime/1.12.655/aws-java-sdk-chime-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-signer/1.12.655/aws-java-sdk-signer-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-dlm/1.12.655/aws-java-sdk-dlm-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-eks/1.12.655/aws-java-sdk-eks-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mediatailor/1.12.655/aws-java-sdk-mediatailor-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-neptune/1.12.655/aws-java-sdk-neptune-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-pi/1.12.655/aws-java-sdk-pi-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iot1clickprojects/1.12.655/aws-java-sdk-iot1clickprojects-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iot1clickdevices/1.12.655/aws-java-sdk-iot1clickdevices-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotanalytics/1.12.655/aws-java-sdk-iotanalytics-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-acmpca/1.12.655/aws-java-sdk-acmpca-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-secretsmanager/1.12.655/aws-java-sdk-secretsmanager-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-fms/1.12.655/aws-java-sdk-fms-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-connect/1.12.655/aws-java-sdk-connect-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-transcribe/1.12.655/aws-java-sdk-transcribe-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-autoscalingplans/1.12.655/aws-java-sdk-autoscalingplans-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-workmail/1.12.655/aws-java-sdk-workmail-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-servicediscovery/1.12.655/aws-java-sdk-servicediscovery-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloud9/1.12.655/aws-java-sdk-cloud9-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-serverlessapplicationrepository/1.12.655/aws-java-sdk-serverlessapplicationrepository-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-alexaforbusiness/1.12.655/aws-java-sdk-alexaforbusiness-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-resourcegroups/1.12.655/aws-java-sdk-resourcegroups-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-comprehend/1.12.655/aws-java-sdk-comprehend-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-translate/1.12.655/aws-java-sdk-translate-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sagemaker/1.12.655/aws-java-sdk-sagemaker-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iotjobsdataplane/1.12.655/aws-java-sdk-iotjobsdataplane-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sagemakerruntime/1.12.655/aws-java-sdk-sagemakerruntime-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kinesisvideo/1.12.655/aws-java-sdk-kinesisvideo-1.12.655.jar:/Users/thetnandaraung/.m2/repository/io/netty/netty-codec-http/4.1.105.Final/netty-codec-http-4.1.105.Final.jar:/Users/thetnandaraung/.m2/repository/io/netty/netty-common/4.1.105.Final/netty-common-4.1.105.Final.jar:/Users/thetnandaraung/.m2/repository/io/netty/netty-buffer/4.1.105.Final/netty-buffer-4.1.105.Final.jar:/Users/thetnandaraung/.m2/repository/io/netty/netty-transport/4.1.105.Final/netty-transport-4.1.105.Final.jar:/Users/thetnandaraung/.m2/repository/io/netty/netty-codec/4.1.105.Final/netty-codec-4.1.105.Final.jar:/Users/thetnandaraung/.m2/repository/io/netty/netty-handler/4.1.105.Final/netty-handler-4.1.105.Final.jar:/Users/thetnandaraung/.m2/repository/io/netty/netty-resolver/4.1.105.Final/netty-resolver-4.1.105.Final.jar:/Users/thetnandaraung/.m2/repository/io/netty/netty-transport-native-unix-common/4.1.105.Final/netty-transport-native-unix-common-4.1.105.Final.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appsync/1.12.655/aws-java-sdk-appsync-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-guardduty/1.12.655/aws-java-sdk-guardduty-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mq/1.12.655/aws-java-sdk-mq-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mediaconvert/1.12.655/aws-java-sdk-mediaconvert-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mediastore/1.12.655/aws-java-sdk-mediastore-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mediastoredata/1.12.655/aws-java-sdk-mediastoredata-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-medialive/1.12.655/aws-java-sdk-medialive-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mediapackage/1.12.655/aws-java-sdk-mediapackage-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-costexplorer/1.12.655/aws-java-sdk-costexplorer-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-pricing/1.12.655/aws-java-sdk-pricing-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mobile/1.12.655/aws-java-sdk-mobile-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudhsmv2/1.12.655/aws-java-sdk-cloudhsmv2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-glue/1.12.655/aws-java-sdk-glue-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-migrationhub/1.12.655/aws-java-sdk-migrationhub-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-dax/1.12.655/aws-java-sdk-dax-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-greengrass/1.12.655/aws-java-sdk-greengrass-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-athena/1.12.655/aws-java-sdk-athena-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-marketplaceentitlement/1.12.655/aws-java-sdk-marketplaceentitlement-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codestar/1.12.655/aws-java-sdk-codestar-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lexmodelbuilding/1.12.655/aws-java-sdk-lexmodelbuilding-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-resourcegroupstaggingapi/1.12.655/aws-java-sdk-resourcegroupstaggingapi-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-pinpoint/1.12.655/aws-java-sdk-pinpoint-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-xray/1.12.655/aws-java-sdk-xray-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-opsworkscm/1.12.655/aws-java-sdk-opsworkscm-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-support/1.12.655/aws-java-sdk-support-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-simpledb/1.12.655/aws-java-sdk-simpledb-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-servicecatalog/1.12.655/aws-java-sdk-servicecatalog-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-servermigration/1.12.655/aws-java-sdk-servermigration-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-simpleworkflow/1.12.655/aws-java-sdk-simpleworkflow-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-storagegateway/1.12.655/aws-java-sdk-storagegateway-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-route53/1.12.655/aws-java-sdk-route53-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-s3/1.12.655/aws-java-sdk-s3-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-importexport/1.12.655/aws-java-sdk-importexport-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sts/1.12.655/aws-java-sdk-sts-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sqs/1.12.655/aws-java-sdk-sqs-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-rds/1.12.655/aws-java-sdk-rds-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-redshift/1.12.655/aws-java-sdk-redshift-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-elasticbeanstalk/1.12.655/aws-java-sdk-elasticbeanstalk-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-glacier/1.12.655/aws-java-sdk-glacier-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iam/1.12.655/aws-java-sdk-iam-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-datapipeline/1.12.655/aws-java-sdk-datapipeline-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-elasticloadbalancing/1.12.655/aws-java-sdk-elasticloadbalancing-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-elasticloadbalancingv2/1.12.655/aws-java-sdk-elasticloadbalancingv2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-emr/1.12.655/aws-java-sdk-emr-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-elasticache/1.12.655/aws-java-sdk-elasticache-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-elastictranscoder/1.12.655/aws-java-sdk-elastictranscoder-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ec2/1.12.655/aws-java-sdk-ec2-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-dynamodb/1.12.655/aws-java-sdk-dynamodb-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-sns/1.12.655/aws-java-sdk-sns-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-budgets/1.12.655/aws-java-sdk-budgets-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudtrail/1.12.655/aws-java-sdk-cloudtrail-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudwatch/1.12.655/aws-java-sdk-cloudwatch-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-logs/1.12.655/aws-java-sdk-logs-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-events/1.12.655/aws-java-sdk-events-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cognitoidentity/1.12.655/aws-java-sdk-cognitoidentity-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cognitosync/1.12.655/aws-java-sdk-cognitosync-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-directconnect/1.12.655/aws-java-sdk-directconnect-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudformation/1.12.655/aws-java-sdk-cloudformation-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudfront/1.12.655/aws-java-sdk-cloudfront-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-clouddirectory/1.12.655/aws-java-sdk-clouddirectory-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kinesis/1.12.655/aws-java-sdk-kinesis-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-opsworks/1.12.655/aws-java-sdk-opsworks-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ses/1.12.655/aws-java-sdk-ses-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-autoscaling/1.12.655/aws-java-sdk-autoscaling-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudsearch/1.12.655/aws-java-sdk-cloudsearch-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudwatchmetrics/1.12.655/aws-java-sdk-cloudwatchmetrics-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codedeploy/1.12.655/aws-java-sdk-codedeploy-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codepipeline/1.12.655/aws-java-sdk-codepipeline-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-kms/1.12.655/aws-java-sdk-kms-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-config/1.12.655/aws-java-sdk-config-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lambda/1.12.655/aws-java-sdk-lambda-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ecs/1.12.655/aws-java-sdk-ecs-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ecr/1.12.655/aws-java-sdk-ecr-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cloudhsm/1.12.655/aws-java-sdk-cloudhsm-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-ssm/1.12.655/aws-java-sdk-ssm-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-workspaces/1.12.655/aws-java-sdk-workspaces-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-machinelearning/1.12.655/aws-java-sdk-machinelearning-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-directory/1.12.655/aws-java-sdk-directory-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-efs/1.12.655/aws-java-sdk-efs-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codecommit/1.12.655/aws-java-sdk-codecommit-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-devicefarm/1.12.655/aws-java-sdk-devicefarm-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-elasticsearch/1.12.655/aws-java-sdk-elasticsearch-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-waf/1.12.655/aws-java-sdk-waf-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-marketplacecommerceanalytics/1.12.655/aws-java-sdk-marketplacecommerceanalytics-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-inspector/1.12.655/aws-java-sdk-inspector-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-iot/1.12.655/aws-java-sdk-iot-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-api-gateway/1.12.655/aws-java-sdk-api-gateway-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-acm/1.12.655/aws-java-sdk-acm-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-gamelift/1.12.655/aws-java-sdk-gamelift-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-dms/1.12.655/aws-java-sdk-dms-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-marketplacemeteringservice/1.12.655/aws-java-sdk-marketplacemeteringservice-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-cognitoidp/1.12.655/aws-java-sdk-cognitoidp-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-discovery/1.12.655/aws-java-sdk-discovery-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-applicationautoscaling/1.12.655/aws-java-sdk-applicationautoscaling-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-snowball/1.12.655/aws-java-sdk-snowball-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-rekognition/1.12.655/aws-java-sdk-rekognition-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-polly/1.12.655/aws-java-sdk-polly-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lightsail/1.12.655/aws-java-sdk-lightsail-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-stepfunctions/1.12.655/aws-java-sdk-stepfunctions-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-health/1.12.655/aws-java-sdk-health-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-costandusagereport/1.12.655/aws-java-sdk-costandusagereport-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-codebuild/1.12.655/aws-java-sdk-codebuild-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-appstream/1.12.655/aws-java-sdk-appstream-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-shield/1.12.655/aws-java-sdk-shield-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-batch/1.12.655/aws-java-sdk-batch-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-lex/1.12.655/aws-java-sdk-lex-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-mechanicalturkrequester/1.12.655/aws-java-sdk-mechanicalturkrequester-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-organizations/1.12.655/aws-java-sdk-organizations-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-workdocs/1.12.655/aws-java-sdk-workdocs-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-core/1.12.655/aws-java-sdk-core-1.12.655.jar:/Users/thetnandaraung/.m2/repository/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar:/Users/thetnandaraung/.m2/repository/commons-codec/commons-codec/1.16.0/commons-codec-1.16.0.jar:/Users/thetnandaraung/.m2/repository/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/Users/thetnandaraung/.m2/repository/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/Users/thetnandaraung/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-cbor/2.15.3/jackson-dataformat-cbor-2.15.3.jar:/Users/thetnandaraung/.m2/repository/joda-time/joda-time/2.8.1/joda-time-2.8.1.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-models/1.12.655/aws-java-sdk-models-1.12.655.jar:/Users/thetnandaraung/.m2/repository/com/amazonaws/aws-java-sdk-swf-libraries/1.11.22/aws-java-sdk-swf-libraries-1.11.22.jar:/Users/thetnandaraung/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar:/Users/thetnandaraung/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.1/jakarta.xml.bind-api-4.0.1.jar:/Users/thetnandaraung/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.2/jakarta.activation-api-2.1.2.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-core/6.1.3/spring-core-6.1.3.jar:/Users/thetnandaraung/.m2/repository/org/springframework/spring-jcl/6.1.3/spring-jcl-6.1.3.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 4                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 11                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 8388608                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 603979776                                 {product} {ergonomic}
+     bool ManagementServer                         = true                                      {product} {command line}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 9663676416                                {product} {ergonomic}
+   size_t MaxNewSize                               = 5796528128                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 8388608                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 16384                                  {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 0                                      {pd product} {ergonomic}
+     bool ProfileInterpreter                       = false                                  {pd product} {command line}
+    uintx ProfiledCodeHeapSize                     = 0                                      {pd product} {ergonomic}
+     bool ShowCodeDetailsInExceptionMessages       = true                                   {manageable} {command line}
+   size_t SoftMaxHeapSize                          = 9663676416                             {manageable} {ergonomic}
+     intx TieredStopAtLevel                        = 1                                         {product} {command line}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseNUMA                                  = false                                     {product} {ergonomic}
+     bool UseNUMAInterleaving                      = false                                     {product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags foldmultilines=false
+ #1: stderr all=off uptime,level,tags foldmultilines=false
+
+Environment Variables:
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+SHELL=/bin/zsh
+TMPDIR=/var/folders/x7/87v5bktj0nj2r5rxwhv8fmwm0000gn/T/
+
+Active Locale:
+LC_ALL=C
+LC_COLLATE=C
+LC_CTYPE=C
+LC_MESSAGES=C
+LC_MONETARY=C
+LC_NUMERIC=C
+LC_TIME=C
+
+Signal Handlers:
+   SIGSEGV: crash_handler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_ONSTACK|SA_RESTART|SA_SIGINFO, unblocked
+    SIGBUS: crash_handler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+    SIGFPE: crash_handler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+   SIGPIPE: javaSignalHandler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGXFSZ: javaSignalHandler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGILL: crash_handler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+   SIGUSR2: SR_handler in libjvm.dylib, mask=00000000000000000000000000000000, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGHUP: UserHandler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGINT: UserHandler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGTERM: UserHandler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGQUIT: UserHandler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGTRAP: crash_handler in libjvm.dylib, mask=11100110000111110111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+
+
+Periodic native trim disabled
+
+---------------  S Y S T E M  ---------------
+
+OS:
+uname: Darwin 23.2.0 Darwin Kernel Version 23.2.0: Wed Nov 15 21:54:05 PST 2023; root:xnu-10002.61.3~2/RELEASE_ARM64_T6031 arm64
+OS uptime: 0 days 2:26 hours
+rlimit (soft/hard): STACK 8176k/65520k , CORE 0k/infinity , NPROC 6000/9000 , NOFILE 10240/infinity , AS infinity/infinity , CPU infinity/infinity , DATA infinity/infinity , FSIZE infinity/infinity , MEMLOCK infinity/infinity , RSS infinity/infinity
+load average: 1.98 1.76 1.70
+
+CPU: total 14 (initial active 14) 0x61:0x0:0x72015832:0, fp, asimd, aes, pmull, sha1, sha256, crc32, lse, sha3, sha512
+machdep.cpu.brand_string:Apple M3 Max
+hw.cachelinesize:128
+hw.l1icachesize:131072
+hw.l1dcachesize:65536
+hw.l2cachesize:4194304
+
+Memory: 16k page, physical 37748736k(229184k free), swap 0k(0k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (21.0.1+12-LTS-29) for bsd-aarch64 JRE (21.0.1+12-LTS-29), built on 2023-10-05T13:27:09Z by "mach5one" with clang Apple LLVM 12.0.0 (clang-1200.0.32.29)
+
+END.

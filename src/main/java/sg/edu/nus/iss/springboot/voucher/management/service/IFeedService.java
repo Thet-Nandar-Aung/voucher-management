@@ -1,22 +1,33 @@
 package sg.edu.nus.iss.springboot.voucher.management.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 
 public interface IFeedService {
 
-    List<Feed> findAllFeeds();
+	List<FeedDTO> findAllFeeds();
 
-    Optional<Feed> findByFeedId(String feedId);
-    
-    ArrayList <FeedDTO> save(String campaignId);
+	List<FeedDTO> findAllActiveFeedsByCampaignId(String campaignId);
 
-    void delete(String feedId);
-    
-    List<Feed>  findByTargetedUserAndStatus(User targetedUser,Campaign campaignId) ;
+	List<FeedDTO> findAllReadFeeds();
 
+	List<FeedDTO> findAllReadFeedsByCampaignId(String campaignId);
+	
+	List<FeedDTO> findAllFeedsByEmail(String email);
+	
+	List<FeedDTO> findAllReadFeedsByEmail(String email);
+
+	FeedDTO findByFeedId(String feedId);
+
+	List<FeedDTO> save(String campaignId);
+
+	void delete(String feedId);
+
+	List<Feed> findByTargetedUserAndStatus(User targetedUser, Campaign campaignId);
+
+	FeedDTO updateReadStatusById(String feedId);
+
+	List<FeedDTO> updateReadStatusByEmail(String email);
 }

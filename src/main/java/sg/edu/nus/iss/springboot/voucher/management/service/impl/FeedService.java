@@ -11,16 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
-import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
-import sg.edu.nus.iss.springboot.voucher.management.entity.Feed;
-import sg.edu.nus.iss.springboot.voucher.management.entity.User;
-import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
-import sg.edu.nus.iss.springboot.voucher.management.repository.FeedRepository;
-import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
+import sg.edu.nus.iss.springboot.voucher.management.dto.*;
+import sg.edu.nus.iss.springboot.voucher.management.entity.*;
+import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.IFeedService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
-import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
 
 @Service
 public class FeedService implements IFeedService {
@@ -37,17 +32,38 @@ public class FeedService implements IFeedService {
 	private UserRepository userRepository;
 
 	@Override
-	public List<Feed> findAllFeeds() {
-		return feedRepository.findAll();
+	public List<FeedDTO> findAllFeeds() {
+		logger.info("Getting all feeds");
+		List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
+		List<Feed> feedList = feedRepository.findByIsDeletedFalse();
+		logger.info("Found {}, converting to Feed DTOs...", feedList.size());
+		if (!feedList.isEmpty()) {
+			Iterator<Feed> feedItr = feedList.iterator();
+			while (feedItr.hasNext()) {
+				Feed feed = feedItr.next();
+				feedDTOList.add(DTOMapper.toFeedDTO(feed));
+			}
+		}
+
+		return feedDTOList;
 	}
 
 	@Override
-	public Optional<Feed> findByFeedId(String feedId) {
-		return feedRepository.findById(feedId);
+	public FeedDTO findByFeedId(String feedId) {
+		FeedDTO feedDTO = new FeedDTO();
+		Optional<Feed> feed = feedRepository.findById(feedId);
+		if (feed.isPresent()) {
+
+			feedDTO = DTOMapper.toFeedDTO(feed.get());
+		} else {
+			logger.info("Feed not found for feedId {}...", feedId);
+		}
+		return feedDTO;
+
 	}
 
 	@Override
-	public ArrayList<FeedDTO> save(String campaignId) {
+	public List<FeedDTO> save(String campaignId) {
 		ArrayList<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
 		Optional<Campaign> campaign = campaignRepository.findById(campaignId);
 		if (campaign.isPresent()) {
@@ -56,18 +72,18 @@ public class FeedService implements IFeedService {
 			List<User> userList = userRepository.findByIsActiveTrue();
 			if (!userList.isEmpty()) {
 
-				Iterator<User> user = userList.iterator();
+				Iterator<User> userItr = userList.iterator();
 
-				while (user.hasNext()) {
-					User val = user.next();
+				while (userItr.hasNext()) {
+					User user = userItr.next();
 					// check feed already generated or not
-					 List<Feed>  dbFeed = feedRepository.findByTargetedUserAndStatus(val, campaign.get(), false, false);
+					List<Feed> dbFeed = feedRepository.findByTargetedUserAndStatus(user, campaign.get(), false, false);
 					//
-					if (dbFeed.size() == 0 ) {
+					if (dbFeed.size() == 0) {
 						Feed feed = new Feed();
 						feed.setCampaignId(campaign.get());
 						feed.setCreatedDate(LocalDateTime.now());
-						feed.setTargetUserId(val);
+						feed.setTargetUserId(user);
 						Feed createdFeed = feedRepository.save(feed);
 						if (createdFeed != null) {
 							FeedDTO feedDTO = new FeedDTO();
@@ -76,7 +92,7 @@ public class FeedService implements IFeedService {
 						}
 
 					} else {
-						logger.info("Campaign already promoted for Targeted User." + val.getEmail());
+						logger.info("Campaign already promoted for Targeted User." + user.getEmail());
 					}
 
 				}
@@ -98,9 +114,159 @@ public class FeedService implements IFeedService {
 	}
 
 	@Override
-	public  List<Feed>  findByTargetedUserAndStatus(User targetedUser, Campaign campaignId) {
+	public List<Feed> findByTargetedUserAndStatus(User targetedUser, Campaign campaignId) {
 		// TODO Auto-generated method stub
 		return feedRepository.findByTargetedUserAndStatus(targetedUser, campaignId, false, false);
+	}
+
+	@Override
+	public List<FeedDTO> findAllActiveFeedsByCampaignId(String campaignId) {
+		logger.info("Getting all feeds by CampaignId");
+		List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
+		Optional<Campaign> campaign = campaignRepository.findById(campaignId);
+		if (campaign.isPresent()) {
+			List<Feed> feedList = feedRepository.findAllFeedsByCampaignId(campaign.get(), false);
+			logger.info("Found {}, converting to Feed DTOs...", feedList.size());
+			if (!feedList.isEmpty()) {
+				Iterator<Feed> feedItr = feedList.iterator();
+				while (feedItr.hasNext()) {
+					Feed feed = feedItr.next();
+					feedDTOList.add(DTOMapper.toFeedDTO(feed));
+				}
+			}
+		} else {
+			logger.info("Campaign not found :" + campaignId);
+		}
+
+		return feedDTOList;
+	}
+
+	@Override
+	public List<FeedDTO> findAllReadFeeds() {
+		logger.info("Getting all read feeds.");
+		List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
+		List<Feed> feedList = feedRepository.findByIsDeletedFalseAndIsReadTrue();
+		logger.info("Found {}, converting to Feed DTOs...", feedList.size());
+		if (!feedList.isEmpty()) {
+			Iterator<Feed> feedItr = feedList.iterator();
+			while (feedItr.hasNext()) {
+				Feed feed = feedItr.next();
+				feedDTOList.add(DTOMapper.toFeedDTO(feed));
+			}
+		}
+
+		return feedDTOList;
+	}
+
+	@Override
+	public List<FeedDTO> findAllReadFeedsByCampaignId(String campaignId) {
+
+		logger.info("Getting all feeds by CampaignId");
+		List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
+		Optional<Campaign> campaign = campaignRepository.findById(campaignId);
+		if (campaign.isPresent()) {
+			List<Feed> feedList = feedRepository.findAllReadFeedsByCampaignId(campaign.get(), false, true);
+			logger.info("Found {}, converting to Feed DTOs...", feedList.size());
+			if (!feedList.isEmpty()) {
+				Iterator<Feed> feedItr = feedList.iterator();
+				while (feedItr.hasNext()) {
+					Feed feed = feedItr.next();
+					feedDTOList.add(DTOMapper.toFeedDTO(feed));
+				}
+			}
+		} else {
+			logger.info("Campaign not found :" + campaignId);
+		}
+
+		return feedDTOList;
+	}
+	
+	
+
+	@Override
+	public FeedDTO updateReadStatusById(String feedId) {
+		FeedDTO feedDTO = new FeedDTO();
+		Optional<Feed> feed = feedRepository.findById(feedId);
+		if (feed.isPresent()) {
+			feed.get().setRead(true);
+			feed.get().setReadTime(LocalDateTime.now());
+			Feed updatedFeed = feedRepository.save(feed.get());
+			feedDTO = DTOMapper.toFeedDTO(updatedFeed);
+		} else {
+			logger.info("Feed not found for feedId {}...", feedId);
+		}
+		return feedDTO;
+	}
+
+	@Override
+	public List<FeedDTO> updateReadStatusByEmail(String email) {
+		List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
+		FeedDTO feedDTO = new FeedDTO();
+		User user = userRepository.findByEmail(email);
+		if (user != null) {
+			List<Feed> feedList = feedRepository.findActiveFeedByEmail(user, false, false);
+			logger.info("Found {}, Feed for update read status...", feedList.size());
+			if (!feedList.isEmpty()) {
+				Iterator<Feed> feedItr = feedList.iterator();
+				while (feedItr.hasNext()) {
+					Feed feed = feedItr.next();
+					feed.setRead(true);
+					feed.setReadTime(LocalDateTime.now());
+					Feed updatedFeed = feedRepository.save(feed);
+					feedDTO = DTOMapper.toFeedDTO(updatedFeed);
+					feedDTOList.add(feedDTO);
+				}
+
+			} else {
+				logger.info("Feed not found for email {}...", email);
+			}
+		}
+
+		return feedDTOList;
+	}
+
+	@Override
+	public List<FeedDTO> findAllFeedsByEmail(String email) {
+		logger.info("Getting all feeds by Email");
+		List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
+		User user = userRepository.findByEmail(email);
+		if (user != null) {
+			List<Feed> feedList = feedRepository.findAllFeedsByEmail(user, false);
+			logger.info("Found {}, converting to Feed DTOs...", feedList.size());
+			if (!feedList.isEmpty()) {
+				Iterator<Feed> feedItr = feedList.iterator();
+				while (feedItr.hasNext()) {
+					Feed feed = feedItr.next();
+					feedDTOList.add(DTOMapper.toFeedDTO(feed));
+				}
+			}
+		} else {
+			logger.info("User not found :" + email);
+		}
+
+		return feedDTOList;
+	}
+
+	@Override
+	public List<FeedDTO> findAllReadFeedsByEmail(String email) {
+		logger.info("Getting all Read feeds by Email");
+		List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
+		User user = userRepository.findByEmail(email);
+		if (user != null) {
+			List<Feed> feedList = feedRepository.findAllReadFeedsByEmail(user, false,true);
+			logger.info("Found {}, converting to Feed DTOs...", feedList.size());
+			if (!feedList.isEmpty()) {
+				Iterator<Feed> feedItr = feedList.iterator();
+				while (feedItr.hasNext()) {
+					Feed feed = feedItr.next();
+					feedDTOList.add(DTOMapper.toFeedDTO(feed));
+				}
+			}
+		} else {
+			logger.info("User not found :" + email);
+		}
+
+		return feedDTOList;
 	}
 
 }

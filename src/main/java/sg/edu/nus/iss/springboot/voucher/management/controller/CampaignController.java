@@ -105,20 +105,18 @@ public class CampaignController {
 	}
 
 	@PostMapping(value = "/promote/{campaignId}", produces = "application/json")
-	public ResponseEntity<APIResponse<ArrayList<FeedDTO>>> promoteCampaign(@PathVariable String campaignId) {
+	public ResponseEntity<APIResponse<List<FeedDTO>>> promoteCampaign(@PathVariable String campaignId) {
 		try {
 			logger.info("Calling Promote Campaign API...");
 			String message = "";
 			if (!GeneralUtility.makeNotNull(campaignId).equals("")) {
 
-				ArrayList<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
+				List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
 				feedDTOList = feedService.save(campaignId);
 				if (feedDTOList.size() > 0) {
 
-					APIResponse<ArrayList<FeedDTO>> apiResponse = APIResponse.success(feedDTOList,
-							"Campaign promoted successfully");
-
-					return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(feedDTOList,
+							"Campaign promoted successfully"));
 
 				} else {
 					message = "Promote Campaign has failed: Campaign already promoted (or) Targeted User/Campaign is invalid";

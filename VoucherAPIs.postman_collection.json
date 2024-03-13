@@ -317,6 +317,331 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Search Campaign",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/getAll",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\",\n    \"password\": \"Pwd@21212\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Campaign",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "campaign",
+							"value": "{\n    \"description\": \"Create campaign new new\",\n    \"startDate\": \"2024-03-11T23:18:50.551124\",\n    \"endDate\": \"2024-03-21T23:18:50.551124\",\n    \"condition1\": \"Test1\",\n    \"condition2\": \"Test2\",\n    \"numberOfVouchers\": \"999\",\n    \"numberOfLikes\": \"89\",\n\"tagsJson\":\"\",\n    \"store\": {\n        \"storeId\": \"8e6ce799-c7b1-499e-ac70-1b39e42520a3\"\n    },\n    \"createdBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search All Active Feed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getAll",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search All Read Feed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getAllRead",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getAllRead"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Feed by CampaignId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getAllByCampaignId/44177067-2089-43c6-b5c7-4df64b1d781e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getAllByCampaignId",
+						"44177067-2089-43c6-b5c7-4df64b1d781e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Promote Campaign",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/promote/44177067-2089-43c6-b5c7-4df64b1d781e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"promote",
+						"44177067-2089-43c6-b5c7-4df64b1d781e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Read Feed by CampaignId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getAllReadByCampaignId/44177067-2089-43c6-b5c7-4df64b1d781e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getAllReadByCampaignId",
+						"44177067-2089-43c6-b5c7-4df64b1d781e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Feed Read Status by FeedId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/feed/updateReadStatusById/0315a7de-90e4-47d2-968c-679ca5e7a711",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"updateReadStatusById",
+						"0315a7de-90e4-47d2-968c-679ca5e7a711"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Feed Read Status by Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/feed/updateReadStatusByEmail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"updateReadStatusByEmail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Feed by FeedId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getById/a875a0fc-5ccd-4999-a546-6334f07236bf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getById",
+						"a875a0fc-5ccd-4999-a546-6334f07236bf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Feed by Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getAllByEmail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getAllByEmail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Read Feed by Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getAllReadFeedsByEmail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getAllReadFeedsByEmail"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
