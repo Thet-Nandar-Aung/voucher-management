@@ -30,16 +30,30 @@ public class VoucherController {
     @Autowired
     private VoucherService voucherService;
 
-    @GetMapping(value = "/all/{email}", produces = "application/json")
+    @GetMapping(value = "/getByEmail/{email}", produces = "application/json")
     public ResponseEntity<APIResponse<List<VoucherDTO>>> findAllClaimedVouchersByEmail(@PathVariable String email) {
         try {
-            logger.info("Calling get Voucher API...");
+            logger.info("Calling get Voucher by email API...");
             return ResponseEntity.status(HttpStatus.OK)
                 .body(APIResponse.success(voucherService.findAllClaimedVouchersByEmail(email), "Successfully get claimed vouchers by email: " + email));
         } catch (Exception ex) {
-            logger.error("Calling Voucher get Voucher API failed...");
+            logger.error("Calling Voucher get Voucher by email API failed...");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(APIResponse.error("Failed to get voucher for email "+ email));
+        }
+        
+    }
+
+    @GetMapping(value = "/getByCampaignId/{campaignId}", produces = "application/json")
+    public ResponseEntity<APIResponse<List<VoucherDTO>>> findAllClaimedVouchersBycampaignId(@PathVariable String campaignId) {
+        try {
+            logger.info("Calling get Voucher by campaignId API...");
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(APIResponse.success(voucherService.findAllClaimedVouchersByCampaignId(campaignId), "Successfully get claimed vouchers by campaignId: " + campaignId));
+        } catch (Exception ex) {
+            logger.error("Calling Voucher get Voucher by campaignId API failed...");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(APIResponse.error("Failed to get voucher for campaignId "+ campaignId));
         }
         
     }
@@ -59,7 +73,7 @@ public class VoucherController {
         
     }
 
-    @PostMapping(value = "/create", produces = "application/json")
+    @PostMapping(value = "/claim", produces = "application/json")
     public ResponseEntity<APIResponse<VoucherDTO>> createVoucher(@RequestPart("voucher") Voucher voucher) {
         try {
             logger.info("Calling Voucher create API...");

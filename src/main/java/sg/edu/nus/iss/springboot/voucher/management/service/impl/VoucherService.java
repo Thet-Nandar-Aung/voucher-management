@@ -63,6 +63,7 @@ public class VoucherService implements IVoucherService {
         try {
             User user = userRepository.findByEmail(voucher.getClaimedBy().getEmail());
             Campaign campaign = campaignRepository.findById(voucher.getCampaign().getCampaignId()).orElseThrow();
+            voucher.setVoucherStatus(VoucherStatus.CLAIMED);
             voucher.setClaimedBy(user);
             voucher.setClaimTime(LocalDateTime.now());
             voucher.setCampaign(campaign);
@@ -80,10 +81,15 @@ public class VoucherService implements IVoucherService {
     public VoucherDTO consume(Voucher voucher) {
         try {
             // Add validation here to make sure the same userId is passed
-            voucher.setConsumedTime(LocalDateTime.now());
-            voucher.setVoucherStatus(VoucherStatus.CONSUMED);
+            Voucher dbVoucher = voucherRepository.findById(voucher.getVoucherId()).orElseThrow();
+            if (dbVoucher == null) {
+                logger.info("Voucher Id {} is not found.", voucher.getVoucherId());
+                return null;
+            }
+            dbVoucher.setConsumedTime(LocalDateTime.now());
+            dbVoucher.setVoucherStatus(VoucherStatus.CONSUMED);
             logger.info("Consuming voucher...");
-            Voucher savedVoucher = voucherRepository.save(voucher);
+            Voucher savedVoucher = voucherRepository.save(dbVoucher);
             logger.info("Consumed successfully...");
             return DTOMapper.toVoucherDTO(savedVoucher);
         } catch (Exception ex) {

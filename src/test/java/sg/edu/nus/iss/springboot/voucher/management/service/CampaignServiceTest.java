@@ -25,6 +25,7 @@ import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
+import sg.edu.nus.iss.springboot.voucher.management.repository.VoucherRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
 
 @SpringBootTest
@@ -40,13 +41,16 @@ public class CampaignServiceTest {
     @Mock
     private StoreRepository storeRepository;
 
+    @Mock
+    private VoucherRepository voucherRepository;
+
     @InjectMocks
     private CampaignService campaignService;
 
     private static List<Campaign> mockCampaigns = new ArrayList<>();
     private static User user = new User("1","test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true, null, null, null, null, null, null,null);
     private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null, null, null, null, null, null, user, null, user, false, null);
-    private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
+    private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
     private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
    
     @BeforeAll
@@ -56,9 +60,18 @@ public class CampaignServiceTest {
     }
 
     @Test
-    void getAllCampaigns(){
-        Mockito.when(campaignRepository.findAll()).thenReturn(mockCampaigns);
-        List<CampaignDTO> campaignDTOs = campaignService.findAllCampaigns();
+    void getAllActiveCampaigns(){
+        Mockito.when(campaignRepository.findByCampaignStatus(CampaignStatus.PROMOTED)).thenReturn(mockCampaigns);
+        List<CampaignDTO> campaignDTOs = campaignService.findAllActiveCampaigns();
+        assertEquals(mockCampaigns.size(), campaignDTOs.size());
+        assertEquals(mockCampaigns.get(0).getCampaignId(), campaignDTOs.get(0).getCampaignId());
+        assertEquals(mockCampaigns.get(1).getCampaignId(), campaignDTOs.get(1).getCampaignId());
+    }
+
+    @Test
+    void getAllCampaignsByStoreId(){
+        Mockito.when(campaignRepository.findByStoreStoreId(store.getStoreId())).thenReturn(mockCampaigns);
+        List<CampaignDTO> campaignDTOs = campaignService.findAllCampaignsByStoreId(campaign1.getStore().getStoreId());
         assertEquals(mockCampaigns.size(), campaignDTOs.size());
         assertEquals(mockCampaigns.get(0).getCampaignId(), campaignDTOs.get(0).getCampaignId());
         assertEquals(mockCampaigns.get(1).getCampaignId(), campaignDTOs.get(1).getCampaignId());
@@ -70,7 +83,7 @@ public class CampaignServiceTest {
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         CampaignDTO campaignDTO = campaignService.create(campaign1);
-        assertEquals(campaignDTO.getCreatedBy().getUserId(), campaign1.getCreatedBy().getUserId());
+        assertEquals(campaignDTO.getCreatedBy().getEmail(), campaign1.getCreatedBy().getEmail());
         assertEquals(campaignDTO.getDescription(), campaign1.getDescription());
         assertEquals(campaignDTO.getStore().getStoreName(), campaign1.getStore().getStoreName());
     }

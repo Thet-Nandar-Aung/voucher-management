@@ -7,7 +7,9 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 
 public interface ICampaignService {
 
-    List<CampaignDTO> findAllCampaigns();
+    List<CampaignDTO> findAllActiveCampaigns();
+
+    List<CampaignDTO> findAllCampaignsByStoreId(String storeId);
 
     CampaignDTO findByCampaignId(String campaignId);
     

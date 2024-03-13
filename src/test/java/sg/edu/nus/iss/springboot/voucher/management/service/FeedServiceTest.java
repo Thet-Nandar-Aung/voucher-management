@@ -65,10 +65,9 @@ public class FeedServiceTest {
 				"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
 				"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
 				"Singapore", false);
-		campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, null,
-				null, null, user, user, null, null, null, null);
-		campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0, null, null, null,
-				null, null, user, user, null, null, null, null);
+		campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
+		campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
+		   
 
 		mockUsers.add(user);
 		feed1 = new Feed("1", campaign1, false, false, null, user, null);
