@@ -2,6 +2,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,8 +60,10 @@ public class FeedServiceTest {
 				"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
 				"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
 				"Singapore", false);
-		campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, null,
-				null, null, user, user, null, null, null, null);
+		campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 10,
+				0,
+				null, null, 10, LocalDateTime.now(), LocalDateTime.now(), user, user, LocalDateTime.now(),
+				LocalDateTime.now(), null);
 
 		mockUsers.add(user);
 		feed = new Feed("1", campaign1, false, false, null, user, null);

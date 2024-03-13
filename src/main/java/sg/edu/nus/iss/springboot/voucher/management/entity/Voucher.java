@@ -11,9 +11,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import sg.edu.nus.iss.springboot.voucher.management.enums.VoucherStatus;
 
 @Entity
+@Getter
+@Setter
 @AllArgsConstructor
 public class Voucher {
 
@@ -40,53 +44,5 @@ public class Voucher {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "claimedBy")
 	private User claimedBy;
-
-	public String getVoucherId() {
-		return voucherId;
-	}
-
-	public void setVoucherId(String voucherId) {
-		this.voucherId = voucherId;
-	}
-
-	public Campaign getCampaign() {
-		return campaign;
-	}
-
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
-	}
-
-	public VoucherStatus getVoucherStatus() {
-		return voucherStatus;
-	}
-
-	public void setVoucherStatus(VoucherStatus voucherStatus) {
-		this.voucherStatus = voucherStatus;
-	}
-
-	public LocalDateTime getClaimTime() {
-		return claimTime;
-	}
-
-	public void setClaimTime(LocalDateTime claimTime) {
-		this.claimTime = claimTime;
-	}
-
-	public LocalDateTime getConsumedTime() {
-		return consumedTime;
-	}
-
-	public void setConsumedTime(LocalDateTime consumedTime) {
-		this.consumedTime = consumedTime;
-	}
-
-	public User getClaimedBy() {
-		return claimedBy;
-	}
-
-	public void setClaimedBy(User claimedBy) {
-		this.claimedBy = claimedBy;
-	}
 
 }

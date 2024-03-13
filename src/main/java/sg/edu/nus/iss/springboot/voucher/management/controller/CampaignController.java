@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
-import sg.edu.nus.iss.springboot.voucher.management.dto.StoreResponse.ResultStore;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
-import sg.edu.nus.iss.springboot.voucher.management.entity.Feed;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.FeedService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
@@ -48,7 +46,7 @@ public class CampaignController {
 		} catch (Exception ex) {
 			logger.info("Calling Campaign getALL API failed...");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(APIResponse.error(campaignService.findAllCampaigns(), "Failed to get all campaigns"));
+					.body(APIResponse.error("Failed to get all campaigns"));
 		}
 	}
 
@@ -61,7 +59,7 @@ public class CampaignController {
 		} catch (Exception ex) {
 			logger.error("Calling Campaign get Campaign API failed...");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse
-					.success(campaignService.findByCampaignId(campaignId), "Failed to get campaignId " + campaignId));
+					.error("Failed to get campaignId " + campaignId));
 		}
 
 	}
@@ -75,7 +73,7 @@ public class CampaignController {
 		} catch (Exception ex) {
 			logger.error("Calling Campaign create API failed...");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(APIResponse.error(campaignService.create(campaign), "Created failed"));
+					.body(APIResponse.error("Created failed"));
 		}
 	}
 
@@ -88,7 +86,7 @@ public class CampaignController {
 		} catch (Exception ex) {
 			logger.info("Calling Campaign update API failed...");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(APIResponse.error(campaignService.update(campaign), "Updated failed"));
+					.body(APIResponse.error("Updated failed"));
 		}
 	}
 

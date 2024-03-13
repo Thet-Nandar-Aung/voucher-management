@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,16 +52,18 @@ public class CampaignControllerTest {
         private static List<CampaignDTO> mockCampaigns = new ArrayList<>();
         private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null,
                         true,
-                        null, null, null, null, null, null,null);
+                        null, null, null, null, null, null, null);
         private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null,
                         null,
                         null, null, null, null, user, null, user, false, null);
-        private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0,
+        private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 10,
                         0,
-                        null, null, null, null, null, user, user, null, null, null, null);
-        private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0,
+                        null, null, 10, LocalDateTime.now(), LocalDateTime.now(), user, user, LocalDateTime.now(),
+                        LocalDateTime.now(), null);
+        private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 10,
                         0,
-                        null, null, null, null, null, user, user, null, null, null, null);
+                        null, null, 10, LocalDateTime.now(), LocalDateTime.now(), user, user, LocalDateTime.now(),
+                        LocalDateTime.now(), null);
 
         @BeforeAll
         static void setUp() {
