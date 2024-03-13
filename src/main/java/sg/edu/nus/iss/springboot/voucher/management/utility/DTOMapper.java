@@ -39,12 +39,11 @@ public class DTOMapper {
 
     public static UserDTO toUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getUserId());
         userDTO.setUsername(user.getUsername());
         userDTO.setEmail(user.getEmail());
         userDTO.setRole(user.getRole());
         userDTO.setImage(user.getImage());
-        userDTO.setIsActive(user.isActive());
+        userDTO.setActive(user.isActive());
         userDTO.setLastLoginDate(user.getLastLoginDate());
         return userDTO;
     }

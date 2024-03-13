@@ -25,6 +25,7 @@ import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
+import sg.edu.nus.iss.springboot.voucher.management.repository.VoucherRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
 
 @SpringBootTest
@@ -39,6 +40,9 @@ public class CampaignServiceTest {
 
     @Mock
     private StoreRepository storeRepository;
+
+    @Mock
+    private VoucherRepository voucherRepository;
 
     @InjectMocks
     private CampaignService campaignService;
@@ -70,7 +74,7 @@ public class CampaignServiceTest {
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         CampaignDTO campaignDTO = campaignService.create(campaign1);
-        assertEquals(campaignDTO.getCreatedBy().getUserId(), campaign1.getCreatedBy().getUserId());
+        assertEquals(campaignDTO.getCreatedBy().getEmail(), campaign1.getCreatedBy().getEmail());
         assertEquals(campaignDTO.getDescription(), campaign1.getDescription());
         assertEquals(campaignDTO.getStore().getStoreName(), campaign1.getStore().getStoreName());
     }

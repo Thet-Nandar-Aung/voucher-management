@@ -89,12 +89,13 @@ public class VoucherServiceTest {
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         voucher1.setClaimTime(LocalDateTime.now());
         VoucherDTO voucherDTO = voucherService.claim(voucher1);
-        assertEquals(voucherDTO.getClaimedBy().getUserId(), voucher1.getClaimedBy().getUserId());
+        assertEquals(voucherDTO.getClaimedBy().getEmail(), voucher1.getClaimedBy().getEmail());
         assertEquals(voucherDTO.getCampaign().getCampaignId(), voucher1.getCampaign().getCampaignId());
     }
 
     @Test
     void consumeVoucher(){
+        Mockito.when(voucherRepository.findById(voucher1.getVoucherId())).thenReturn(Optional.of(voucher1));
         Mockito.when(voucherRepository.save(Mockito.any(Voucher.class))).thenReturn(voucher1);
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
