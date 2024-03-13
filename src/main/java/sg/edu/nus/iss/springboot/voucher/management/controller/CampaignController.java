@@ -34,10 +34,10 @@ public class CampaignController {
     public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveStore() {
         try {
             logger.info("Calling Campaign getALL API...");
-            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.findAllCampaigns(), "Successfully get all campaigns"));
+            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.findAllCampaigns(), "Successfully get all campaigns."));
         } catch (Exception ex) {
             logger.info("Calling Campaign getALL API failed...");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(campaignService.findAllCampaigns(), "Failed to get all campaigns"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Failed to get all campaigns."));
         }
     }
 
@@ -50,7 +50,7 @@ public class CampaignController {
         } catch (Exception ex) {
             logger.error("Calling Campaign get Campaign API failed...");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(APIResponse.success(campaignService.findByCampaignId(campaignId), "Failed to get campaignId "+ campaignId));
+                .body(APIResponse.error("Failed to get campaignId "+ campaignId));
         }
         
     }
@@ -59,10 +59,10 @@ public class CampaignController {
     public ResponseEntity<APIResponse<CampaignDTO>> createCampaign(@RequestPart("campaign") Campaign campaign) {
         try {
             logger.info("Calling Campaign create API...");
-            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.create(campaign), "Created sucessfully"));
+            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignService.create(campaign), "Campaign created sucessfully"));
         } catch (Exception ex) {
             logger.error("Calling Campaign create API failed...");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(campaignService.create(campaign), "Created failed"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Campaign created failed."));
         }
     }
 
@@ -71,11 +71,11 @@ public class CampaignController {
         try {
             logger.info("Calling Campaign update API...");
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(APIResponse.success(campaignService.update(campaign), "Updated sucessfully"));
+                    .body(APIResponse.success(campaignService.update(campaign), "Campaign updated sucessfully."));
         } catch (Exception ex) {
             logger.info("Calling Campaign update API failed...");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(APIResponse.error(campaignService.update(campaign), "Updated failed"));
+                    .body(APIResponse.error("Campaign updated failed."));
         }
     }
 
@@ -84,10 +84,10 @@ public class CampaignController {
         try {
             logger.info("Calling Campaign delete API...");
             campaignService.delete(campaignId);
-            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success("Deleted successfully"));
+            return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success("Campaign deleted successfully."));
         } catch (Exception ex) {
             logger.error("Calling Campaign delete API failed...");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Delete failed"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Campaign delete failed."));
         }
     }
 }
