@@ -319,12 +319,12 @@
 			"response": []
 		},
 		{
-			"name": "Search Campaign",
+			"name": "Search Promoted Campaign",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/api/campaign/getAll",
+					"raw": "http://localhost:8081/api/campaign/all/active",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -333,7 +333,8 @@
 					"path": [
 						"api",
 						"campaign",
-						"getAll"
+						"all",
+						"active"
 					]
 				}
 			},
