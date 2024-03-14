@@ -471,17 +471,8 @@
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"campaignId\": \"c30d4c86-85df-4a80-a442-0bf89a58bbc9\",\n    \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8081/api/campaign/promote",
+					"raw": "http://localhost:8081/api/campaign/promote/c30d4c86-85df-4a80-a442-0bf89a58bbc9",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -490,7 +481,8 @@
 					"path": [
 						"api",
 						"campaign",
-						"promote"
+						"promote",
+						"c30d4c86-85df-4a80-a442-0bf89a58bbc9"
 					]
 				}
 			},
