@@ -11,6 +11,8 @@ public interface ICampaignService {
 
     List<CampaignDTO> findAllCampaignsByStoreId(String storeId);
 
+    List<CampaignDTO> findAllCampaignsByEmail(String storeId);
+
     CampaignDTO findByCampaignId(String campaignId);
     
     CampaignDTO create(Campaign campaign);
