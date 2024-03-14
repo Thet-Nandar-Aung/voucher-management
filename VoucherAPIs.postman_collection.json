@@ -235,7 +235,7 @@
 						},
 						{
 							"key": "store",
-							"value": "{\n    \"storeId\": \"b398421b-5c17-4e91-8960-1574affef757\",\n    \"storeName\": \"IKEA111\",\n    \"description\": \"Create a safe and cosy environment.\",\n    \"address1\": \"317 Alexandra Rd\",\n    \"address2\": \"Level 1\",\n    \"city\": \"Singapore\",\n    \"state\": \"Singapore\",\n    \"country\": \"Singapore\",\n    \"postalCode\": \"159965\",\n    \"contactNumber\": \"+65 6786 6868\",\n    \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    },\n    \"deleted\": false\n}",
+							"value": "{\n    \"storeId\": \"8e6ce799-c7b1-499e-ac70-1b39e42520a3\",\n    \"storeName\": \"IKEA111\",\n    \"description\": \"Create a safe and cosy environment.\",\n    \"address1\": \"317 Alexandra Rd\",\n    \"address2\": \"Level 1\",\n    \"city\": \"Singapore\",\n    \"state\": \"Singapore\",\n    \"country\": \"Singapore\",\n    \"postalCode\": \"159965\",\n    \"contactNumber\": \"+65 6786 6868\",\n    \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    },\n    \"deleted\": false\n}",
 							"contentType": "application/json",
 							"type": "text"
 						}
@@ -302,7 +302,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/api/store/getById/b398421b-5c17-4e91-8960-1574affef757",
+					"raw": "http://localhost:8081/api/store/getById/8e6ce799-c7b1-499e-ac70-1b39e42520a3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -312,7 +312,7 @@
 						"api",
 						"store",
 						"getById",
-						"b398421b-5c17-4e91-8960-1574affef757"
+						"8e6ce799-c7b1-499e-ac70-1b39e42520a3"
 					]
 				}
 			},
@@ -466,12 +466,21 @@
 			"response": []
 		},
 		{
-			"name": "Promote Campaign",
+			"name": "Campaign Promote",
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"c30d4c86-85df-4a80-a442-0bf89a58bbc9\",\n    \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8081/api/campaign/promote/44177067-2089-43c6-b5c7-4df64b1d781e",
+					"raw": "http://localhost:8081/api/campaign/promote",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -480,8 +489,7 @@
 					"path": [
 						"api",
 						"campaign",
-						"promote",
-						"44177067-2089-43c6-b5c7-4df64b1d781e"
+						"promote"
 					]
 				}
 			},

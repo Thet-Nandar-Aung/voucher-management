@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
+import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
@@ -129,5 +130,16 @@ public class CampaignControllerTest {
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.success").value(true)).andDo(print());
         }
+        
+        @Test
+    	void testPromoteCampaign() throws Exception {       	
+        	Mockito.when(campaignService.promote(campaign1.getCampaignId())).thenReturn(DTOMapper.toCampaignDTO(campaign1));
+           	mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/promote/{campaignId}","1")
+    				.contentType(MediaType.APPLICATION_JSON))
+    				.andExpect(MockMvcResultMatchers.status().isOk())
+    				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+    				.andExpect(jsonPath("$.success").value(true)).andDo(print());
+    	}
+
 
 }

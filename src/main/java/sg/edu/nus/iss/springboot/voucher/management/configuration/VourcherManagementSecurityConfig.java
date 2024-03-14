@@ -1,12 +1,10 @@
 package sg.edu.nus.iss.springboot.voucher.management.configuration;
 
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.CacheControl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,15 +19,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.HstsHeaderWriter;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.servlet.config.annotation.CorsRegistration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.VoucherManagementUserDetailService;
 
@@ -62,6 +59,9 @@ public class VourcherManagementSecurityConfig {
 
 	@Value("${aws.s3.image.url.prefix}")
 	private String s3ImageUrlPrefix;
+	
+	@Value("${aws.ses.from}")
+	private String emailFrom;
 
 	@Bean
 	public String getAwsRegion() {
@@ -102,6 +102,13 @@ public class VourcherManagementSecurityConfig {
 	public String getS3ImageUrlPrefix() {
 		return s3ImageUrlPrefix;
 	}
+		
+	@Bean
+	public String getEmailFrom() {
+		return emailFrom;
+	}
+
+
 
 	@Autowired
 	private VoucherManagementUserDetailService userDetailsComp;
@@ -128,8 +135,7 @@ public class VourcherManagementSecurityConfig {
 				return config;
 			});
 		}).headers(headers -> headers.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "*"))
-				.addHeaderWriter(new HstsHeaderWriter(31536000, false, true))
-				.addHeaderWriter((request, response) -> {
+				.addHeaderWriter(new HstsHeaderWriter(31536000, false, true)).addHeaderWriter((request, response) -> {
 					response.addHeader("Cache-Control", "max-age=60, must-revalidate");
 
 				}))
@@ -153,6 +159,14 @@ public class VourcherManagementSecurityConfig {
 		AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
 				.withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).withRegion(awsRegion).build();
 		return amazonS3Client;
+	}
+
+	@Bean
+	public AmazonSimpleEmailService sesClient() {
+		AWSCredentials awsCredentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
+		AmazonSimpleEmailService sesClient = AmazonSimpleEmailServiceClientBuilder.standard()
+				.withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).withRegion(awsRegion).build();
+		return sesClient;
 	}
 
 }

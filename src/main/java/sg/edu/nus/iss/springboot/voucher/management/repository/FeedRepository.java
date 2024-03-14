@@ -13,7 +13,6 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 
 @Repository
 public interface FeedRepository extends JpaRepository<Feed, String> {
-	Feed save(Feed feed);
 	
 	List<Feed>findByIsDeletedFalse();
 

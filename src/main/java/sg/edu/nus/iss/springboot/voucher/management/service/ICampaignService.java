@@ -18,5 +18,7 @@ public interface ICampaignService {
     CampaignDTO update(Campaign campaign);
 
     void delete(String campaignId);
+    
+    CampaignDTO promote(String campaign);
 
 }

@@ -29,13 +29,13 @@ public class FeedController {
 	private FeedService feedService;
 
 	@GetMapping(value = "/getAll", produces = "application/json")
-	public ResponseEntity<APIResponse<List<FeedDTO>>> getAllFeed() {
+	public ResponseEntity<APIResponse<List<FeedDTO>>> getAllActiveFeed() {
 		logger.info("Call getAll feed API...");
 		try {
 			List<FeedDTO> feedDTOList = feedService.findAllFeeds();
 			if (feedDTOList.size() > 0) {
 				return ResponseEntity.status(HttpStatus.OK)
-						.body(APIResponse.success(feedDTOList, "Successfully get all feed."));
+						.body(APIResponse.success(feedDTOList, "All feed get Successfully"));
 			} else {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error("Feed not found."));
 			}
@@ -55,7 +55,7 @@ public class FeedController {
 			List<FeedDTO> feedDTOList = feedService.findAllReadFeeds();
 			if (feedDTOList.size() > 0) {
 				return ResponseEntity.status(HttpStatus.OK)
-						.body(APIResponse.success(feedDTOList, "Successfully get all read feed."));
+						.body(APIResponse.success(feedDTOList, "All feed get Successfully"));
 			} else {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error("Feed (read) not found."));
 			}
@@ -79,7 +79,7 @@ public class FeedController {
 				if (feedDTOList.size() > 0) {
 
 					return ResponseEntity.status(HttpStatus.OK)
-							.body(APIResponse.success(feedDTOList, "Successfully get all feed by CampaignId."));
+							.body(APIResponse.success(feedDTOList, "All feed get Successfully."));
 
 				} else {
 
@@ -111,7 +111,7 @@ public class FeedController {
 				if (feedDTOList.size() > 0) {
 
 					return ResponseEntity.status(HttpStatus.OK)
-							.body(APIResponse.success(feedDTOList, "Successfully get all read feed by CampaignId."));
+							.body(APIResponse.success(feedDTOList, "All feed get Successfully."));
 
 				} else {
 
@@ -148,7 +148,7 @@ public class FeedController {
 				List<FeedDTO> feedDTOList = feedService.findAllFeedsByEmail(email);
 				if (feedDTOList.size() > 0) {
 					return ResponseEntity.status(HttpStatus.OK)
-							.body(APIResponse.success(feedDTOList, "Successfully get all feed."));
+							.body(APIResponse.success(feedDTOList, "All feed get Successfully."));
 				} else {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error("Feed not found."));
 				}
@@ -183,7 +183,7 @@ public class FeedController {
 				List<FeedDTO> feedDTOList = feedService.findAllReadFeedsByEmail(email);
 				if (feedDTOList.size() > 0) {
 					return ResponseEntity.status(HttpStatus.OK)
-							.body(APIResponse.success(feedDTOList, "Successfully get all feed."));
+							.body(APIResponse.success(feedDTOList, "All feed get Successfully."));
 				} else {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error("Feed not found."));
 				}
@@ -211,12 +211,12 @@ public class FeedController {
 			if (!GeneralUtility.makeNotNull(feedId).equals("")) {
 				FeedDTO feedDTO = feedService.findByFeedId(feedId);
 
-				if (!GeneralUtility.makeNotNull(feedDTO).equals("")) {
+				if (GeneralUtility.makeNotNull(feedDTO.getFeedId()).equals(feedId)) {
 					return ResponseEntity.status(HttpStatus.OK)
-							.body(APIResponse.success(feedDTO, "FeedId get successfully: " + feedId));
+							.body(APIResponse.success(feedDTO, "Feed get successfully." ));
 				} else {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND)
-							.body(APIResponse.error("Invalid FeedId: " + feedId));
+							.body(APIResponse.error("Feed not found for Id: " + feedId));
 				}
 
 			} else {
@@ -242,12 +242,12 @@ public class FeedController {
 			if (!GeneralUtility.makeNotNull(feedId).equals("")) {
 				FeedDTO feedDTO = feedService.updateReadStatusById(feedId);
 
-				if (!GeneralUtility.makeNotNull(feedDTO).equals("")) {
+				if (GeneralUtility.makeNotNull(feedDTO.getFeedId()).equals(feedId)) {
 					return ResponseEntity.status(HttpStatus.OK).body(
-							APIResponse.success(feedDTO, "Read status updated successfully for FeedId: " + feedId));
+							APIResponse.success(feedDTO, "Read status updated successfully for FeedId."));
 				} else {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND)
-							.body(APIResponse.error("Invalid FeedId: " + feedId));
+							.body(APIResponse.error("Feed not found for Id: " + feedId));
 				}
 			} else {
 				message = "Bad Request:FeedId could not be blank.";
@@ -280,7 +280,7 @@ public class FeedController {
 
 				if (feedDTOList.size() > 0) {
 					return ResponseEntity.status(HttpStatus.OK).body(
-							APIResponse.success(feedDTOList, "Read status updated successfully for user: " + email));
+							APIResponse.success(feedDTOList, "Read status updated successfully."));
 				} else {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error("Feed not found for user: "+email));
 				}

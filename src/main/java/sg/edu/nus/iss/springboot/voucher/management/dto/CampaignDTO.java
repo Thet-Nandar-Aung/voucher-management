@@ -35,4 +35,9 @@ public class CampaignDTO {
 
     public CampaignDTO(){
     }
+    
+    public CampaignDTO(String campaignId , UserDTO updatedBy) {
+    	this.campaignId = campaignId;
+    	this.updatedBy=updatedBy;
+    }
 }

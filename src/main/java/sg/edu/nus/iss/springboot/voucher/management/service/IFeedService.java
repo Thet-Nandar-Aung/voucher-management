@@ -21,7 +21,7 @@ public interface IFeedService {
 
 	FeedDTO findByFeedId(String feedId);
 
-	List<FeedDTO> save(String campaignId);
+	boolean generateFeed();
 
 	void delete(String feedId);
 

@@ -1,6 +1,5 @@
 package sg.edu.nus.iss.springboot.voucher.management.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,16 +11,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
-import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
-import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
-import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
+import sg.edu.nus.iss.springboot.voucher.management.dto.*;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
-import sg.edu.nus.iss.springboot.voucher.management.service.impl.FeedService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
 
 @RestController
@@ -34,16 +31,12 @@ public class CampaignController {
 	@Autowired
 	private CampaignService campaignService;
 
-	@Autowired
-	private FeedService feedService;
-
 	@GetMapping(value = "/all/active", produces = "application/json")
 	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveCampaigns() {
 		try {
 			logger.info("Calling Campaign getAllActiveCampaigns API...");
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(APIResponse.success(campaignService.findAllActiveCampaigns(),
-							"Successfully get all active campaigns"));
+			return ResponseEntity.status(HttpStatus.OK).body(APIResponse
+					.success(campaignService.findAllActiveCampaigns(), "Successfully get all active campaigns"));
 		} catch (Exception ex) {
 			logger.info("Calling Campaign getAllActiveCampaigns API failed...");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -55,9 +48,8 @@ public class CampaignController {
 	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByStoreId(@PathVariable String storeId) {
 		try {
 			logger.info("Calling Campaign getAllCampaignsByStoreId API...");
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(APIResponse.success(campaignService.findAllCampaignsByStoreId(storeId),
-							"Successfully get all active campaigns"));
+			return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(
+					campaignService.findAllCampaignsByStoreId(storeId), "Successfully get all active campaigns"));
 		} catch (Exception ex) {
 			logger.info("Calling Campaign getAllCampaignsByStoreId API failed...");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -73,8 +65,8 @@ public class CampaignController {
 					campaignService.findByCampaignId(campaignId), "Successfully get campaignId " + campaignId));
 		} catch (Exception ex) {
 			logger.error("Calling Campaign get Campaign API failed...");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse
-					.error("Failed to get campaignId " + campaignId));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(APIResponse.error("Failed to get campaignId " + campaignId));
 		}
 
 	}
@@ -87,8 +79,7 @@ public class CampaignController {
 					.body(APIResponse.success(campaignService.create(campaign), "Created sucessfully"));
 		} catch (Exception ex) {
 			logger.error("Calling Campaign create API failed...");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(APIResponse.error("Created failed"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Created failed"));
 		}
 	}
 
@@ -100,8 +91,7 @@ public class CampaignController {
 					.body(APIResponse.success(campaignService.update(campaign), "Updated sucessfully"));
 		} catch (Exception ex) {
 			logger.info("Calling Campaign update API failed...");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(APIResponse.error("Updated failed"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Updated failed"));
 		}
 	}
 
@@ -116,32 +106,25 @@ public class CampaignController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Delete failed"));
 		}
 	}
+	
 
 	@PostMapping(value = "/promote/{campaignId}", produces = "application/json")
-	public ResponseEntity<APIResponse<List<FeedDTO>>> promoteCampaign(@PathVariable String campaignId) {
+	public ResponseEntity<APIResponse<CampaignDTO>> promoteCampaign(@PathVariable String campaignId) {
 		try {
-			logger.info("Calling Promote Campaign API...");
+			logger.info("Calling  Campaign Promote API...");
 			String message = "";
-			if (!GeneralUtility.makeNotNull(campaignId).equals("")) {
 
-				List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
-				feedDTOList = feedService.save(campaignId);
-				if (feedDTOList.size() > 0) {
+			CampaignDTO campaignDTO = campaignService.promote(campaignId);
 
-					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(feedDTOList,
-							"Campaign promoted successfully"));
+			if (GeneralUtility.makeNotNull(campaignDTO.getCampaignId()).equals(campaignId)) {
 
-				} else {
-					message = "Promote Campaign has failed: Campaign already promoted (or) Targeted User/Campaign is invalid";
-					logger.error(message);
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(message));
-				}
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(APIResponse.success(campaignDTO, "Campaign promoted successfully"));
 
 			} else {
-				message = "Bad Request:Campaign ID could not be blank.";
+				message = "Campaign Promote has failed: Campaign already promoted (or) Campaign Id is invalid";
 				logger.error(message);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(message));
-
 			}
 
 		} catch (Exception e) {

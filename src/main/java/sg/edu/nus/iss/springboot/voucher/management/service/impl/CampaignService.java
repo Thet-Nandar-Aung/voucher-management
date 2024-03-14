@@ -2,7 +2,9 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -25,111 +27,146 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 @Service
 public class CampaignService implements ICampaignService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CampaignService.class);
+	private static final Logger logger = LoggerFactory.getLogger(CampaignService.class);
 
-    @Autowired
-    private CampaignRepository campaignRepository;
+	@Autowired
+	private CampaignRepository campaignRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private StoreRepository storeRepository;
+	@Autowired
+	private StoreRepository storeRepository;
 
-    @Autowired
-    private VoucherRepository voucherRepository;
+	@Autowired
+	private VoucherRepository voucherRepository;
 
-    @Override
-    public List<CampaignDTO> findAllActiveCampaigns() {
-        logger.info("Getting all active campaigns...");
-        List<Campaign> campaigns = campaignRepository.findByCampaignStatus(CampaignStatus.PROMOTED);
-        logger.info("Found {}, converting to DTOs...", campaigns.size());
-        List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
-        for (Campaign campaign : campaigns) {
-            campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
-            campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
-        }
-        return campaignDTOs;
-    }
+	@Override
+	public List<CampaignDTO> findAllActiveCampaigns() {
+		logger.info("Getting all active campaigns...");
+		List<Campaign> campaigns = campaignRepository.findByCampaignStatus(CampaignStatus.PROMOTED);
+		logger.info("Found {}, converting to DTOs...", campaigns.size());
+		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+		for (Campaign campaign : campaigns) {
+			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+		}
+		return campaignDTOs;
+	}
 
-    @Override
-    public List<CampaignDTO> findAllCampaignsByStoreId(String storeId) {
-        logger.info("Getting all campaigns by Store Id...");
-        List<Campaign> campaigns = campaignRepository.findByStoreStoreId(storeId);
-        logger.info("Found {}, converting to DTOs...", campaigns.size());
-        List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
-        for (Campaign campaign : campaigns) {
-            campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
-            campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
-        }
-        return campaignDTOs;
-    }
+	@Override
+	public List<CampaignDTO> findAllCampaignsByStoreId(String storeId) {
+		logger.info("Getting all campaigns by Store Id...");
+		List<Campaign> campaigns = campaignRepository.findByStoreStoreId(storeId);
+		logger.info("Found {}, converting to DTOs...", campaigns.size());
+		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+		for (Campaign campaign : campaigns) {
+			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+		}
+		return campaignDTOs;
+	}
 
-    @Override
-    public CampaignDTO findByCampaignId(String campaignId) {
-        logger.info("Getting campaign for campaignId {} ...", campaignId);
-        Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
-        if (campaign != null) {
-            logger.info("Campaign found...");
-            campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaignId));
-            return DTOMapper.toCampaignDTO(campaign);
-        }
-        logger.warn("Didn't find any campaign for campaignId {}...", campaignId);
-        return null;
-    }
+	@Override
+	public CampaignDTO findByCampaignId(String campaignId) {
+		logger.info("Getting campaign for campaignId {} ...", campaignId);
+		Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
+		if (campaign != null) {
+			logger.info("Campaign found...");
+			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaignId));
+			return DTOMapper.toCampaignDTO(campaign);
+		}
+		logger.warn("Didn't find any campaign for campaignId {}...", campaignId);
+		return null;
+	}
 
-    @Override
-    public CampaignDTO create(Campaign campaign) {
-        try {
-            User user = userRepository.findByEmail(campaign.getCreatedBy().getEmail());
-            Store store = storeRepository.findById(campaign.getStore().getStoreId()).orElseThrow();
-            campaign.setPin(String.valueOf(new Random().nextInt(9000) + 1000));
-            campaign.setCreatedBy(user);
-            campaign.setCreatedDate(LocalDateTime.now());
-            campaign.setUpdatedBy(user);
-            campaign.setUpdatedDate(LocalDateTime.now());
-            campaign.setStore(store);
-            logger.info("Saving campaign...");
-            Campaign savedCampaign = campaignRepository.save(campaign);
-            logger.info("Saved successfully...");
-            return DTOMapper.toCampaignDTO(savedCampaign);
-        } catch (Exception ex) {
-            logger.error("Campaign saving exception... {}", ex.toString());
-            return null;
-        }
+	@Override
+	public CampaignDTO create(Campaign campaign) {
+		try {
+			User user = userRepository.findByEmail(campaign.getCreatedBy().getEmail());
+			Store store = storeRepository.findById(campaign.getStore().getStoreId()).orElseThrow();
+			campaign.setPin(String.valueOf(new Random().nextInt(9000) + 1000));
+			campaign.setCreatedBy(user);
+			campaign.setCreatedDate(LocalDateTime.now());
+			campaign.setUpdatedBy(user);
+			campaign.setUpdatedDate(LocalDateTime.now());
+			campaign.setStore(store);
+			logger.info("Saving campaign...");
+			Campaign savedCampaign = campaignRepository.save(campaign);
+			logger.info("Saved successfully...");
+			return DTOMapper.toCampaignDTO(savedCampaign);
+		} catch (Exception ex) {
+			logger.error("Campaign saving exception... {}", ex.toString());
+			return null;
+		}
 
-    }
+	}
 
-    @Override
-    public CampaignDTO update(Campaign campaign) {
-        try {
-            User user = userRepository.findByEmail(campaign.getCreatedBy().getEmail());
-            campaign.setUpdatedBy(user);
-            campaign.setUpdatedDate(LocalDateTime.now());
-            logger.info("Saving campaign...");
-            Campaign savedCampaign = campaignRepository.save(campaign);
-            logger.info("Saved successfully...");
-            CampaignDTO campaignDTO = DTOMapper.toCampaignDTO(savedCampaign);
-            return campaignDTO;
-        } catch (Exception ex) {
-            logger.error("Campaign updating exception... {}", ex.toString());
-            return null;
-        }
+	@Override
+	public CampaignDTO update(Campaign campaign) {
+		try {
+			User user = userRepository.findByEmail(campaign.getCreatedBy().getEmail());
+			campaign.setUpdatedBy(user);
+			campaign.setUpdatedDate(LocalDateTime.now());
+			logger.info("Saving campaign...");
+			Campaign savedCampaign = campaignRepository.save(campaign);
+			logger.info("Saved successfully...");
+			CampaignDTO campaignDTO = DTOMapper.toCampaignDTO(savedCampaign);
+			return campaignDTO;
+		} catch (Exception ex) {
+			logger.error("Campaign updating exception... {}", ex.toString());
+			return null;
+		}
 
-    }
+	}
 
-    @Override
-    public void delete(String campaignId) {
-        if (campaignId == null) {
-            logger.info("CampaignId is null...");
-            return;
-        }
-        try {
-            logger.info("Deleting campaignId {}...", campaignId);
-            campaignRepository.findById(campaignId).ifPresent(campaign -> campaignRepository.delete(campaign));
-            logger.info("Deleted successfully...");
-        } catch (Exception ex) {
-            logger.error("Campaign deleting exception... {}", ex.toString());
-        }
-    }
+	@Override
+	public void delete(String campaignId) {
+		if (campaignId == null) {
+			logger.info("CampaignId is null...");
+			return;
+		}
+		try {
+			logger.info("Deleting campaignId {}...", campaignId);
+			campaignRepository.findById(campaignId).ifPresent(campaign -> campaignRepository.delete(campaign));
+			logger.info("Deleted successfully...");
+		} catch (Exception ex) {
+			logger.error("Campaign deleting exception... {}", ex.toString());
+		}
+	}
+
+	@Override
+	public CampaignDTO promote(String campaignId) {
+		CampaignDTO campaignDTO = new CampaignDTO();
+		try {
+
+			Optional<Campaign> dbCampaign = campaignRepository.findById(campaignId);
+			if (dbCampaign.isPresent()) {
+				logger.info("Promoting campaign: status {}..", dbCampaign.get().getCampaignStatus());
+				if (dbCampaign.get().getCampaignStatus().equals(CampaignStatus.CREATED)) {
+
+					LocalDateTime startDate = dbCampaign.get().getStartDate();
+					LocalDateTime endDate = dbCampaign.get().getEndDate();
+					logger.info("Promoting campaign:startDate{} ,endDate{}...", startDate, endDate);
+
+					if ((startDate.isBefore(LocalDateTime.now()) ||startDate.equals(LocalDateTime.now())) && endDate.isAfter(LocalDateTime.now())) {					
+						dbCampaign.get().setCampaignStatus(CampaignStatus.PROMOTED);
+						dbCampaign.get().setUpdatedDate(LocalDateTime.now());
+						Campaign promottedCampaign = campaignRepository.save(dbCampaign.get());
+						logger.info("Promotted successfully...");
+						campaignDTO = DTOMapper.toCampaignDTO(promottedCampaign);
+					} else {
+						logger.info(
+								"Promoting campaign Failed: startDate{} should not be greater than current date and endDate{} should not be less than current date...",
+								startDate, endDate);
+					}
+				}
+			}
+
+		} catch (Exception ex) {
+			logger.error("Campaign Promoting exception... {}", ex.toString());
+
+		}
+		return campaignDTO;
+	}
 }

@@ -3,6 +3,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -110,5 +111,21 @@ public class CampaignServiceTest {
         Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
         CampaignDTO campaignDTO = campaignService.findByCampaignId(campaign1.getCampaignId());
         assertEquals(campaignDTO.getCampaignId(), campaign1.getCampaignId());
+    }
+    
+    @Test
+    void promoteCampaign(){
+    	campaign1.setCampaignStatus(CampaignStatus.CREATED);
+    	LocalDateTime currentTime = LocalDateTime.now();
+    	LocalDateTime endDate = currentTime.plusMonths(1);
+
+    	campaign1.setStartDate(currentTime);
+    	campaign1.setEndDate(endDate);
+        Mockito.when(campaignRepository.save(Mockito.any(Campaign.class))).thenReturn(campaign1);
+        Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
+        Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
+        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        CampaignDTO campaignDTO = campaignService.promote(campaign1.getCampaignId());
+        assertEquals(campaignDTO.getCampaignStatus(), CampaignStatus.PROMOTED);
     }
 }

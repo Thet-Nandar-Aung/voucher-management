@@ -1,11 +1,6 @@
 package sg.edu.nus.iss.springboot.voucher.management.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,11 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
-import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
-import sg.edu.nus.iss.springboot.voucher.management.dto.VoucherDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
@@ -30,8 +22,6 @@ import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.FeedService;
 
 @SpringBootTest
-@TestPropertySource(properties = { "DB_USERNAME=admin", "DB_PASSWORD=RDS_12345" })
-
 public class FeedServiceTest {
 
 	@Mock
@@ -77,16 +67,14 @@ public class FeedServiceTest {
 	}
 
 	@Test
-	void promoteCampaign() {
+	void generateFeeds() {
 		Mockito.when(feedRepository.save(Mockito.any(Feed.class))).thenReturn(feed1);
 		Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
 		Mockito.when(userRepository.findByIsActiveTrue()).thenReturn(mockUsers);
 
-		List<FeedDTO> feedDTOList = new ArrayList<FeedDTO>();
-		feedDTOList = feedService.save(campaign1.getCampaignId());
+		boolean isGenerated = feedService.generateFeed();
 
-		assertThat(feedDTOList).isNotNull();
-		assertThat(feedDTOList.get(0).getFeedId().equals("1")).isTrue();
+		assertEquals(isGenerated,true);
 	}
 
 	@Test
