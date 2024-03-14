@@ -66,6 +66,19 @@ public class CampaignService implements ICampaignService {
     }
 
     @Override
+    public List<CampaignDTO> findAllCampaignsByEmail(String email) {
+        logger.info("Getting all campaigns by email...");
+        List<Campaign> campaigns = campaignRepository.findByCreatedByEmail(email);
+        logger.info("Found {}, converting to DTOs...", campaigns.size());
+        List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+        for (Campaign campaign : campaigns) {
+            campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+            campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+        }
+        return campaignDTOs;
+    }
+
+    @Override
     public CampaignDTO findByCampaignId(String campaignId) {
         logger.info("Getting campaign for campaignId {} ...", campaignId);
         Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
