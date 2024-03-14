@@ -95,6 +95,16 @@ public class CampaignControllerTest {
         }
 
         @Test
+        void testGetAllCampaignsByEmail() throws Exception {
+                Mockito.when(campaignService.findAllCampaignsByEmail(campaign1.getCreatedBy().getEmail())).thenReturn(mockCampaigns);
+                mockMvc.perform(MockMvcRequestBuilders.get("/api/campaign/user/email").param("email", "test@email.com")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.success").value(true)).andDo(print());
+        }
+
+        @Test
         void testCreateCampaign() throws Exception {
                 Mockito.when(campaignService.create(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
                 MockMultipartFile campaign = new MockMultipartFile("campaign", "campaign",

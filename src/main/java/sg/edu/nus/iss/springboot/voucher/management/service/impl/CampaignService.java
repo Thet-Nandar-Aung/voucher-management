@@ -2,7 +2,6 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -58,6 +57,19 @@ public class CampaignService implements ICampaignService {
 	public List<CampaignDTO> findAllCampaignsByStoreId(String storeId) {
 		logger.info("Getting all campaigns by Store Id...");
 		List<Campaign> campaigns = campaignRepository.findByStoreStoreId(storeId);
+		logger.info("Found {}, converting to DTOs...", campaigns.size());
+		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+		for (Campaign campaign : campaigns) {
+			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+		}
+		return campaignDTOs;
+	}
+
+	@Override
+	public List<CampaignDTO> findAllCampaignsByEmail(String email) {
+		logger.info("Getting all campaigns by email...");
+		List<Campaign> campaigns = campaignRepository.findByCreatedByEmail(email);
 		logger.info("Found {}, converting to DTOs...", campaigns.size());
 		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
 		for (Campaign campaign : campaigns) {
@@ -149,7 +161,8 @@ public class CampaignService implements ICampaignService {
 					LocalDateTime endDate = dbCampaign.get().getEndDate();
 					logger.info("Promoting campaign:startDate{} ,endDate{}...", startDate, endDate);
 
-					if ((startDate.isBefore(LocalDateTime.now()) ||startDate.equals(LocalDateTime.now())) && endDate.isAfter(LocalDateTime.now())) {					
+					if ((startDate.isBefore(LocalDateTime.now()) || startDate.equals(LocalDateTime.now()))
+							&& endDate.isAfter(LocalDateTime.now())) {
 						dbCampaign.get().setCampaignStatus(CampaignStatus.PROMOTED);
 						dbCampaign.get().setUpdatedDate(LocalDateTime.now());
 						Campaign promottedCampaign = campaignRepository.save(dbCampaign.get());

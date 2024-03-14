@@ -11,12 +11,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
-import sg.edu.nus.iss.springboot.voucher.management.dto.*;
+import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
+import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
@@ -54,6 +55,19 @@ public class CampaignController {
 			logger.info("Calling Campaign getAllCampaignsByStoreId API failed...");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(APIResponse.error("Failed to get all campaigns by store Id"));
+		}
+	}
+
+	@GetMapping(value = "/user/email", produces = "application/json")
+	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByEmail(@RequestParam("email") String email) {
+		try {
+			logger.info("Calling Campaign getAllCampaignsByEmail API...");
+			return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(
+					campaignService.findAllCampaignsByEmail(email), "Successfully get all campaigns by email"));
+		} catch (Exception ex) {
+			logger.info("Calling Campaign getAllCampaignsByEmail API failed...");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(APIResponse.error("Failed to get all campaigns by email"));
 		}
 	}
 
@@ -106,7 +120,6 @@ public class CampaignController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Delete failed"));
 		}
 	}
-	
 
 	@PostMapping(value = "/promote/{campaignId}", produces = "application/json")
 	public ResponseEntity<APIResponse<CampaignDTO>> promoteCampaign(@PathVariable String campaignId) {

@@ -79,6 +79,15 @@ public class CampaignServiceTest {
     }
 
     @Test
+    void getAllCampaignsByEmail(){
+        Mockito.when(campaignRepository.findByCreatedByEmail(campaign1.getCreatedBy().getEmail())).thenReturn(mockCampaigns);
+        List<CampaignDTO> campaignDTOs = campaignService.findAllCampaignsByEmail(campaign1.getCreatedBy().getEmail());
+        assertEquals(mockCampaigns.size(), campaignDTOs.size());
+        assertEquals(mockCampaigns.get(0).getCampaignId(), campaignDTOs.get(0).getCampaignId());
+        assertEquals(mockCampaigns.get(1).getCampaignId(), campaignDTOs.get(1).getCampaignId());
+    }
+
+    @Test
     void createCampaign(){
         Mockito.when(campaignRepository.save(Mockito.any(Campaign.class))).thenReturn(campaign1);
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
