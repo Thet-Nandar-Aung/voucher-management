@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService
 @SpringBootTest
 @TestPropertySource(properties = { "DB_USERNAME=admin", "DB_PASSWORD=RDS_12345" })
 public class CampaignServiceTest {
-    
+
     @Mock
     private CampaignRepository campaignRepository;
 
@@ -49,20 +49,26 @@ public class CampaignServiceTest {
     private CampaignService campaignService;
 
     private static List<Campaign> mockCampaigns = new ArrayList<>();
-    private static User user = new User("1","test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true, null, null, null, null, null, null,null);
-    private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null, null, null, null, null, null, user, null, user, false, null);
-    private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
-    private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
-   
+    private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true,
+            null, null, null, null, null, null, null);
+    private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null, null,
+            null, null, null, null, user, null, user, false, null);
+    private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 0, 0,
+            null, null, 0, null, null, user, user, null, null, null);
+    private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0,
+            null, null, 0, null, null, user, user, null, null, null);
+
     @BeforeAll
-    static void setUp(){
+    static void setUp() {
         mockCampaigns.add(campaign1);
         mockCampaigns.add(campaign2);
     }
 
     @Test
-    void getAllActiveCampaigns(){
-        Mockito.when(campaignRepository.findByCampaignStatus(CampaignStatus.PROMOTED)).thenReturn(mockCampaigns);
+    void getAllActiveCampaigns() {
+        Mockito.when(campaignRepository
+                .findByCampaignStatusIn(Arrays.asList(CampaignStatus.PROMOTED, CampaignStatus.FEEDGENERATED)))
+                .thenReturn(mockCampaigns);
         List<CampaignDTO> campaignDTOs = campaignService.findAllActiveCampaigns();
         assertEquals(mockCampaigns.size(), campaignDTOs.size());
         assertEquals(mockCampaigns.get(0).getCampaignId(), campaignDTOs.get(0).getCampaignId());
@@ -70,7 +76,7 @@ public class CampaignServiceTest {
     }
 
     @Test
-    void getAllCampaignsByStoreId(){
+    void getAllCampaignsByStoreId() {
         Mockito.when(campaignRepository.findByStoreStoreId(store.getStoreId())).thenReturn(mockCampaigns);
         List<CampaignDTO> campaignDTOs = campaignService.findAllCampaignsByStoreId(campaign1.getStore().getStoreId());
         assertEquals(mockCampaigns.size(), campaignDTOs.size());
@@ -79,8 +85,9 @@ public class CampaignServiceTest {
     }
 
     @Test
-    void getAllCampaignsByEmail(){
-        Mockito.when(campaignRepository.findByCreatedByEmail(campaign1.getCreatedBy().getEmail())).thenReturn(mockCampaigns);
+    void getAllCampaignsByEmail() {
+        Mockito.when(campaignRepository.findByCreatedByEmail(campaign1.getCreatedBy().getEmail()))
+                .thenReturn(mockCampaigns);
         List<CampaignDTO> campaignDTOs = campaignService.findAllCampaignsByEmail(campaign1.getCreatedBy().getEmail());
         assertEquals(mockCampaigns.size(), campaignDTOs.size());
         assertEquals(mockCampaigns.get(0).getCampaignId(), campaignDTOs.get(0).getCampaignId());
@@ -88,7 +95,7 @@ public class CampaignServiceTest {
     }
 
     @Test
-    void createCampaign(){
+    void createCampaign() {
         Mockito.when(campaignRepository.save(Mockito.any(Campaign.class))).thenReturn(campaign1);
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
@@ -99,7 +106,7 @@ public class CampaignServiceTest {
     }
 
     @Test
-    void updateCampaign(){
+    void updateCampaign() {
         Mockito.when(campaignRepository.save(Mockito.any(Campaign.class))).thenReturn(campaign1);
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
@@ -109,27 +116,27 @@ public class CampaignServiceTest {
     }
 
     @Test
-    void deleteCampaign() throws Exception{
+    void deleteCampaign() throws Exception {
         Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
         campaignService.delete(campaign1.getCampaignId());
-        assertAll(() -> campaignService.delete(campaign1.getCampaignId()));        
+        assertAll(() -> campaignService.delete(campaign1.getCampaignId()));
     }
 
     @Test
-    void findSingleCampaign(){
+    void findSingleCampaign() {
         Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
         CampaignDTO campaignDTO = campaignService.findByCampaignId(campaign1.getCampaignId());
         assertEquals(campaignDTO.getCampaignId(), campaign1.getCampaignId());
     }
-    
-    @Test
-    void promoteCampaign(){
-    	campaign1.setCampaignStatus(CampaignStatus.CREATED);
-    	LocalDateTime currentTime = LocalDateTime.now();
-    	LocalDateTime endDate = currentTime.plusMonths(1);
 
-    	campaign1.setStartDate(currentTime);
-    	campaign1.setEndDate(endDate);
+    @Test
+    void promoteCampaign() {
+        campaign1.setCampaignStatus(CampaignStatus.CREATED);
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime endDate = currentTime.plusMonths(1);
+
+        campaign1.setStartDate(currentTime);
+        campaign1.setEndDate(endDate);
         Mockito.when(campaignRepository.save(Mockito.any(Campaign.class))).thenReturn(campaign1);
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
         Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));

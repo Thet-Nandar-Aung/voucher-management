@@ -97,7 +97,7 @@ public class CampaignControllerTest {
         @Test
         void testGetAllCampaignsByEmail() throws Exception {
                 Mockito.when(campaignService.findAllCampaignsByEmail(campaign1.getCreatedBy().getEmail())).thenReturn(mockCampaigns);
-                mockMvc.perform(MockMvcRequestBuilders.get("/api/campaign/user/email").param("email", "test@email.com")
+                mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/user/email").param("email", "test@email.com")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(MockMvcResultMatchers.status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

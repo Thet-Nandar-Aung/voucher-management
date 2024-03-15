@@ -2,6 +2,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -82,7 +83,8 @@ public class FeedService implements IFeedService {
 		boolean isGenerated = true;
 		try {
 
-			List<Campaign> campaignList = campaignRepository.findByCampaignStatus(CampaignStatus.PROMOTED);
+			List<Campaign> campaignList = campaignRepository
+					.findByCampaignStatusIn(Arrays.asList(CampaignStatus.PROMOTED, CampaignStatus.FEEDGENERATED));
 			if (campaignList.size() > 0) {
 
 				Iterator<Campaign> campaignItr = campaignList.iterator();
@@ -103,7 +105,6 @@ public class FeedService implements IFeedService {
 
 								List<Feed> dbFeed = feedRepository.findByTargetedUserAndStatus(user, campaign, false,
 										false);
-								
 
 								if (dbFeed.size() == 0) {
 									Feed feed = new Feed();

@@ -58,7 +58,7 @@ public class CampaignController {
 		}
 	}
 
-	@GetMapping(value = "/user/email", produces = "application/json")
+	@PostMapping(value = "/user/email", produces = "application/json")
 	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByEmail(@RequestParam("email") String email) {
 		try {
 			logger.info("Calling Campaign getAllCampaignsByEmail API...");

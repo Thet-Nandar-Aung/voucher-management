@@ -2,6 +2,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -43,7 +44,8 @@ public class CampaignService implements ICampaignService {
 	@Override
 	public List<CampaignDTO> findAllActiveCampaigns() {
 		logger.info("Getting all active campaigns...");
-		List<Campaign> campaigns = campaignRepository.findByCampaignStatus(CampaignStatus.PROMOTED);
+		List<Campaign> campaigns = campaignRepository
+				.findByCampaignStatusIn(Arrays.asList(CampaignStatus.PROMOTED, CampaignStatus.FEEDGENERATED));
 		logger.info("Found {}, converting to DTOs...", campaigns.size());
 		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
 		for (Campaign campaign : campaigns) {
