@@ -22,7 +22,7 @@ public interface ICampaignService {
 
     boolean delete(Campaign campaign);
     
-    CampaignDTO promote(String campaign);
+    CampaignDTO promote(Campaign campaign);
     
     List<Campaign>  findByDescription(String description);
     

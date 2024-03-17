@@ -176,22 +176,26 @@ public class CampaignService implements ICampaignService {
 	}
 
 	@Override
-	public CampaignDTO promote(String campaignId) {
+	public CampaignDTO promote(Campaign campaign) {
 		CampaignDTO campaignDTO = new CampaignDTO();
 		try {
 
-			Optional<Campaign> dbCampaign = campaignRepository.findById(campaignId);
+			Optional<Campaign> dbCampaign = campaignRepository.findById(campaign.getCampaignId());
 			if (dbCampaign.isPresent()) {
 				logger.info("Promoting campaign: status {}..", dbCampaign.get().getCampaignStatus());
 				if (dbCampaign.get().getCampaignStatus().equals(CampaignStatus.CREATED)) {
+					
+					User user = userRepository.findByEmail(campaign.getUpdatedBy().getEmail());
 
 					LocalDateTime startDate = dbCampaign.get().getStartDate();
 					LocalDateTime endDate = dbCampaign.get().getEndDate();
+					
 					logger.info("Promoting campaign:startDate{} ,endDate{}...", startDate, endDate);
 
 					if ((startDate.isAfter(LocalDateTime.now()) || startDate.equals(LocalDateTime.now()))
 							&& endDate.isAfter(LocalDateTime.now())) {
 						dbCampaign.get().setCampaignStatus(CampaignStatus.READYTOPROMOTE);
+						dbCampaign.get().setUpdatedBy(user);
 						dbCampaign.get().setUpdatedDate(LocalDateTime.now());
 						Campaign promottedCampaign = campaignRepository.save(dbCampaign.get());
 						logger.info("Promotted successfully...");

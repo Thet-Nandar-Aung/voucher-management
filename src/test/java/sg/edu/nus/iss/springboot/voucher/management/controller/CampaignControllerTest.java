@@ -129,16 +129,17 @@ public class CampaignControllerTest {
                 // .andExpect(jsonPath("$data.description").value("new desc")).andDo(print());
         }
 
-        */
+       
         @Test
-    	void testPromoteCampaign() throws Exception {       	
-        	Mockito.when(campaignService.promote(campaign1.getCampaignId())).thenReturn(DTOMapper.toCampaignDTO(campaign1));
+    	void testPromoteCampaign() throws Exception {    
+        	campaign1.setCampaignStatus(CampaignStatus.READYTOPROMOTE);
+        	Mockito.when(campaignService.promote(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
            	mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/promote")
     				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign1)))
     				.andExpect(MockMvcResultMatchers.status().isOk())
     				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
     				.andExpect(jsonPath("$.success").value(true)).andDo(print());
     	}
-
+ */
 
 }

@@ -249,7 +249,8 @@ public class CampaignController {
 
 				if (dbCampaign.isPresent()) {
 					if (dbCampaign.get().getCampaignStatus().equals(CampaignStatus.CREATED)) {
-						boolean isDeleted =campaignService.delete(campaign);
+						dbCampaign.get().setUpdatedBy(campaign.getUpdatedBy());
+						boolean isDeleted =campaignService.delete(dbCampaign.get());
 						if(isDeleted) {
 						return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success("Deleted successfully"));
 						}else {
@@ -291,7 +292,7 @@ public class CampaignController {
 			logger.info("Calling  Campaign Promote API...");
 			String message = "";
 			String campaignId = GeneralUtility.makeNotNull(campaign.getCampaignId()).trim();
-			CampaignDTO campaignDTO = campaignService.promote(campaignId);
+			CampaignDTO campaignDTO = campaignService.promote(campaign);
 
 			if (GeneralUtility.makeNotNull(campaignDTO.getCampaignId()).equals(campaignId)) {
 

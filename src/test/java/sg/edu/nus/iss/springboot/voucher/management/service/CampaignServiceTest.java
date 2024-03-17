@@ -149,7 +149,7 @@ public class CampaignServiceTest {
         Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
         Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
-        CampaignDTO campaignDTO = campaignService.promote(campaign1.getCampaignId());
+        CampaignDTO campaignDTO = campaignService.promote(campaign1);
         assertEquals(campaignDTO.getCampaignStatus(), CampaignStatus.READYTOPROMOTE);
     }
 }
