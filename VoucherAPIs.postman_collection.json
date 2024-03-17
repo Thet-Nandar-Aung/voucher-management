@@ -423,7 +423,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"campaignId\": \"d8827ad8-d6f5-49be-9f72-36fffe3e38e5\"\n}",
+					"raw": "{\n    \"campaignId\": \"f04a5251-6304-4aff-b93a-72972e14acad\",\n     \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -605,8 +605,17 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"feedId\": \"7746d0bd-fc24-45c3-8fbc-891ee79ec3fb\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8081/api/feed/updateReadStatusById/0315a7de-90e4-47d2-968c-679ca5e7a711",
+					"raw": "http://localhost:8081/api/feed/updateReadStatusById",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -615,8 +624,7 @@
 					"path": [
 						"api",
 						"feed",
-						"updateReadStatusById",
-						"0315a7de-90e4-47d2-968c-679ca5e7a711"
+						"updateReadStatusById"
 					]
 				}
 			},
@@ -947,6 +955,36 @@
 						"api",
 						"voucher",
 						"getById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/api/campaign/delete",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"f04a5251-6304-4aff-b93a-72972e14acad\",\n     \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"delete"
 					]
 				}
 			},
