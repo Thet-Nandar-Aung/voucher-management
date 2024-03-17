@@ -28,7 +28,7 @@
 			"response": []
 		},
 		{
-			"name": "Create User",
+			"name": "User Create",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -77,37 +77,7 @@
 			"response": []
 		},
 		{
-			"name": "Reset Password",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\",\n    \"password\": \"Pwd@345\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8081/api/user/resetPassword",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"user",
-						"resetPassword"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update User",
+			"name": "User Update",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -150,6 +120,36 @@
 			"response": []
 		},
 		{
+			"name": "Reset Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\",\n    \"password\": \"Pwd@345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/user/resetPassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"resetPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Search all Active Store",
 			"request": {
 				"method": "GET",
@@ -171,7 +171,7 @@
 			"response": []
 		},
 		{
-			"name": "Create Store",
+			"name": "Store Create",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -215,7 +215,7 @@
 			"response": []
 		},
 		{
-			"name": "Update Store",
+			"name": "Store Update",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -299,10 +299,19 @@
 		{
 			"name": "Search Store by StoreId",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"storeId\": \"38f07560-11a4-4c1c-8042-23b1e901b894\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8081/api/store/getById/8e6ce799-c7b1-499e-ac70-1b39e42520a3",
+					"raw": "http://localhost:8081/api/store/getById",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -311,30 +320,7 @@
 					"path": [
 						"api",
 						"store",
-						"getById",
-						"8e6ce799-c7b1-499e-ac70-1b39e42520a3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Search Promoted Campaign",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/api/campaign/all/active",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"campaign",
-						"all",
-						"active"
+						"getById"
 					]
 				}
 			},
@@ -371,20 +357,18 @@
 			"response": []
 		},
 		{
-			"name": "Create Campaign",
+			"name": "Campaign Create",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "campaign",
-							"value": "{\n    \"description\": \"Create campaign new new\",\n    \"startDate\": \"2024-03-11T23:18:50.551124\",\n    \"endDate\": \"2024-03-21T23:18:50.551124\",\n    \"condition1\": \"Test1\",\n    \"condition2\": \"Test2\",\n    \"numberOfVouchers\": \"999\",\n    \"numberOfLikes\": \"89\",\n\"tagsJson\":\"\",\n    \"store\": {\n        \"storeId\": \"8e6ce799-c7b1-499e-ac70-1b39e42520a3\"\n    },\n    \"createdBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
-							"contentType": "application/json",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"Create campaign\",\n    \"startDate\": \"2024-03-19T23:18:50.551124\",\n    \"endDate\": \"2024-03-21T23:18:50.551124\",\n    \"numberOfVouchers\": \"999\",\n    \"numberOfLikes\": \"89\",\n    \"tagsJson\": \"\",\n    \"amount\": \"20\",\n    \"tandc\": \"Test\",\n    \"store\": {\n        \"storeId\": \"38f07560-11a4-4c1c-8042-23b1e901b894\"\n    },\n    \"createdBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
 					"raw": "http://localhost:8081/api/campaign/create",
@@ -397,6 +381,178 @@
 						"api",
 						"campaign",
 						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Campaign Update",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"d8827ad8-d6f5-49be-9f72-36fffe3e38e5\",\n    \"description\": \"Create campaign new new\",\n    \"startDate\": \"2024-03-19T23:18:50.551124\",\n    \"endDate\": \"2024-03-21T23:18:50.551124\",\n    \"numberOfVouchers\": \"999\",\n    \"numberOfLikes\": \"89\",\n    \"tagsJson\": \"\",\n    \"amount\":\"20\",\n    \"tandc\":\"Test\",\n    \"store\": {\n        \"storeId\": \"38f07560-11a4-4c1c-8042-23b1e901b894\"\n    },\n    \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Campaign Promote",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"d8827ad8-d6f5-49be-9f72-36fffe3e38e5\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/promote",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"promote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Active Campaign (Promoted)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/all/active",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"all",
+						"active"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Campaign ByID",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"d8827ad8-d6f5-49be-9f72-36fffe3e38e5\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/getById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"getById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search All Campaign by Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/getAllByEmail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"getAllByEmail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search All Campaign By Store",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"storeId\": \"38f07560-11a4-4c1c-8042-23b1e901b894\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/getAllByStoreId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"getAllByStoreId"
 					]
 				}
 			},
@@ -439,72 +595,6 @@
 						"api",
 						"feed",
 						"getAllRead"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Search Feed by CampaignId",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/api/feed/getAllByCampaignId/44177067-2089-43c6-b5c7-4df64b1d781e",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"feed",
-						"getAllByCampaignId",
-						"44177067-2089-43c6-b5c7-4df64b1d781e"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Campaign Promote",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/api/campaign/promote/c30d4c86-85df-4a80-a442-0bf89a58bbc9",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"campaign",
-						"promote",
-						"c30d4c86-85df-4a80-a442-0bf89a58bbc9"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Search Read Feed by CampaignId",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/api/feed/getAllReadByCampaignId/44177067-2089-43c6-b5c7-4df64b1d781e",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"feed",
-						"getAllReadByCampaignId",
-						"44177067-2089-43c6-b5c7-4df64b1d781e"
 					]
 				}
 			},
@@ -563,12 +653,21 @@
 			"response": []
 		},
 		{
-			"name": "Search Feed by FeedId",
+			"name": "Search Feed by CampaignId",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"bd57c084-5501-4606-9e46-728f9a1c9e92\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8081/api/feed/getById/a875a0fc-5ccd-4999-a546-6334f07236bf",
+					"raw": "http://localhost:8081/api/feed/getAllByCampaignId",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -577,8 +676,67 @@
 					"path": [
 						"api",
 						"feed",
-						"getById",
-						"a875a0fc-5ccd-4999-a546-6334f07236bf"
+						"getAllByCampaignId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Read Feed by CampaignId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"bd57c084-5501-4606-9e46-728f9a1c9e92\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getAllReadByCampaignId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getAllReadByCampaignId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Feed by FeedId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"feedId\": \"8251a480-7fc4-4874-96fa-61d4ae798ae2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/feed/getById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"feed",
+						"getById"
 					]
 				}
 			},
@@ -639,6 +797,156 @@
 						"api",
 						"feed",
 						"getAllReadFeedsByEmail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Voucher By Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/voucher/getByEmail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"voucher",
+						"getByEmail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voucher Claim",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaign\": {\n        \"campaignId\": \"d8827ad8-d6f5-49be-9f72-36fffe3e38e5\"\n    },\n    \"claimedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/voucher/claim",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"voucher",
+						"claim"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voucher Consume",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"voucherId\": \"22bb99d4-0054-49c7-aab0-f5749f48057c\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/voucher/consume",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"voucher",
+						"consume"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Voucher By CampaignId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"d8827ad8-d6f5-49be-9f72-36fffe3e38e5\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/voucher/getByCampaignId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"voucher",
+						"getByCampaignId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Voucher ById",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"voucherId\": \"22bb99d4-0054-49c7-aab0-f5749f48057c\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/voucher/getById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"voucher",
+						"getById"
 					]
 				}
 			},
