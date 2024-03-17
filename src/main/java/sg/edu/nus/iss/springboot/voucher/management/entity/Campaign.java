@@ -85,4 +85,7 @@ public class Campaign {
 	@OneToMany(mappedBy = "voucherId")
 	private List<Voucher> voucher;
 	
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private boolean isDeleted;
+	
 }

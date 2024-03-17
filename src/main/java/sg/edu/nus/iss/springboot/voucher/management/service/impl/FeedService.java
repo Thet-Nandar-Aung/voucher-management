@@ -80,18 +80,18 @@ public class FeedService implements IFeedService {
 	@Override
 	@Transactional
 	public boolean generateFeed() {
-		boolean isGenerated = true;
+		boolean isPromoted = true;
 		try {
 
 			List<Campaign> campaignList = campaignRepository
-					.findByCampaignStatusIn(Arrays.asList(CampaignStatus.PROMOTED, CampaignStatus.FEEDGENERATED));
+					.findByCampaignStatusIn(Arrays.asList(CampaignStatus.READYTOPROMOTE));
 			if (campaignList.size() > 0) {
 
 				Iterator<Campaign> campaignItr = campaignList.iterator();
 
 				while (campaignItr.hasNext()) {
 					Campaign campaign = campaignItr.next();
-					if (campaign.getCampaignStatus().equals(CampaignStatus.PROMOTED)) {
+					if (campaign.getCampaignStatus().equals(CampaignStatus.READYTOPROMOTE)) {
 						// to amend targeted user logic
 						List<User> userList = userRepository.findByIsActiveTrue();
 						if (!userList.isEmpty()) {
@@ -113,23 +113,23 @@ public class FeedService implements IFeedService {
 									feed.setTargetUserId(user);
 									Feed createdFeed = feedRepository.save(feed);
 									if (createdFeed == null) {
-										isGenerated = false;
+										isPromoted = false;
 									}
 
 								} else {
 									logger.info("Campaign already promoted for Targeted User." + user.getEmail());
-									isGenerated = false;
+									isPromoted = false;
 								}
 
 							}
 
 						} else {
 							logger.info("Targeted User not found.");
-							isGenerated = false;
+							isPromoted = false;
 						}
 
-						if (isGenerated) {
-							campaign.setCampaignStatus(CampaignStatus.FEEDGENERATED);
+						if (isPromoted) {
+							campaign.setCampaignStatus(CampaignStatus.PROMOTED);
 							campaign.setUpdatedDate(LocalDateTime.now());
 							Campaign updatedCampaign = campaignRepository.save(campaign);
 							logger.info("Feed Generated successfully {}...", updatedCampaign.getCampaignId());
@@ -140,10 +140,10 @@ public class FeedService implements IFeedService {
 
 		} catch (Exception ex) {
 			logger.error("Feed generating exception... {}", ex.toString());
-			isGenerated = false;
+			isPromoted = false;
 		}
 
-		return isGenerated;
+		return isPromoted;
 	}
 
 	@Override

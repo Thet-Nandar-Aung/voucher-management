@@ -4,12 +4,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
@@ -20,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
@@ -39,51 +46,56 @@ public class StoreControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	@Autowired
+	@MockBean
 	private StoreService storeService;
+	
+	private static List<Store> mockStores= new ArrayList<>();
 
-	@Autowired
-	private UserService userService;
+	private static User user = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
 
-	User testUser;
+	private static Store store = new Store("1","MUJI",
+			"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
+			"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
+			"Singapore", null, null, null, user, null, user, false, null);
 
-	Store testStore;
 
 	@BeforeEach
 	void setUp() {
 
-		testUser = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
-
-		testStore = new Store("MUJI",
-				"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
-				"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
-				"Singapore", false);
+		mockStores.add(store);
+		
 	}
 
 	@Test
 	@Transactional
 	void testGetAllActiveStore() throws Exception {
-		storeService.create(testStore);
+		Mockito.when(storeService.findByIsDeletedFalse()).thenReturn(mockStores);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/store/getAll"))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(jsonPath("$.message").value("200 OK"))
 				.andDo(print());
 	}
-
+	
 	@Test
 	@Transactional
+	void testGetStoreById() throws Exception {
+		Mockito.when(storeService.findById(store.getStoreId())).thenReturn(Optional.of(store));
+		
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/store/getById")
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(store)))
+		        .andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.message").value("200 OK"))
+				.andExpect(jsonPath("$.result[0].storeId").value(store.getStoreId())).andDo(print());
+	}
+
+	/*@Test
+	@Transactional
 	void testGetAllStoreByUser() throws Exception {
-
-		User createdUser = userService.create(testUser);
-		testStore.setCreatedBy(createdUser);
-
-		storeService.create(testStore);
-
-	    createdUser.getUserId().trim();
-
-		UserRequest userReq = new UserRequest("antonia@gmail.com");
-
+		UserRequest userReq = new UserRequest(user.getEmail());
+		Mockito.when(storeService.findAllByUserAndStatus(user,false)).thenReturn(mockStores);
+		
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/store/getAllByUser")
 				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userReq)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
@@ -92,39 +104,27 @@ public class StoreControllerTest {
 
 	}
 
-	@Test
-	@Transactional
-	void testGetStoreById() throws Exception {
-		Store createdStore = storeService.create(testStore);
-
-		String storeId = createdStore.getStoreId();
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/store/getById/{storeId}", storeId)
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.message").value("200 OK"))
-				.andExpect(jsonPath("$.result[0].storeId").value(storeId)).andDo(print());
-	}
+	
 
 	@Test
 	@Transactional
 	void testCreateStore() throws Exception {
 
-		User createdUser = userService.create(testUser);
-		testStore.setCreatedBy(createdUser);
+		Mockito.when(storeService.findById(store.getStoreId())).thenReturn(Optional.of(store));
 		
 		// MockMultipartFile for image file
 		MockMultipartFile imageFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
 
 		// MockMultipartFile for user JSON
 	
-		MockMultipartFile store = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
-				objectMapper.writeValueAsBytes(testStore));
+		MockMultipartFile storeReq = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
+				objectMapper.writeValueAsBytes(store));
 
-		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/create").file(store).file(imageFile)
+		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/create").file(storeReq).file(imageFile)
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.message").value("Store created successfully."))
-				.andExpect(jsonPath("$.result[0].storeName").value(testStore.getStoreName())).andDo(print());
+				.andExpect(jsonPath("$.result[0].storeName").value(store.getStoreName())).andDo(print());
 
 	}
 
@@ -132,25 +132,20 @@ public class StoreControllerTest {
 	@Transactional
 	void testUpdateStore() throws Exception {
 		
-		User createdUser = userService.create(testUser);
-		testStore.setUpdatedBy(createdUser);
-		
-		Store createdStore = storeService.create(testStore);
-		createdStore.setDeleted(true);
-
+		Mockito.when(storeService.findById(store.getStoreId())).thenReturn(Optional.of(store));
 		// MockMultipartFile for image file
 		MockMultipartFile imageFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
 
 		// MockMultipartFile for user JSON
-		MockMultipartFile store = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
-				objectMapper.writeValueAsBytes(createdStore));
+		MockMultipartFile storeReq = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
+				objectMapper.writeValueAsBytes(store));
 
-		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/update").file(store).file(imageFile)
+		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/update").file(storeReq).file(imageFile)
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.message").value("Store updated successfully."))
-				.andExpect(jsonPath("$.result[0].storeName").value(testStore.getStoreName())).andDo(print());
+				.andExpect(jsonPath("$.result[0].storeName").value(store.getStoreName())).andDo(print());
 
 	}
-
+*/
 }

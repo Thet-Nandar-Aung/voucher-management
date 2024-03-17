@@ -251,8 +251,8 @@ public class StoreController {
 		}
 	}
 
-	@GetMapping(value = "/getById/{storeId}", produces = "application/json")
-	public ResponseEntity<StoreResponseDetail> getStoreById(@PathVariable String storeId) {
+	@PostMapping(value = "/getById", produces = "application/json")
+	public ResponseEntity<StoreResponseDetail> getStoreById(@RequestBody Store store) {
 
 		logger.info("Call store getStoreById API...");
 
@@ -261,7 +261,7 @@ public class StoreController {
 		ArrayList<ResultStoreDetail> resultList = new ArrayList<ResultStoreDetail>();
 		StoreResponseDetail storeResponse = new StoreResponseDetail();
 		try {
-			storeId = GeneralUtility.makeNotNull(storeId).trim();
+			String storeId = GeneralUtility.makeNotNull(store.getStoreId()).trim();
 			logger.info("storeId: " + storeId);
 
 			if (!storeId.equals("")) {

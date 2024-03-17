@@ -51,12 +51,12 @@ public class FeedServiceTest {
 		user = new User("1", "admin12345@gmail.com", "Admin", "Pwd@123", RoleType.MERCHANT, null, null, true, null,
 				null, null, null, null, null, null);
 
-		store = new Store("MUJI",
+		store = new Store("1","MUJI",
 				"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
 				"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
-				"Singapore", false);
-		campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
-		campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null);
+				"Singapore", null, null, null, user, null, user, false, null);
+		campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null,false);
+		campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, null,false);
 		   
 
 		mockUsers.add(user);

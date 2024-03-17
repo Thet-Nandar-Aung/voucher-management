@@ -54,14 +54,14 @@ public class FeedControllerTest {
 	private static User user = new User("1", "admin12345@gmail.com", "Admin", "Pwd@123", RoleType.MERCHANT, null, null, true, null,
 			null, null, null, null, null, null);
 
-	private static Store store = new Store("MUJI",
+	private static Store store = new Store("1","MUJI",
 			"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",
 			"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
-			"Singapore", false);
+			"Singapore", null, null, null, user, null, user, false, null);
 	private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null,
-			null, user, user, null, null, null);
+			null, user, user, null, null, null,false);
 	private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null,
-			null, user, user, null, null, null);
+			null, user, user, null, null, null,false);
 
 	private static Feed feed1 = new Feed("1", campaign1, false, false, null, user, null);
 	private static Feed feed2 = new Feed("2", campaign2, false, false, null, user, null);
@@ -96,8 +96,9 @@ public class FeedControllerTest {
 	@Test
 	void testGetAllByCampaignId() throws Exception {
 		Mockito.when(feedService.findAllActiveFeedsByCampaignId(campaign1.getCampaignId())).thenReturn(mockFeeds);
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/feed/getAllByCampaignId/{campaignId}", "1")
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/feed/getAllByCampaignId")
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign1)))
+		        .andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andExpect(jsonPath("$.data[0].feedId").value(1))
 				.andDo(print());
@@ -106,8 +107,8 @@ public class FeedControllerTest {
 	@Test
 	void testGetAllReadByCampaignId() throws Exception {
 		Mockito.when(feedService.findAllReadFeedsByCampaignId(campaign1.getCampaignId())).thenReturn(mockFeeds);
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/feed/getAllReadByCampaignId/{campaignId}", "1")
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/feed/getAllReadByCampaignId")
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign1))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andExpect(jsonPath("$.data[0].feedId").value(1))
 				.andDo(print());
@@ -140,7 +141,8 @@ public class FeedControllerTest {
 	void testGetFeedById() throws Exception {
 		Mockito.when(feedService.findByFeedId(feed1.getFeedId())).thenReturn(DTOMapper.toFeedDTO(feed1));
 		mockMvc.perform(
-				MockMvcRequestBuilders.get("/api/feed/getById/{feedId}", "1").contentType(MediaType.APPLICATION_JSON))
+				MockMvcRequestBuilders.post("/api/feed/getById").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(feed1)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andDo(print());
@@ -149,8 +151,8 @@ public class FeedControllerTest {
 	@Test
 	void testUpdateReadStatusById() throws Exception {
 		Mockito.when(feedService.updateReadStatusById(feed1.getFeedId())).thenReturn(DTOMapper.toFeedDTO(feed1));
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/feed/updateReadStatusById/{feedId}", "1")
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/feed/updateReadStatusById")
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(feed1))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andDo(print());
 	}

@@ -15,6 +15,7 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Voucher;
 import sg.edu.nus.iss.springboot.voucher.management.enums.VoucherStatus;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
+import sg.edu.nus.iss.springboot.voucher.management.repository.FeedRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.VoucherRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.IVoucherService;
@@ -33,6 +34,9 @@ public class VoucherService implements IVoucherService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+	private FeedRepository feedRepository;
 
     @Override
     public List<VoucherDTO> findAllClaimedVouchersByEmail(String email) {
@@ -70,6 +74,7 @@ public class VoucherService implements IVoucherService {
             logger.info("Saving voucher...");
             Voucher savedVoucher = voucherRepository.save(voucher);
             logger.info("Saved successfully...");
+           
             return DTOMapper.toVoucherDTO(savedVoucher);
         } catch (Exception ex) {
             logger.error("Voucher saving exception... {}", ex.toString());
@@ -81,6 +86,7 @@ public class VoucherService implements IVoucherService {
     public VoucherDTO consume(Voucher voucher) {
         try {
             // Add validation here to make sure the same userId is passed
+        	
             Voucher dbVoucher = voucherRepository.findById(voucher.getVoucherId()).orElseThrow();
             if (dbVoucher == null) {
                 logger.info("Voucher Id {} is not found.", voucher.getVoucherId());

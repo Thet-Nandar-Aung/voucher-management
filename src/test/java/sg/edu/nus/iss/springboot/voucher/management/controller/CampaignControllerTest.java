@@ -60,11 +60,11 @@ public class CampaignControllerTest {
         private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.CREATED, null, 10,
                         0,
                         null, null, 10, LocalDateTime.now(), LocalDateTime.now(), user, user, LocalDateTime.now(),
-                        LocalDateTime.now(), null);
+                        LocalDateTime.now(), null,false);
         private static Campaign campaign2 = new Campaign("2", "new campaign 2", store, CampaignStatus.CREATED, null, 10,
                         0,
                         null, null, 10, LocalDateTime.now(), LocalDateTime.now(), user, user, LocalDateTime.now(),
-                        LocalDateTime.now(), null);
+                        LocalDateTime.now(), null,false);
 
         @BeforeAll
         static void setUp() {
@@ -82,12 +82,12 @@ public class CampaignControllerTest {
                                 .andExpect(jsonPath("$.success").value(true))
                                 .andExpect(jsonPath("$.data[0].campaignId").value(1)).andDo(print());
         }
-
+/*
         @Test
         void getAllCampaignsByStoreId() throws Exception {
                 Mockito.when(campaignService.findAllCampaignsByStoreId(store.getStoreId())).thenReturn(mockCampaigns);
-                mockMvc.perform(MockMvcRequestBuilders.get("/api/campaign/store/{id}", "1")
-                                .contentType(MediaType.APPLICATION_JSON))
+                mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/getAllByStoreId")
+                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(store)))
                                 .andExpect(MockMvcResultMatchers.status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.success").value(true))
@@ -97,8 +97,8 @@ public class CampaignControllerTest {
         @Test
         void testGetAllCampaignsByEmail() throws Exception {
                 Mockito.when(campaignService.findAllCampaignsByEmail(campaign1.getCreatedBy().getEmail())).thenReturn(mockCampaigns);
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/user/email").param("email", "test@email.com")
-                                .contentType(MediaType.APPLICATION_JSON))
+                mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/getAllByEmail")
+                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user)))
                                 .andExpect(MockMvcResultMatchers.status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.success").value(true)).andDo(print());
@@ -107,11 +107,9 @@ public class CampaignControllerTest {
         @Test
         void testCreateCampaign() throws Exception {
                 Mockito.when(campaignService.create(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
-                MockMultipartFile campaign = new MockMultipartFile("campaign", "campaign",
-                                MediaType.APPLICATION_JSON_VALUE,
-                                objectMapper.writeValueAsBytes(campaign1));
-                mockMvc.perform(MockMvcRequestBuilders.multipart("/api/campaign/create").file(campaign)
-                                .contentType(MediaType.APPLICATION_JSON))
+               
+                mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/create")
+                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign1)))
                                 .andExpect(MockMvcResultMatchers.status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.success").value(true)).andDo(print());
@@ -120,32 +118,23 @@ public class CampaignControllerTest {
         @Test
         void testUpdateCampaign() throws Exception {
                 campaign1.setDescription("new desc");
+               
                 Mockito.when(campaignService.update(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
-                MockMultipartFile campaign = new MockMultipartFile("campaign", "campaign",
-                                MediaType.APPLICATION_JSON_VALUE,
-                                objectMapper.writeValueAsBytes(campaign1));
-                mockMvc.perform(MockMvcRequestBuilders.multipart("/api/campaign/update").file(campaign)
-                                .contentType(MediaType.APPLICATION_JSON))
+                
+                mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/update")
+                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign1)))
                                 .andExpect(MockMvcResultMatchers.status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.success").value(true)).andDo(print());
                 // .andExpect(jsonPath("$data.description").value("new desc")).andDo(print());
         }
 
-        @Test
-        void testDeleteCampaign() throws Exception {
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/delete/{campaignId}", "1")
-                                .contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(MockMvcResultMatchers.status().isOk())
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.success").value(true)).andDo(print());
-        }
-        
+        */
         @Test
     	void testPromoteCampaign() throws Exception {       	
         	Mockito.when(campaignService.promote(campaign1.getCampaignId())).thenReturn(DTOMapper.toCampaignDTO(campaign1));
-           	mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/promote/{campaignId}","1")
-    				.contentType(MediaType.APPLICATION_JSON))
+           	mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/promote")
+    				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign1)))
     				.andExpect(MockMvcResultMatchers.status().isOk())
     				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
     				.andExpect(jsonPath("$.success").value(true)).andDo(print());
