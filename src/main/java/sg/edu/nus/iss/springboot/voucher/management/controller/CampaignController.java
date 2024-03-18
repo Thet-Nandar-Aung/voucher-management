@@ -202,7 +202,7 @@ public class CampaignController {
 				if (dbCampaign.isPresent()) {
 
 					if (dbCampaign.get().getCampaignStatus().equals(CampaignStatus.CREATED)) {
-
+						
 						CampaignDTO campaignDTO = campaignService.update(campaign);
 						if (!GeneralUtility.makeNotNull(campaignDTO.getCampaignId()).equals("")) {
 							return ResponseEntity.status(HttpStatus.OK)

@@ -27,7 +27,9 @@ public class DTOMapper {
         campaignDTO.setAmount(campaign.getAmount());
         campaignDTO.setStartDate(campaign.getStartDate());
         campaignDTO.setEndDate(campaign.getEndDate());
+        if(campaign.getCreatedBy() !=null) {
         campaignDTO.setCreatedBy(toUserDTO(campaign.getCreatedBy()));
+        }
         campaignDTO.setCreatedDate(campaign.getCreatedDate());
         if(campaign.getUpdatedBy() !=null) {
         campaignDTO.setUpdatedBy(toUserDTO(campaign.getUpdatedBy()));

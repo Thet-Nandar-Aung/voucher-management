@@ -121,21 +121,20 @@ public class CampaignService implements ICampaignService {
 	public CampaignDTO update(Campaign campaign) {
 		CampaignDTO campaignDTO = new CampaignDTO();
 		try {
-
+			Optional<Campaign> dbCampaign = campaignRepository.findById(campaign.getCampaignId());
 			User user = userRepository.findByEmail(campaign.getUpdatedBy().getEmail());
-
-			campaign.setDescription(GeneralUtility.makeNotNull(campaign.getDescription()));
-			campaign.setAmount(campaign.getAmount());
-			campaign.setStartDate(campaign.getStartDate());
-			campaign.setEndDate(campaign.getEndDate());
-			campaign.setNumberOfLikes(campaign.getNumberOfLikes());
-			campaign.setNumberOfVouchers(campaign.getNumberOfVouchers());
-			campaign.setTagsJson(GeneralUtility.makeNotNull(campaign.getTagsJson()));
-			campaign.setTandc(GeneralUtility.makeNotNull(campaign.getTandc()));
-			campaign.setUpdatedBy(user);
-			campaign.setUpdatedDate(LocalDateTime.now());
+			dbCampaign.get().setDescription(GeneralUtility.makeNotNull(campaign.getDescription()));
+			dbCampaign.get().setAmount(campaign.getAmount());
+			dbCampaign.get().setStartDate(campaign.getStartDate());
+			dbCampaign.get().setEndDate(campaign.getEndDate());
+			dbCampaign.get().setNumberOfLikes(campaign.getNumberOfLikes());
+			dbCampaign.get().setNumberOfVouchers(campaign.getNumberOfVouchers());
+			dbCampaign.get().setTagsJson(GeneralUtility.makeNotNull(campaign.getTagsJson()));
+			dbCampaign.get().setTandc(GeneralUtility.makeNotNull(campaign.getTandc()));
+			dbCampaign.get().setUpdatedBy(user);
+			dbCampaign.get().setUpdatedDate(LocalDateTime.now());
 			logger.info("Saving campaign...");
-			Campaign savedCampaign = campaignRepository.save(campaign);
+			Campaign savedCampaign = campaignRepository.save(dbCampaign.get());
 			logger.info("Saved successfully...");
 			campaignDTO = DTOMapper.toCampaignDTO(savedCampaign);
 
