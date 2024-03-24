@@ -13,11 +13,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
+@Getter
+@Setter
 @AllArgsConstructor
 public class User {
 
@@ -81,124 +85,5 @@ public class User {
 	@OneToMany(mappedBy = "targetUserId")
 	private List<Feed> feedTargetUser;
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public RoleType getRole() {
-		return role;
-	}
-
-	public void setRole(RoleType role) {
-		this.role = role;
-	}
-
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public LocalDateTime getUpdatedDate() {
-		return updatedDate;
-	}
-
-	public void setUpdatedDate(LocalDateTime updatedDate) {
-		this.updatedDate = updatedDate;
-	}
-
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
-
-	public LocalDateTime getLastLoginDate() {
-		return lastLoginDate;
-	}
-
-	public void setLastLoginDate(LocalDateTime lastLoginDate) {
-		this.lastLoginDate = lastLoginDate;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public List<Store> getCreatedStores() {
-		return createdStores;
-	}
-
-	public void setCreatedStores(List<Store> createdStores) {
-		this.createdStores = createdStores;
-	}
-
-	public List<Store> getUpdatedStores() {
-		return updatedStores;
-	}
-
-	public void setUpdatedStores(List<Store> updatedStores) {
-		this.updatedStores = updatedStores;
-	}
-
-	public List<Campaign> getCreatedCampaign() {
-		return createdCampaign;
-	}
-
-	public void setCreatedCampaign(List<Campaign> createdCampaign) {
-		this.createdCampaign = createdCampaign;
-	}
-
-	public List<Campaign> getUpdatedCampaign() {
-		return updatedCampaign;
-	}
-
-	public void setUpdatedCampaign(List<Campaign> updatedCampaign) {
-		this.updatedCampaign = updatedCampaign;
-	}
-
-	public List<Feed> getFeedTargetUser() {
-		return feedTargetUser;
-	}
-
-	public void setFeedTargetUser(List<Feed> feedTargetUser) {
-		this.feedTargetUser = feedTargetUser;
-	}
 
 }

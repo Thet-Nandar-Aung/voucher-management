@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.springboot.voucher.management.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,23 +11,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
-import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
-import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
 
 @RestController
@@ -53,14 +50,27 @@ public class CampaignController {
 	}
 
 	@PostMapping(value = "/getAllByStoreId", produces = "application/json")
-	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByStoreId(@RequestBody Store store) {
+	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByStoreId(@RequestBody Store store,
+			@RequestParam(defaultValue = "") String status) {
 		try {
 			logger.info("Calling Campaign getAllCampaignsByStoreId API...");
 
 			String storeId = GeneralUtility.makeNotNull(store.getStoreId()).trim();
-
+			
 			if (!storeId.equals("")) {
-				List<CampaignDTO> campaignDTOs = campaignService.findAllCampaignsByStoreId(storeId);
+				List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+				if(GeneralUtility.makeNotNull(status).equals("")) {
+					campaignDTOs = campaignService.findAllCampaignsByStoreId(storeId);
+				}else {
+					try {
+					CampaignStatus campaignStatus = CampaignStatus.valueOf(status);
+					campaignDTOs = campaignService.findByStoreIdAndStatus(storeId,campaignStatus);
+					}catch(Exception ex) {
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+								.body(APIResponse.error("Failed to get all campaigns by store Id.Campaign Status is invalid."));
+					}
+				}
+
 
 				if (campaignDTOs.size() > 0) {
 					return ResponseEntity.status(HttpStatus.OK)

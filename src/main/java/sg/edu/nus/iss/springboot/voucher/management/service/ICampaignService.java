@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
+import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 
 public interface ICampaignService {
 
@@ -27,5 +28,7 @@ public interface ICampaignService {
     List<Campaign>  findByDescription(String description);
     
     Optional<Campaign>  findById(String campaignId);
+    
+    List<CampaignDTO>findByStoreIdAndStatus(String storeId,CampaignStatus status);
 
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 
 @Data
 @Getter
@@ -14,7 +15,7 @@ import lombok.Setter;
 public class FeedDTO {
 
 	private String feedId;
-	private String campaignId;
+	private CampaignDTO campaign;
 	private boolean isRead = false;
 	private LocalDateTime readTime;
 	private UserDTO targetUserId;

@@ -7,27 +7,6 @@
 	},
 	"item": [
 		{
-			"name": "Search all Active User",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/api/user/getAll",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"user",
-						"getAll"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "User Create",
 			"request": {
 				"method": "POST",
@@ -150,27 +129,6 @@
 			"response": []
 		},
 		{
-			"name": "Search all Active Store",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/api/store/getAll",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"store",
-						"getAll"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Store Create",
 			"request": {
 				"method": "POST",
@@ -188,7 +146,7 @@
 						{
 							"key": "image",
 							"type": "file",
-							"src": "/Users/thetnandaraung/Downloads/121212.jpg"
+							"src": "/Users/thetnandaraung/Downloads/22.jpg"
 						},
 						{
 							"key": "store",
@@ -258,6 +216,79 @@
 			"response": []
 		},
 		{
+			"name": "Search all Active User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/user/getAll",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search all Active Store",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/store/getAll",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"store",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search all Active Store (Pagination)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/store/getAll?page=0&size=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"store",
+						"getAll"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Search Store by User",
 			"request": {
 				"auth": {
@@ -291,6 +322,55 @@
 						"api",
 						"store",
 						"getAllByUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Store by User (Pagination)",
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/store/getAllByUser?page=0&size=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"store",
+						"getAllByUser"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
 					]
 				}
 			},
@@ -411,6 +491,36 @@
 						"api",
 						"campaign",
 						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Campaign Delete",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"f04a5251-6304-4aff-b93a-72972e14acad\",\n     \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"delete"
 					]
 				}
 			},
@@ -553,6 +663,42 @@
 						"api",
 						"campaign",
 						"getAllByStoreId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search All Campaign By Store with Status",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"storeId\": \"38f07560-11a4-4c1c-8042-23b1e901b894\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/campaign/getAllByStoreId?status=PROMOTED",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"campaign",
+						"getAllByStoreId"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "PROMOTED"
+						}
 					]
 				}
 			},
@@ -955,36 +1101,6 @@
 						"api",
 						"voucher",
 						"getById"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "http://localhost:8081/api/campaign/delete",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"campaignId\": \"f04a5251-6304-4aff-b93a-72972e14acad\",\n     \"updatedBy\": {\n        \"email\": \"Eleven.11@gmail.com\"\n    }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8081/api/campaign/delete",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"campaign",
-						"delete"
 					]
 				}
 			},

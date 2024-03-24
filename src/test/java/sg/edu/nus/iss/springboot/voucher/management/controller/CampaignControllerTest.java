@@ -82,7 +82,7 @@ public class CampaignControllerTest {
                                 .andExpect(jsonPath("$.success").value(true))
                                 .andExpect(jsonPath("$.data[0].campaignId").value(1)).andDo(print());
         }
-/*
+
         @Test
         void getAllCampaignsByStoreId() throws Exception {
                 Mockito.when(campaignService.findAllCampaignsByStoreId(store.getStoreId())).thenReturn(mockCampaigns);
@@ -103,7 +103,7 @@ public class CampaignControllerTest {
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.success").value(true)).andDo(print());
         }
-
+     /*
         @Test
         void testCreateCampaign() throws Exception {
                 Mockito.when(campaignService.create(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
@@ -140,6 +140,6 @@ public class CampaignControllerTest {
     				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
     				.andExpect(jsonPath("$.success").value(true)).andDo(print());
     	}
- */
+     */
 
 }

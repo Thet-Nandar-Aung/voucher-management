@@ -110,10 +110,11 @@ public class VoucherControllerTest {
                                 .andExpect(jsonPath("$.success").value(true)).andDo(print());
                                 // .andExpect(jsonPath("$.data.voucherId").value(1)).andDo(print());
         }
-/*
+
+        /*
         @Test
         void testClaimVoucher() throws Exception {
-        	 Mockito.when(campaignService.promote(campaign.getCampaignId())).thenReturn(DTOMapper.toCampaignDTO(campaign));
+        	 Mockito.when(campaignService.promote(campaign)).thenReturn(DTOMapper.toCampaignDTO(campaign));
         	    voucher1.setVoucherStatus(VoucherStatus.CONSUMED);
                 Mockito.when(voucherService.claim(voucher1)).thenReturn(DTOMapper.toVoucherDTO(voucher1));
                
@@ -126,7 +127,7 @@ public class VoucherControllerTest {
 
         @Test
         void testConsumeVoucher() throws Exception {
-        	    Mockito.when(campaignService.promote(campaign.getCampaignId())).thenReturn(DTOMapper.toCampaignDTO(campaign));
+        	    Mockito.when(campaignService.promote(campaign)).thenReturn(DTOMapper.toCampaignDTO(campaign));
                 Mockito.when(voucherService.consume(voucher1)).thenReturn(DTOMapper.toVoucherDTO(voucher1));
                 mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/consume")
                                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(voucher1)))

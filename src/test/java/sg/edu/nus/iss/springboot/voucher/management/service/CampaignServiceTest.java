@@ -116,18 +116,7 @@ public class CampaignServiceTest {
         CampaignDTO campaignDTO = campaignService.update(campaign1);
         assertEquals(campaignDTO.getDescription(), "test update");
     }
-   /*
-    @Test
-    void deleteCampaign() throws Exception {
-        Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
-        Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
-        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
-        campaign1.setDeleted(true);
-        campaign1.setCampaignStatus(CampaignStatus.CREATED);
-        campaign1.setUpdatedBy(user);
-        boolean isDeleted= campaignService.delete(campaign1);
-        assertEquals(isDeleted, true);
-    }*/
+ 
 
     @Test
     void findSingleCampaign() {

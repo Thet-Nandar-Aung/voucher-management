@@ -225,4 +225,18 @@ public class CampaignService implements ICampaignService {
 		// TODO Auto-generated method stub
 		return campaignRepository.findById(campaignId);
 	}
+
+	@Override
+	public List<CampaignDTO> findByStoreIdAndStatus(String storeId, CampaignStatus campaignStatus) {
+		logger.info("Getting all campaigns by Store Id and Status...");
+		List<Campaign> campaigns = campaignRepository.findByStoreStoreIdAndCampaignStatus(storeId,campaignStatus);
+		logger.info("Found {}, converting to DTOs...", campaigns.size());
+		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
+		for (Campaign campaign : campaigns) {
+			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+		}
+		return campaignDTOs;
+	}
+
 }

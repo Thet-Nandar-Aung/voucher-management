@@ -1,24 +1,28 @@
 package sg.edu.nus.iss.springboot.voucher.management.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 
 public interface IStoreService {
-
-	List<Store> findByIsDeletedFalse();
 	
-	List<Store>findAllByUserAndStatus(User createdBy, boolean isDeleted);
+	Map<Long, List<StoreDTO>> findAllByUserAndStatus(User createdBy, boolean isDeleted,Pageable pageable);
 	
-	Store findByStoreName(String storename);
+	StoreDTO findByStoreId(String storeId);
 	
-	Optional<Store>  findById(String storeId);
+	StoreDTO findByStoreName(String storename);
 	
-	Store create(Store store);
+	StoreDTO create(Store store, MultipartFile uploadFile);
 	
-	Store update(Store store);
+	StoreDTO update(Store store, MultipartFile uploadFile);
 	
+	Map<Long, List<StoreDTO>> findByIsDeletedFalse(Pageable pageable) ;
 	
+	Store uploadImage(Store store, MultipartFile uploadFile);
 }

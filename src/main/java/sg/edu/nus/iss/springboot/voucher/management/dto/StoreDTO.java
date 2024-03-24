@@ -18,6 +18,7 @@ public class StoreDTO {
 	private String description;
 	private String image;
 	private String tagsJson;
+	private String address;
 	private String address1;
 	private String address2;
 	private String address3;
@@ -30,7 +31,6 @@ public class StoreDTO {
 	private UserDTO createdBy;
 	private LocalDateTime updatedDate;
 	private UserDTO updatedBy;
-	private boolean isDeleted;
 
     public StoreDTO() {
     }

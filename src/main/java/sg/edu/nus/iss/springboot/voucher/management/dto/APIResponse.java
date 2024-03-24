@@ -11,12 +11,14 @@ public class APIResponse<T> {
 
     private Boolean success;
     private String message;
+    private long totalRecord;
     private T data;
 
     public static <T> APIResponse<T> empty() {
         return APIResponse.<T>builder()
                 .success(false)
                 .message("")
+                .totalRecord(0)
                 .data(null)
                 .build();
     }
@@ -41,6 +43,7 @@ public class APIResponse<T> {
         return APIResponse.<T>builder()
                 .success(false)
                 .message("error")
+                .totalRecord(0)
                 .build();
     }
 
@@ -48,6 +51,7 @@ public class APIResponse<T> {
         return APIResponse.<T>builder()
                 .success(false)
                 .message(message)
+                .totalRecord(0)
                 .build();
     }
 
@@ -55,6 +59,7 @@ public class APIResponse<T> {
         return APIResponse.<T>builder()
                 .success(false)
                 .message("error")
+                .totalRecord(0)
                 .build();
     }
 
@@ -70,6 +75,16 @@ public class APIResponse<T> {
         return APIResponse.<T>builder()
                 .success(false)
                 .message(message)
+                .totalRecord(0)
+                .build();
+    }
+    
+    public static <T> APIResponse<T> success(T data, String message,long totalRecord) {
+        return APIResponse.<T>builder()
+                .success(true)
+                .message(message)
+                .totalRecord(totalRecord)
+                .data(data)
                 .build();
     }
 

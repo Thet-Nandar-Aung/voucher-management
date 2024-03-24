@@ -16,6 +16,8 @@ public interface CampaignRepository extends JpaRepository<Campaign, String> {
     List<Campaign> findByCampaignStatusIn(List<CampaignStatus> statuses);
 
     List<Campaign> findByStoreStoreId(String storeId);
+    
+    List<Campaign> findByStoreStoreIdAndCampaignStatus(String storeId,CampaignStatus status);
 
     List<Campaign> findByCreatedByEmail(String email);
     
