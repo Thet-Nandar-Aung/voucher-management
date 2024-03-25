@@ -1,6 +1,5 @@
 package sg.edu.nus.iss.springboot.voucher.management.service;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -15,8 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.VoucherDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
@@ -33,26 +36,27 @@ import sg.edu.nus.iss.springboot.voucher.management.repository.VoucherRepository
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.VoucherService;
 
 @SpringBootTest
-@TestPropertySource(properties = { "DB_USERNAME=admin", "DB_PASSWORD=RDS_12345" })
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class VoucherServiceTest {
     
-    @Mock
+	@MockBean
     private VoucherRepository voucherRepository;
 
-    @Mock
+    @MockBean
     private UserRepository userRepository;
 
-    @Mock
+    @MockBean
     private StoreRepository storeRepository;
 
-    @Mock
+    @MockBean
     private CampaignRepository campaignRepository;
 
-    @InjectMocks
+    @Autowired
     private VoucherService voucherService;
 
     private static List<Voucher> mockVouchers   = new ArrayList<>();
-    private static User user = new User("1","test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true, null, null, null, null, null, null,null);
+    private static User user = new User("1","test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true, null, null, null, null, null, null,null, null, false);
     private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null, null, null, null, null, null, user, null, user, false, null);
     private static Campaign campaign = new Campaign("1", "new voucher 1", store, CampaignStatus.CREATED, null, 0, 0, null, null, 0, null, null, user, user, null, null, mockVouchers,false);
     private static Voucher voucher1 = new Voucher("1", campaign, VoucherStatus.CLAIMED, LocalDateTime.now(), null, user);

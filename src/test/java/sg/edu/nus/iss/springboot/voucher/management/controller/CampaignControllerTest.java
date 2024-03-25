@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,9 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,6 +39,8 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CampaignControllerTest {
 
         @Autowired
@@ -47,13 +52,11 @@ public class CampaignControllerTest {
         @MockBean
         private CampaignService campaignService;
 
-        @InjectMocks
-        private CampaignController campaignController;
 
         private static List<CampaignDTO> mockCampaigns = new ArrayList<>();
         private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null,
                         true,
-                        null, null, null, null, null, null, null);
+                        null, null, null, null, null, null, null, null, false);
         private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null,
                         null,
                         null, null, null, null, user, null, user, false, null);
@@ -103,7 +106,8 @@ public class CampaignControllerTest {
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.success").value(true)).andDo(print());
         }
-     /*
+     
+        /*
         @Test
         void testCreateCampaign() throws Exception {
                 Mockito.when(campaignService.create(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));

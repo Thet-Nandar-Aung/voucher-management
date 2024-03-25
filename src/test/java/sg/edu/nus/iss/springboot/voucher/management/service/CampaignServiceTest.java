@@ -13,8 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
@@ -29,27 +33,28 @@ import sg.edu.nus.iss.springboot.voucher.management.repository.VoucherRepository
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
 
 @SpringBootTest
-@TestPropertySource(properties = { "DB_USERNAME=admin", "DB_PASSWORD=RDS_12345" })
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CampaignServiceTest {
 
-    @Mock
+	@MockBean
     private CampaignRepository campaignRepository;
 
-    @Mock
+	@MockBean
     private UserRepository userRepository;
 
-    @Mock
+	@MockBean
     private StoreRepository storeRepository;
 
-    @Mock
+	@MockBean
     private VoucherRepository voucherRepository;
 
-    @InjectMocks
+    @Autowired
     private CampaignService campaignService;
 
     private static List<Campaign> mockCampaigns = new ArrayList<>();
     private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true,
-            null, null, null, null, null, null, null);
+            null, null, null, null, null, null, null, null, false);
     private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null, null,
             null, null, null, null, user, null, user, false, null);
     private static Campaign campaign1 = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 0, 0,

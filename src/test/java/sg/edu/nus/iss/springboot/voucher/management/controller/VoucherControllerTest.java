@@ -18,9 +18,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,6 +40,8 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class VoucherControllerTest {
 
         @Autowired
@@ -52,13 +56,9 @@ public class VoucherControllerTest {
         @MockBean
         private CampaignService campaignService;
 
-
-        @InjectMocks
-        private VoucherController voucherController;
-
         private static List<VoucherDTO> mockVouchers = new ArrayList<>();
         private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null,
-                        true, null, null, null, null, null, null, null);
+                        true, null, null, null, null, null, null, null, null, false);
         private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null,
                         null, null, null, null, null, user, null, user, false, null);
         private static Campaign campaign = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 10,
@@ -135,6 +135,6 @@ public class VoucherControllerTest {
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(jsonPath("$.success").value(true)).andDo(print());
                 // .andExpect(jsonPath("$data.description").value("new desc")).andDo(print());
-        }
-*/
+        }*/
+
 }

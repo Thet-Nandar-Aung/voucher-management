@@ -62,6 +62,9 @@ public class VourcherManagementSecurityConfig {
 	
 	@Value("${aws.ses.from}")
 	private String emailFrom;
+	
+	@Value("${client.url}")
+	private String clientUrl;
 
 	@Bean
 	public String getAwsRegion() {
@@ -108,7 +111,10 @@ public class VourcherManagementSecurityConfig {
 		return emailFrom;
 	}
 
-
+	@Bean
+	public String getClientUrl() {
+		return clientUrl;
+	}
 
 	@Autowired
 	private VoucherManagementUserDetailService userDetailsComp;

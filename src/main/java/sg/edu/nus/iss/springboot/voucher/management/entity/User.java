@@ -84,6 +84,11 @@ public class User {
 
 	@OneToMany(mappedBy = "targetUserId")
 	private List<Feed> feedTargetUser;
-
+	
+	@Column(nullable = false, columnDefinition = "varchar(255) default ''")
+    private String verificationToken;
+    
+	@Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean isVerified;
 
 }

@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
@@ -36,16 +38,19 @@ import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
 @SpringBootTest
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class StoreServiceTest {
 
-	@Mock
+	@MockBean
 	private StoreRepository storeRepository;
 
-	@Mock
+	@MockBean
 	private UserRepository userRepository;
-
-	@InjectMocks
+	
+	@Autowired
 	private StoreService storeService;
+
 
 	private static User user = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
 

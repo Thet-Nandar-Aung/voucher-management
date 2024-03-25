@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 
 import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
 import sg.edu.nus.iss.springboot.voucher.management.dto.*;
@@ -30,6 +31,9 @@ public class UserController {
 
 	@Autowired
 	private AmazonS3 s3Client;
+	
+	@Autowired
+	private AmazonSimpleEmailService sesClient;
 
 	@Autowired
 	private VourcherManagementSecurityConfig securityConfig;
@@ -122,10 +126,10 @@ public class UserController {
 						}
 
 					}
-
-					User createdUser = userService.create(user);
+					
+					User createdUser = userService.create(sesClient, user, securityConfig.getEmailFrom().trim(), securityConfig.getClientUrl().trim());
 					if (!GeneralUtility.makeNotNull(createdUser).equals("")) {
-
+						
 						message = "User created successfully.";
 						logger.info(message + user.getEmail());
 						result.setEmail(createdUser.getEmail());

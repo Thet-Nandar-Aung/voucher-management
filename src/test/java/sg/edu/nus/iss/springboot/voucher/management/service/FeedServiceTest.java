@@ -10,7 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
@@ -22,18 +26,20 @@ import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.FeedService;
 
 @SpringBootTest
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class FeedServiceTest {
 
-	@Mock
+	@MockBean
 	private FeedRepository feedRepository;
 
-	@Mock
+	@MockBean
 	private CampaignRepository campaignRepository;
 
-	@Mock
+	@MockBean
 	private UserRepository userRepository;
 
-	@InjectMocks
+	@Autowired
 	private FeedService feedService;
 
 	private static Feed feed1;
@@ -49,7 +55,7 @@ public class FeedServiceTest {
 	static void setUp() {
 
 		user = new User("1", "admin12345@gmail.com", "Admin", "Pwd@123", RoleType.MERCHANT, null, null, true, null,
-				null, null, null, null, null, null);
+				null, null, null, null, null, null, null, false);
 
 		store = new Store("1","MUJI",
 				"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",

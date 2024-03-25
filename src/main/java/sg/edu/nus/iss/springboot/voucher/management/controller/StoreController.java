@@ -167,7 +167,7 @@ public class StoreController {
 
 			storeDTO = storeService.findByStoreId(storeId);
 
-			if (storeDTO ==null) {
+			if (!GeneralUtility.makeNotNull(storeDTO.getStoreId()).equals(storeId)) {
 				message = "Unable to find the store with id: " + storeId;
 				logger.error(message);
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));

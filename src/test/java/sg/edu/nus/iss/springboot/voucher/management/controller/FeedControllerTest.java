@@ -16,9 +16,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,6 +37,8 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class FeedControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
@@ -52,7 +56,7 @@ public class FeedControllerTest {
 	private static List<FeedDTO> mockFeeds = new ArrayList<>();
 	
 	private static User user = new User("1", "admin12345@gmail.com", "Admin", "Pwd@123", RoleType.MERCHANT, null, null, true, null,
-			null, null, null, null, null, null);
+			null, null, null, null, null, null, null, false);
 
 	private static Store store = new Store("1","MUJI",
 			"MUJI offers a wide variety of good quality items from stationery to household items and apparel.",

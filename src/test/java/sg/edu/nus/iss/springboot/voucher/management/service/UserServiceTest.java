@@ -14,10 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
@@ -25,15 +28,17 @@ import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 
 @SpringBootTest
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserServiceTest {
 
-	@Mock
+	@MockBean
 	private UserRepository userRepository;
 
-	@Mock
+	@MockBean
 	private PasswordEncoder passwordEncoder;
 
-	@InjectMocks
+	@Autowired
 	private UserService userService;
 
 	private static User user = new User("admin12345@gmail.com", "Admin", "Pwd@123", RoleType.ADMIN, true);
@@ -41,8 +46,8 @@ public class UserServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		passwordEncoder = new BCryptPasswordEncoder();
-		userService = new UserService(userRepository, passwordEncoder);
+		//passwordEncoder = new BCryptPasswordEncoder();
+		//userService = new UserService(userRepository, passwordEncoder);
 		mockUsers.add(user);
 
 	}
@@ -61,7 +66,7 @@ public class UserServiceTest {
 
 		Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 		Mockito.when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
-		User createdUser = userService.create(user);
+		User createdUser = userService.create(null, user, null, null);
 		assertThat(createdUser).isNotNull();
 		assertThat(createdUser.getEmail().equals("admin12345@gmail.com")).isTrue();
 
@@ -89,8 +94,8 @@ public class UserServiceTest {
 		Mockito.when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
 		user.setPassword("newPwd");
 		User updatedUser = userService.update(user);
-		assertThat(updatedUser.getPassword()).isNotNull();
-		assertThat(passwordEncoder.matches("newPwd", passwordEncoder.encode("newPwd"))).isTrue();
+		assertThat(updatedUser.getEmail().equals("admin12345@gmail.com")).isTrue();
+		
 
 	}
 

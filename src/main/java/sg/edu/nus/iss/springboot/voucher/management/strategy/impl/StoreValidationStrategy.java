@@ -47,7 +47,7 @@ public class StoreValidationStrategy implements IAPIHelperValidationStrategy<Sto
 		}
 
 		StoreDTO storeDTO = storeService.findByStoreName(store.getStoreName());
-		if (storeDTO == null) {
+		if (GeneralUtility.makeNotNull(storeDTO.getStoreName()).equals(store.getStoreName())) {
 			return "Store already exists.";
 		}
 
