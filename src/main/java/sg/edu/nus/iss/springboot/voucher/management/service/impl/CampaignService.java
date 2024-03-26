@@ -17,6 +17,8 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
+import sg.edu.nus.iss.springboot.voucher.management.observer.ICampaignSubject;
+import sg.edu.nus.iss.springboot.voucher.management.observer.impl.FeedObserver;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
@@ -26,9 +28,10 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;
 
 @Service
-public class CampaignService implements ICampaignService {
+public class CampaignService implements ICampaignService, ICampaignSubject {
 
 	private static final Logger logger = LoggerFactory.getLogger(CampaignService.class);
+	private List<FeedObserver> feedObservers = new ArrayList<FeedObserver>();
 
 	@Autowired
 	private CampaignRepository campaignRepository;
@@ -41,6 +44,9 @@ public class CampaignService implements ICampaignService {
 
 	@Autowired
 	private VoucherRepository voucherRepository;
+
+	@Autowired
+	private FeedObserver feedObserver;
 
 	@Override
 	public List<CampaignDTO> findAllActiveCampaigns() {
@@ -183,22 +189,25 @@ public class CampaignService implements ICampaignService {
 			if (dbCampaign.isPresent()) {
 				logger.info("Promoting campaign: status {}..", dbCampaign.get().getCampaignStatus());
 				if (dbCampaign.get().getCampaignStatus().equals(CampaignStatus.CREATED)) {
-					
+
 					User user = userRepository.findByEmail(campaign.getUpdatedBy().getEmail());
 
 					LocalDateTime startDate = dbCampaign.get().getStartDate();
 					LocalDateTime endDate = dbCampaign.get().getEndDate();
-					
+
 					logger.info("Promoting campaign:startDate{} ,endDate{}...", startDate, endDate);
 
 					if ((startDate.isAfter(LocalDateTime.now()) || startDate.equals(LocalDateTime.now()))
 							&& endDate.isAfter(LocalDateTime.now())) {
-						dbCampaign.get().setCampaignStatus(CampaignStatus.READYTOPROMOTE);
+						dbCampaign.get().setCampaignStatus(CampaignStatus.PROMOTED);
 						dbCampaign.get().setUpdatedBy(user);
 						dbCampaign.get().setUpdatedDate(LocalDateTime.now());
 						Campaign promottedCampaign = campaignRepository.save(dbCampaign.get());
 						logger.info("Promotted successfully...");
 						campaignDTO = DTOMapper.toCampaignDTO(promottedCampaign);
+						registerObserver(feedObserver); // attach observer
+						notifyObservers(campaign); // notify observer
+						logger.info("Feed generated successfully...");
 					} else {
 						logger.info(
 								"Promoting campaign Failed: startDate{} should not be greater than current date and endDate{} should not be less than current date...",
@@ -229,7 +238,7 @@ public class CampaignService implements ICampaignService {
 	@Override
 	public List<CampaignDTO> findByStoreIdAndStatus(String storeId, CampaignStatus campaignStatus) {
 		logger.info("Getting all campaigns by Store Id and Status...");
-		List<Campaign> campaigns = campaignRepository.findByStoreStoreIdAndCampaignStatus(storeId,campaignStatus);
+		List<Campaign> campaigns = campaignRepository.findByStoreStoreIdAndCampaignStatus(storeId, campaignStatus);
 		logger.info("Found {}, converting to DTOs...", campaigns.size());
 		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
 		for (Campaign campaign : campaigns) {
@@ -237,6 +246,23 @@ public class CampaignService implements ICampaignService {
 			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
 		}
 		return campaignDTOs;
+	}
+
+	@Override
+	public void registerObserver(FeedObserver observer) {
+		feedObservers.add(observer);
+	}
+
+	@Override
+	public void removeObserver(FeedObserver observer) {
+		feedObservers.remove(observer);
+	}
+
+	@Override
+	public void notifyObservers(Campaign campaign) {
+		for (FeedObserver feedObserver : feedObservers) {
+			feedObserver.update(campaign);
+		}
 	}
 
 }
