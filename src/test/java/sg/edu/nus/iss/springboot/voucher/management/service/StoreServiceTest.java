@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,12 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 @SpringBootTest
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@TestPropertySource(properties = {
+        "DB_USERNAME=admin",
+        "DB_PASSWORD=RDS_12345",
+        "AWS_ACCESS_KEY=AKIA47CRXTTV2EHMAA3S",
+        "AWS_SECRET_KEY=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"
+})
 public class StoreServiceTest {
 
 	@MockBean
