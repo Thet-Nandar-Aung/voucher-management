@@ -29,11 +29,11 @@
 						{
 							"key": "image",
 							"type": "file",
-							"src": "/Users/thetnandaraung/Downloads/121212.jpg"
+							"src": "/Users/thetnandaraung/Downloads/22.jpg"
 						},
 						{
 							"key": "user",
-							"value": "{\"email\": \"Eleven.11@gmail.com\",\"username\": \"Eleven\",\"password\":\"Pwd@21212\",\"role\": \"MERCHANT\"}",
+							"value": "{\"email\": \"eleven.11@gmail.com\",\"username\": \"Eleven\",\"password\":\"Pwd@21212\",\"role\": \"MERCHANT\"}",
 							"contentType": "application/json",
 							"type": "text"
 						}
@@ -129,6 +129,54 @@
 			"response": []
 		},
 		{
+			"name": "User Verify",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/user/verify?verifyid=0168F3CE015DE0C7DECC6AEE946719B72A2F3FDAF4531214C7DD00BD03DC4C9838AEC45E311C0CCBD4B8695C621EDAE6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"verify"
+					],
+					"query": [
+						{
+							"key": "verifyid",
+							"value": "0168F3CE015DE0C7DECC6AEE946719B72A2F3FDAF4531214C7DD00BD03DC4C9838AEC45E311C0CCBD4B8695C621EDAE6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search all Active User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/user/getAll",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Store Create",
 			"request": {
 				"method": "POST",
@@ -210,27 +258,6 @@
 						"api",
 						"store",
 						"update"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Search all Active User",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/api/user/getAll",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"user",
-						"getAll"
 					]
 				}
 			},
@@ -413,7 +440,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"Eleven.11@gmail.com\",\n    \"password\": \"Pwd@21212\"\n}",
+					"raw": "{\n    \"email\": \"testing12456789@gmail.com\",\n    \"password\": \"Pwd@21212\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
