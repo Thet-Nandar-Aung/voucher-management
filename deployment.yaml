@@ -44,6 +44,16 @@ spec:
                 configMapKeyRef:
                   name: my-configmap
                   key: SPRING_PROFILES_ACTIVE
+            - name: AES_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: aes_secret
+            - name: FRONTEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: FRONTEND_URL
 
 ---
 apiVersion: v1
