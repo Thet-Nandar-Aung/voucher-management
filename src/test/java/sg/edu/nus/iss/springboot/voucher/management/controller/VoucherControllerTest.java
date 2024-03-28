@@ -68,8 +68,11 @@ public class VoucherControllerTest {
         private static List<VoucherDTO> mockVouchers = new ArrayList<>();
         private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null,
                         true, null, null, null, null, null, null, null, null, false);
-        private static Store store = new Store("1", "Store name 1", "description", null, null, null, null, null, null,
-                        null, null, null, null, null, user, null, user, false, null);
+        private static Store store = new Store("1", "MUJI",
+    			"MUJI offers a wide variety of good quality items from stationery to household items and apparel.", "",
+    			"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
+    			"Singapore", "123456", null, user, null, user, false, null);
+    	
         private static Campaign campaign = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 10,
                         0,
                         null, null, 10, LocalDateTime.now(), LocalDateTime.now(), user, user, LocalDateTime.now(),
