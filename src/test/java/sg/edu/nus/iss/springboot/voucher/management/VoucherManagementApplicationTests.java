@@ -9,7 +9,9 @@ import org.springframework.test.context.TestPropertySource;
         "DB_USERNAME=admin",
         "DB_PASSWORD=RDS_12345",
         "AWS_ACCESS_KEY=AKIA47CRXTTV2EHMAA3S",
-        "AWS_SECRET_KEY=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"
+        "AWS_SECRET_KEY=gxEUBxBDlpio21fLVady5GPfnvsc+YxnluGV5Qwr",
+        "AES_SECRET_KEY=",
+        "FRONTEND_URL="
 })
 class VoucherManagementApplicationTests {
 
