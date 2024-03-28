@@ -22,6 +22,7 @@ public class UserDTO {
 	private boolean isActive;
 	private LocalDateTime lastLoginDate;
 	private String image;
+	private boolean isVerified;
 
     public UserDTO(){
     }

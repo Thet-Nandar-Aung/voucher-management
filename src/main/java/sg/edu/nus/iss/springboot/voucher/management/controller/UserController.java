@@ -33,9 +33,6 @@ public class UserController {
 	private AmazonS3 s3Client;
 	
 	@Autowired
-	private AmazonSimpleEmailService sesClient;
-
-	@Autowired
 	private VourcherManagementSecurityConfig securityConfig;
 
 	@GetMapping(value = "/getAll", produces = "application/json")
@@ -127,7 +124,7 @@ public class UserController {
 
 					}
 					
-					User createdUser = userService.create(sesClient, user, securityConfig.getEmailFrom().trim(), securityConfig.getClientUrl().trim());
+					User createdUser = userService.create(user);
 					if (!GeneralUtility.makeNotNull(createdUser).equals("")) {
 						
 						message = "User created successfully.";
@@ -353,6 +350,39 @@ public class UserController {
 			userResponse.setMessage("Error, " + e.toString());
 			return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping(value = "/verify", produces = "application/json")
+	public ResponseEntity<APIResponse<UserDTO>> verifyUser(@RequestParam String verifyid) {
+		verifyid = GeneralUtility.makeNotNull(verifyid);
+		logger.info("Call user verify API with verifyToken={}", verifyid);
+
+		String message = "";
+		try {
+			if (!verifyid.equals("")) {
+				UserDTO userDTO = userService.verify(verifyid);
+				if (userDTO != null) {
+					message = "User successfully verified.";
+
+					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(userDTO, message));
+
+				} else {
+
+					message = "Vefriy user failed: Verfiy Id is invalid or already verified.";
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
+				}
+			} else {
+
+				message = "Vefriy Id could not be blank.";
+				logger.error(message);
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(message));
+			}
+		} catch (Exception e) {
+			message = "Error: " + e.toString();
+			logger.error(message);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
+		}
+
 	}
 
 }

@@ -23,10 +23,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import sg.edu.nus.iss.springboot.voucher.management.dto.UserDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
+import sg.edu.nus.iss.springboot.voucher.management.utility.EncryptionUtils;
 
 @SpringBootTest
 @Transactional
@@ -44,6 +46,9 @@ public class UserServiceTest {
 
 	@MockBean
 	private PasswordEncoder passwordEncoder;
+	
+	@Mock
+    private EncryptionUtils encryptionUtils;
 
 	@Autowired
 	private UserService userService;
@@ -58,7 +63,6 @@ public class UserServiceTest {
 		mockUsers.add(user);
 
 	}
-
 	@Test
 	void getAllActiveStore() {
 		Mockito.when(userRepository.findByIsActiveTrue()).thenReturn(mockUsers);
@@ -73,7 +77,7 @@ public class UserServiceTest {
 
 		Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 		Mockito.when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
-		User createdUser = userService.create(null, user, null, null);
+		User createdUser = userService.create(user);
 		assertThat(createdUser).isNotNull();
 		assertThat(createdUser.getEmail().equals("admin12345@gmail.com")).isTrue();
 
@@ -105,5 +109,23 @@ public class UserServiceTest {
 		
 
 	}
+	
+	
+	@Test
+    public void verifyUser() throws Exception {
+        String verificationCode = "4E5FCA157F8CEC4E6A351A349C08AC05896D21C97F102BBE318A70314B651E46BB23B575199E2A55720380070701C43D";
+        String decodedVerificationCode = "7f03a9a9-d7a5-4742-bc85-68d52b2bee45";
+       
+        user.setVerified(false);
+
+        Mockito.when(encryptionUtils.decrypt(verificationCode)).thenReturn(decodedVerificationCode);
+        Mockito.when(userRepository.findByVerificationCode(decodedVerificationCode, false, true)).thenReturn(user);
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+
+        UserDTO userDTO = userService.verify(verificationCode);
+
+        assertThat(user.isVerified()).isTrue();
+        assertThat(userDTO).isNotNull();
+    }
 
 }

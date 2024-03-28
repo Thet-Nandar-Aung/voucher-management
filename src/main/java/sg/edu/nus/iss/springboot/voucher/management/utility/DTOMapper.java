@@ -49,6 +49,9 @@ public class DTOMapper {
         userDTO.setImage(user.getImage());
         userDTO.setActive(user.isActive());
         userDTO.setLastLoginDate(user.getLastLoginDate());
+        userDTO.setCreatedDate(user.getCreatedDate());
+        userDTO.setUpdatedDate(user.getUpdatedDate());
+        userDTO.setVerified(user.isVerified());
         return userDTO;
     }
 
