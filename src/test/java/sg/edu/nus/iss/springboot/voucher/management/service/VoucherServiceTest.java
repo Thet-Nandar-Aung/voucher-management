@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -17,10 +18,16 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.VoucherDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
@@ -38,14 +45,7 @@ import sg.edu.nus.iss.springboot.voucher.management.service.impl.VoucherService;
 @SpringBootTest
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestPropertySource(properties = {
-        "DB_USERNAME=admin",
-        "DB_PASSWORD=RDS_12345",
-        "AWS_ACCESS_KEY=AKIA47CRXTTV2EHMAA3S",
-        "AWS_SECRET_KEY=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",
-        "AES_SECRET_KEY=",
-        "FRONTEND_URL="
-})
+@ActiveProfiles("test")
 public class VoucherServiceTest {
     
 	@MockBean
@@ -78,20 +78,41 @@ public class VoucherServiceTest {
 
     @Test
     void findAllClaimedVouchersByEmail(){
-        Mockito.when(voucherRepository.findAllClaimedVouchersByEmail("test@email.com")).thenReturn(mockVouchers);
-        List<VoucherDTO> voucherDTOs = voucherService.findAllClaimedVouchersByEmail("test@email.com");
-        assertEquals(mockVouchers.size(), voucherDTOs.size());
-        assertEquals(mockVouchers.get(0).getVoucherId(), voucherDTOs.get(0).getVoucherId());
-        assertEquals(mockVouchers.get(1).getVoucherId(), voucherDTOs.get(1).getVoucherId());
+    	long totalRecord = 0;
+    	List<VoucherDTO> voucherDTOList = new ArrayList<VoucherDTO>();
+    	Pageable pageable = PageRequest.of(0, 10);
+    	Page<Voucher> mockVoucherPage = new PageImpl<>(mockVouchers, pageable, mockVouchers.size());
+    	
+        Mockito.when(voucherRepository.findAllClaimedVouchersByEmail("test@email.com",pageable)).thenReturn(mockVoucherPage);
+        Map<Long, List<VoucherDTO>> voucherPage = voucherService.findAllClaimedVouchersByEmail("test@email.com",pageable);
+        
+        for (Map.Entry<Long, List<VoucherDTO>> entry : voucherPage.entrySet()) {
+			totalRecord = entry.getKey();
+			voucherDTOList = entry.getValue();
+
+		}
+        assertEquals(mockVouchers.size(), voucherDTOList.size());
+        assertEquals(mockVouchers.get(0).getVoucherId(), voucherDTOList.get(0).getVoucherId());
+        assertEquals(mockVouchers.get(1).getVoucherId(), voucherDTOList.get(1).getVoucherId());
     }
 
     @Test
     void findAllClaimedVouchersByCampaignId(){
-        Mockito.when(voucherRepository.findByCampaignCampaignId("1")).thenReturn(mockVouchers  );
-        List<VoucherDTO> voucherDTOs = voucherService.findAllClaimedVouchersByCampaignId("1");
-        assertEquals(mockVouchers.size(), voucherDTOs.size());
-        assertEquals(mockVouchers.get(0).getVoucherId(), voucherDTOs.get(0).getVoucherId());
-        assertEquals(mockVouchers.get(1).getVoucherId(), voucherDTOs.get(1).getVoucherId());
+    	long totalRecord = 0;
+    	List<VoucherDTO> voucherDTOList = new ArrayList<VoucherDTO>();
+    	Pageable pageable = PageRequest.of(0, 10);
+    	Page<Voucher> mockVoucherPage = new PageImpl<>(mockVouchers, pageable, mockVouchers.size());
+    	
+        Mockito.when(voucherRepository.findByCampaignCampaignId("1",pageable)).thenReturn(mockVoucherPage);
+        Map<Long, List<VoucherDTO>> voucherPage = voucherService.findAllClaimedVouchersByCampaignId("1",pageable);
+        for (Map.Entry<Long, List<VoucherDTO>> entry : voucherPage.entrySet()) {
+			totalRecord = entry.getKey();
+			voucherDTOList = entry.getValue();
+
+		}
+        assertEquals(mockVouchers.size(), voucherDTOList.size());
+        assertEquals(mockVouchers.get(0).getVoucherId(), voucherDTOList.get(0).getVoucherId());
+        assertEquals(mockVouchers.get(1).getVoucherId(), voucherDTOList.get(1).getVoucherId());
     }
 
     @Test

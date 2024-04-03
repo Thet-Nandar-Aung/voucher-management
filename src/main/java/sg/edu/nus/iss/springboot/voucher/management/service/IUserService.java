@@ -1,21 +1,20 @@
 package sg.edu.nus.iss.springboot.voucher.management.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import org.springframework.data.domain.Pageable;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserDTO;
-import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
-import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 
 public interface IUserService {
-	List<User> findByIsActiveTrue();
+	Map<Long, List<UserDTO>> findByIsActiveTrue(Pageable pageable);
 
 	User findByEmail(String email);
 
-	User findByEmailAndStatus(String email, boolean isActive);
+	User findByEmailAndStatus(String email, boolean isActive,boolean isVerified);
 
 	User create(User user);
 

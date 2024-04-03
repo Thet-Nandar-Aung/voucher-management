@@ -2,11 +2,15 @@ package sg.edu.nus.iss.springboot.voucher.management.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
+import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
@@ -37,48 +42,99 @@ public class CampaignController {
 	private CampaignService campaignService;
 
 	@GetMapping(value = "/all/active", produces = "application/json")
-	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveCampaigns() {
+	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllActiveCampaigns(
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "500") int size) {
+		long totalRecord = 0;
 		try {
-			logger.info("Calling Campaign getAllActiveCampaigns API...");
-			return ResponseEntity.status(HttpStatus.OK).body(APIResponse
-					.success(campaignService.findAllActiveCampaigns(), "Successfully get all active campaigns"));
+			logger.info("Calling Campaign getAllActiveCampaigns API with page={}, size={}", page, size);
+
+			Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").ascending());
+			Map<Long, List<CampaignDTO>> resultMap = campaignService.findAllActiveCampaigns(pageable);
+
+			if (resultMap.size() == 0) {
+				String message = "Campign not found.";
+				logger.error(message);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+			}
+
+			List<CampaignDTO> campaignDTOList = new ArrayList<CampaignDTO>();
+			for (Map.Entry<Long, List<CampaignDTO>> entry : resultMap.entrySet()) {
+				totalRecord = entry.getKey();
+				campaignDTOList = entry.getValue();
+
+				logger.info("totalRecord: " + totalRecord);
+				logger.info("CampaignDTO List: " + campaignDTOList);
+
+			}
+			if (campaignDTOList.size() > 0) {
+				return ResponseEntity.status(HttpStatus.OK).body(
+						APIResponse.success(campaignDTOList, "Successfully get all active campaigns.", totalRecord));
+			} else {
+				String message = "Campign not found.";
+				logger.error(message);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+			}
+
 		} catch (Exception ex) {
 			logger.info("Calling Campaign getAllActiveCampaigns API failed...");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(APIResponse.error("Failed to get all active campaigns"));
 		}
 	}
 
 	@PostMapping(value = "/getAllByStoreId", produces = "application/json")
 	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByStoreId(@RequestBody Store store,
-			@RequestParam(defaultValue = "") String status) {
+			@RequestParam(defaultValue = "") String status, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "500") int size) {
+		long totalRecord = 0;
 		try {
-			logger.info("Calling Campaign getAllCampaignsByStoreId API...");
+			logger.info("Calling Campaign getAllCampaignsByStoreId API with page={}, size={}", page, size);
 
 			String storeId = GeneralUtility.makeNotNull(store.getStoreId()).trim();
-			
+
 			if (!storeId.equals("")) {
-				List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
-				if(GeneralUtility.makeNotNull(status).equals("")) {
-					campaignDTOs = campaignService.findAllCampaignsByStoreId(storeId);
-				}else {
+
+				Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").ascending());
+				Map<Long, List<CampaignDTO>> resultMap;
+				if (GeneralUtility.makeNotNull(status).equals("")) {
+
+					resultMap = campaignService.findAllCampaignsByStoreId(storeId, pageable);
+
+				} else {
 					try {
-					CampaignStatus campaignStatus = CampaignStatus.valueOf(status);
-					campaignDTOs = campaignService.findByStoreIdAndStatus(storeId,campaignStatus);
-					}catch(Exception ex) {
-						return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-								.body(APIResponse.error("Failed to get all campaigns by store Id.Campaign Status is invalid."));
+						CampaignStatus campaignStatus = CampaignStatus.valueOf(status);
+
+						resultMap = campaignService.findByStoreIdAndStatus(storeId, campaignStatus, pageable);
+
+					} catch (Exception ex) {
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse
+								.error("Failed to get all campaigns by store Id.Campaign Status is invalid."));
 					}
 				}
 
+				if (resultMap.size() == 0) {
+					String message = "Campaign not found by storeId: " + storeId;
+					logger.error(message);
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+				}
 
-				if (campaignDTOs.size() > 0) {
-					return ResponseEntity.status(HttpStatus.OK)
-							.body(APIResponse.success(campaignDTOs, "Successfully get all active campaigns"));
+				List<CampaignDTO> campaignDTOList = new ArrayList<CampaignDTO>();
+				for (Map.Entry<Long, List<CampaignDTO>> entry : resultMap.entrySet()) {
+					totalRecord = entry.getKey();
+					campaignDTOList = entry.getValue();
+
+					logger.info("totalRecord: " + totalRecord);
+					logger.info("CampaignDTO List: " + campaignDTOList);
+
+				}
+
+				if (campaignDTOList.size() > 0) {
+					return ResponseEntity.status(HttpStatus.OK).body(
+							APIResponse.success(campaignDTOList, "Successfully get all active campaigns", totalRecord));
 				} else {
-					return ResponseEntity.status(HttpStatus.NOT_FOUND)
-							.body(APIResponse.error("Campaign not found by storeId: " + storeId));
-
+					String message = "Campaign not found by storeId: " + storeId;
+					logger.error(message);
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
 				}
 
 			} else {
@@ -90,25 +146,47 @@ public class CampaignController {
 
 		} catch (Exception ex) {
 			logger.info("Calling Campaign getAllCampaignsByStoreId API failed...");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(APIResponse.error("Failed to get all campaigns by store Id"));
 		}
+
 	}
 
 	@PostMapping(value = "/getAllByEmail", produces = "application/json")
-	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByEmail(@RequestBody UserRequest user) {
+	public ResponseEntity<APIResponse<List<CampaignDTO>>> getAllCampaignsByEmail(@RequestBody UserRequest user,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "500") int size) {
+		long totalRecord = 0;
 		try {
-			logger.info("Calling Campaign getAllCampaignsByEmail API...");
+			logger.info("Calling Campaign getAllCampaignsByEmail API with page={}, size={}", page, size);
 
 			String email = GeneralUtility.makeNotNull(user.getEmail()).trim();
 
 			if (!email.equals("")) {
-				List<CampaignDTO> campaignDTOs = campaignService.findAllCampaignsByEmail(email);
+				Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").ascending());
 
-				if (campaignDTOs.size() > 0) {
+				Map<Long, List<CampaignDTO>> resultMap = campaignService.findAllCampaignsByEmail(email, pageable);
 
-					return ResponseEntity.status(HttpStatus.OK)
-							.body(APIResponse.success(campaignDTOs, "Successfully get all campaigns by email"));
+				if (resultMap.size() == 0) {
+					String message = "Campign not found.";
+					logger.error(message);
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+				}
+
+				List<CampaignDTO> campaignDTOList = new ArrayList<CampaignDTO>();
+
+				for (Map.Entry<Long, List<CampaignDTO>> entry : resultMap.entrySet()) {
+					totalRecord = entry.getKey();
+					campaignDTOList = entry.getValue();
+
+					logger.info("totalRecord: " + totalRecord);
+					logger.info("CampaignDTO List: " + campaignDTOList);
+
+				}
+
+				if (campaignDTOList.size() > 0) {
+
+					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(campaignDTOList,
+							"Successfully get all campaigns by email", totalRecord));
 
 				} else {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -212,7 +290,7 @@ public class CampaignController {
 				if (dbCampaign.isPresent()) {
 
 					if (dbCampaign.get().getCampaignStatus().equals(CampaignStatus.CREATED)) {
-						
+
 						CampaignDTO campaignDTO = campaignService.update(campaign);
 						if (!GeneralUtility.makeNotNull(campaignDTO.getCampaignId()).equals("")) {
 							return ResponseEntity.status(HttpStatus.OK)
@@ -260,10 +338,11 @@ public class CampaignController {
 				if (dbCampaign.isPresent()) {
 					if (dbCampaign.get().getCampaignStatus().equals(CampaignStatus.CREATED)) {
 						dbCampaign.get().setUpdatedBy(campaign.getUpdatedBy());
-						boolean isDeleted =campaignService.delete(dbCampaign.get());
-						if(isDeleted) {
-						return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success("Deleted successfully"));
-						}else {
+						boolean isDeleted = campaignService.delete(dbCampaign.get());
+						if (isDeleted) {
+							return ResponseEntity.status(HttpStatus.OK)
+									.body(APIResponse.success("Deleted successfully"));
+						} else {
 							return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse
 									.error("Delete Campaign failed:  campaignId: " + campaign.getCampaignId()));
 						}

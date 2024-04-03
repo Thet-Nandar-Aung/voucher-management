@@ -1,7 +1,10 @@
 package sg.edu.nus.iss.springboot.voucher.management.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import org.springframework.data.domain.Pageable;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
@@ -9,11 +12,11 @@ import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 
 public interface ICampaignService {
 
-    List<CampaignDTO> findAllActiveCampaigns();
+	Map<Long, List<CampaignDTO>> findAllActiveCampaigns(Pageable pageable);
 
-    List<CampaignDTO> findAllCampaignsByStoreId(String storeId);
+	Map<Long, List<CampaignDTO>> findAllCampaignsByStoreId(String storeId,Pageable pageable);
 
-    List<CampaignDTO> findAllCampaignsByEmail(String storeId);
+	Map<Long, List<CampaignDTO>> findAllCampaignsByEmail(String storeId,Pageable pageable);
 
     CampaignDTO findByCampaignId(String campaignId);
     
@@ -29,6 +32,6 @@ public interface ICampaignService {
     
     Optional<Campaign>  findById(String campaignId);
     
-    List<CampaignDTO>findByStoreIdAndStatus(String storeId,CampaignStatus status);
+    Map<Long, List<CampaignDTO>>findByStoreIdAndStatus(String storeId,CampaignStatus status,Pageable pageable);
 
 }

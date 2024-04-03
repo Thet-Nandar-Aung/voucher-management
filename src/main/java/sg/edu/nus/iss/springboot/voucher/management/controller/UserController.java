@@ -2,10 +2,14 @@ package sg.edu.nus.iss.springboot.voucher.management.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +22,7 @@ import sg.edu.nus.iss.springboot.voucher.management.dto.*;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserResponse.ResultItem;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.*;
+import sg.edu.nus.iss.springboot.voucher.management.strategy.impl.UserValidationStrategy;
 import sg.edu.nus.iss.springboot.voucher.management.utility.*;
 
 @RestController
@@ -31,63 +36,55 @@ public class UserController {
 
 	@Autowired
 	private AmazonS3 s3Client;
-	
+
 	@Autowired
 	private VourcherManagementSecurityConfig securityConfig;
 
+	@Autowired
+	private UserValidationStrategy userValidationStrategy;
+
 	@GetMapping(value = "/getAll", produces = "application/json")
-	public ResponseEntity<UserResponse> getAllUser() {
-		logger.info("Call user getAll API...");
-		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
+	public ResponseEntity<APIResponse<List<UserDTO>>> getAllUser(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "500") int size) {
+		logger.info("Call user getAll API with page={}, size={}", page, size);
+		long totalRecord = 0;
 
-		UserResponse userResponse = new UserResponse();
 		try {
-			List<User> userList = userService.findByIsActiveTrue();
 
-			if (userList.isEmpty()) {
-				userResponse.setMessage("No User found.");
-				userResponse.setResult(resultList);
-				return new ResponseEntity<>(userResponse, HttpStatus.OK);
+			Pageable pageable = PageRequest.of(page, size, Sort.by("username").ascending());
+			Map<Long, List<UserDTO>> resultMap = userService.findByIsActiveTrue(pageable);
+
+			if (resultMap.size() == 0) {
+				String message = "User not found.";
+				logger.error(message);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+			}
+
+			List<UserDTO> userDTOList = new ArrayList<UserDTO>();
+
+			for (Map.Entry<Long, List<UserDTO>> entry : resultMap.entrySet()) {
+				totalRecord = entry.getKey();
+				userDTOList = entry.getValue();
+
+				logger.info("totalRecord: " + totalRecord);
+				logger.info("userDTO List: " + userDTOList);
+
+			}
+
+			if (userDTOList.size() > 0) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(APIResponse.success(userDTOList, "Successfully get all active user.", totalRecord));
+
 			} else {
-				userResponse.setMessage(HttpStatus.OK + "");
-
-				for (User user : userList) {
-					ResultItem userResp = new ResultItem();
-					userResp.setEmail(user.getEmail());
-					userResp.setUsername(user.getUsername());
-					userResp.setRole(user.getRole());
-					String imageUrl = GeneralUtility.makeNotNull(user.getImage());
-					if (!imageUrl.equals("")) {
-
-						String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-
-						boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
-								securityConfig.getS3ImagePrivateUsers().trim() + fileName.trim());
-
-						if (isImageExists) {
-
-							String presignedUrl = GeneralUtility
-									.makeNotNull(ImageUploadToS3.generatePresignedUrl(s3Client, securityConfig,
-											securityConfig.getS3ImagePrivateUsers().trim() + fileName.trim()));
-
-							userResp.setImage(presignedUrl);
-						}
-					} else {
-						userResp.setImage("");
-					}
-					resultList.add(userResp);
-				}
-
-				userResponse.setResult(resultList);
-
-				return new ResponseEntity<>(userResponse, HttpStatus.OK);
+				String message = "User not found.";
+				logger.error(message);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
 			}
 
 		} catch (Exception e) {
-			logger.error("Error, " + e.toString());
-			userResponse.setMessage("Error," + e.toString());
-			userResponse.setResult(resultList);
-			return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+			logger.error("Error, " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(APIResponse.error("Error: " + e.getMessage()));
 		}
 	}
 
@@ -95,118 +92,59 @@ public class UserController {
 	public ResponseEntity<UserResponse> createUser(@RequestPart("user") User user,
 			@RequestPart(value = "image", required = false) MultipartFile uploadFile) {
 		logger.info("Call user create API...");
-
-		String message = "";
-
-		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
-
 		UserResponse userResponse = new UserResponse();
-		ResultItem result = new ResultItem();
+		ArrayList<ResultItem> resultList = new ArrayList<>();
+		String message;
+
 		try {
-			if (!GeneralUtility.makeNotNull(user.getEmail()).equals("")) {
-				User dbUser = userService.findByEmail(user.getEmail());
-
-				if (GeneralUtility.makeNotNull(dbUser).equals("")) {
-
-					// if User not found, will create
-
-					if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
-						logger.info("create user: " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
-
-						boolean isImageUploaded = ImageUploadToS3.checkImageExistBeforeUpload(s3Client, uploadFile,
-								securityConfig, securityConfig.getS3ImagePrivateUsers().trim());
-						if (isImageUploaded) {
-							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"
-									+ securityConfig.getS3ImagePrivateUsers().trim()
-									+ uploadFile.getOriginalFilename().trim();
-							user.setImage(imageUrl);
-						}
-
-					}
-					
-					User createdUser = userService.create(user);
-					if (!GeneralUtility.makeNotNull(createdUser).equals("")) {
-						
-						message = "User created successfully.";
-						logger.info(message + user.getEmail());
-						result.setEmail(createdUser.getEmail());
-						result.setUsername(createdUser.getUsername());
-						result.setRole(createdUser.getRole());
-						result.setImage("");//no need to send for creation
-						resultList.add(result);
-						userResponse.setMessage(message);
-						userResponse.setResult(resultList);
-
-						return new ResponseEntity<>(userResponse, HttpStatus.OK);
-
-					} else {
-						message = "Create user failed: Unable to create a new user account with email :"
-								+ user.getEmail();
-						logger.error(message);
-						resultList.add(result);
-						userResponse.setMessage(message);
-						userResponse.setResult(new ArrayList<ResultItem>());
-						return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-					}
-
-				} else {
-
-					message = "User already exists.";
-					logger.error(message);
+			ValidationResult validationResult = userValidationStrategy.validateCreation(user, uploadFile);
+			if (validationResult.isValid()) {
+				user.setImage(GeneralUtility.makeNotNull(validationResult.getImageUrl()));
+				User createdUser = userService.create(user);
+				if (createdUser != null) {
+					message = "User created successfully.";
+					logger.info(message + user.getEmail());
+					ResultItem result = new ResultItem();
+					result.setEmail(createdUser.getEmail());
+					result.setUsername(createdUser.getUsername());
+					result.setRole(createdUser.getRole());
+					resultList.add(result);
 					userResponse.setMessage(message);
 					userResponse.setResult(resultList);
-					return new ResponseEntity<>(userResponse, HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>(userResponse, HttpStatus.OK);
+				} else {
+					message = "Create user failed: Unable to create a new user with email: " + user.getEmail();
+					logger.error(message);
 				}
 			} else {
-				message = "Bad Request.";
+				message = validationResult.getMessage();
 				logger.error(message);
-				userResponse.setMessage(message);
-				userResponse.setResult(resultList);
-				return new ResponseEntity<>(userResponse, HttpStatus.BAD_REQUEST);
 			}
-
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error, " + e.toString());
-			userResponse.setMessage("Error, " + e.toString());
-			userResponse.setResult(resultList);
-			return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+			logger.error("Error: " + e.toString());
+			message = "Error: " + e.toString();
 		}
+
+		userResponse.setMessage(message);
+		userResponse.setResult(resultList);
+		return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@PostMapping(value = "/update", produces = "application/json", consumes = { "application/json",
 			"multipart/form-data" })
 	public ResponseEntity<UserResponse> updateUser(@RequestPart("user") User user,
 			@RequestPart(value = "image", required = false) MultipartFile uploadFile) {
-
 		logger.info("Call user update API...");
-
-		String message = "";
-
-		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
-
 		UserResponse userResponse = new UserResponse();
-		ResultItem result = new ResultItem();
+		ArrayList<ResultItem> resultList = new ArrayList<>();
+		String message;
+
 		try {
-			if (!GeneralUtility.makeNotNull(user.getEmail()).equals("")) {
+			ValidationResult validationResult = userValidationStrategy.validateUpdating(user, uploadFile);
+			if (validationResult.isValid()) {
 				User dbUser = userService.findByEmail(user.getEmail());
-
-				if (!GeneralUtility.makeNotNull(dbUser).equals("")) {
-
-					if (!GeneralUtility.makeNotNull(uploadFile).equals("")) {
-						logger.info("Update user : " + user.getEmail() + "::" + uploadFile.getOriginalFilename());
-
-						boolean isImageUploaded = ImageUploadToS3.checkImageExistBeforeUpload(s3Client, uploadFile,
-								securityConfig, securityConfig.getS3ImagePrivateUsers().trim());
-						if (isImageUploaded) {
-							String imageUrl = securityConfig.getS3ImageUrlPrefix().trim() + "/"
-									+ securityConfig.getS3ImagePrivateUsers().trim()
-									+ uploadFile.getOriginalFilename().trim();
-							user.setImage(imageUrl);
-						}
-
-					}
-
+				if (dbUser != null) {
+					dbUser.setImage(GeneralUtility.makeNotNull(validationResult.getImageUrl()));
 					dbUser.setUsername(user.getUsername());
 					dbUser.setPassword(user.getPassword());
 					dbUser.setRole(user.getRole());
@@ -214,53 +152,39 @@ public class UserController {
 					dbUser.setImage(user.getImage());
 
 					User updatedUser = userService.update(dbUser);
-					if (!GeneralUtility.makeNotNull(updatedUser).equals("")) {
-
+					if (updatedUser != null) {
 						message = "User updated successfully.";
 						logger.info(message + user.getEmail());
+						ResultItem result = new ResultItem();
 						result.setEmail(updatedUser.getEmail());
 						result.setUsername(updatedUser.getUsername());
 						result.setRole(updatedUser.getRole());
-						result.setImage("");//no need to send for updating
 						resultList.add(result);
 						userResponse.setMessage(message);
 						userResponse.setResult(resultList);
 						return new ResponseEntity<>(userResponse, HttpStatus.OK);
 					} else {
-						message = "Update user failed: Changes could not be applied to the user with email :"
+						message = "Update user failed: Changes could not be applied to the user with email: "
 								+ user.getEmail();
 						logger.error(message);
-						resultList.add(result);
-						userResponse.setMessage(message);
-						userResponse.setResult(new ArrayList<ResultItem>());
-						return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-
 				} else {
-
-					message = "User Not found.";
+					message = "User not found.";
 					logger.error(message);
-					resultList.add(result);
-					userResponse.setMessage(message);
-					userResponse.setResult(new ArrayList<ResultItem>());
-					return new ResponseEntity<>(userResponse, HttpStatus.NOT_FOUND);
-
+					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 				}
 			} else {
-				message = "Bad Request.";
+				message = validationResult.getMessage();
 				logger.error(message);
-				userResponse.setMessage(message);
-				userResponse.setResult(resultList);
-				return new ResponseEntity<>(userResponse, HttpStatus.BAD_REQUEST);
 			}
-
 		} catch (Exception e) {
-			logger.error("Error, " + e.toString());
-			e.printStackTrace();
-			userResponse.setMessage("Error, " + e.toString());
-			userResponse.setResult(resultList);
-			return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+			logger.error("Error: " + e.toString());
+			message = "Error: " + e.toString();
 		}
+
+		userResponse.setMessage(message);
+		userResponse.setResult(resultList);
+		return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@PostMapping(value = "/resetPassword", produces = "application/json")
@@ -275,7 +199,7 @@ public class UserController {
 		try {
 
 			if (!GeneralUtility.makeNotNull(resetPwdReq.getEmail()).equals("")) {
-				User dbUser = userService.findByEmailAndStatus(resetPwdReq.getEmail(), true);
+				User dbUser = userService.findByEmailAndStatus(resetPwdReq.getEmail(), true, true);
 				if (!GeneralUtility.makeNotNull(dbUser).equals("")) {
 
 					dbUser.setPassword(resetPwdReq.getPassword());
@@ -319,39 +243,46 @@ public class UserController {
 
 	@PostMapping(value = "/login", produces = "application/json")
 	public ResponseEntity<UserResponse> validateUserLogin(@RequestBody UserRequest userRequest) {
-
 		logger.info("Call user login API...");
 		UserResponse userResponse = new UserResponse();
+		ArrayList<ResultItem> resultList = new ArrayList<>();
 		String message = "";
-		ArrayList<ResultItem> resultList = new ArrayList<ResultItem>();
+
 		try {
+			ValidationResult validationResult = userValidationStrategy.validateObject(userRequest.getEmail());
+			if (!validationResult.isValid()) {
+				userResponse.setMessage(validationResult.getMessage());
+				return new ResponseEntity<>(userResponse, validationResult.getStatus());
+			}
+
 			User user = userService.validateUserLogin(userRequest.getEmail(), userRequest.getPassword());
 			if (user != null) {
-				// return user details
+				String imageUrl = "";
 				ResultItem userResp = new ResultItem();
 				userResp.setEmail(user.getEmail());
 				userResp.setUsername(user.getUsername());
 				userResp.setRole(user.getRole());
-				// image to be changed to presigned url
-				userResp.setImage(user.getImage());
+				if (user.getImage() != null && !user.getImage().isEmpty()) {
+					imageUrl = ImageUploadToS3.generatePresignedUrl(s3Client, securityConfig, user.getImage());
+				}
+				userResp.setImage(imageUrl);
 				resultList.add(userResp);
 				message = user.getEmail() + " login successfully";
-			} else {
-				// return invalid email or password.
-				message = "Invalid email or password";
 				userResponse.setMessage(message);
+				userResponse.setResult(resultList);
+				return new ResponseEntity<>(userResponse, HttpStatus.OK);
+			} else {
+				message = "Invalid credentials.";
+				userResponse.setMessage(message);
+				return new ResponseEntity<>(userResponse, HttpStatus.UNAUTHORIZED);
 			}
-			userResponse.setMessage(message);
-			userResponse.setResult(resultList);
-			return new ResponseEntity<>(userResponse, HttpStatus.OK);
 		} catch (Exception e) {
-			logger.error("Error, " + e.toString());
-			e.printStackTrace();
-			userResponse.setMessage("Error, " + e.toString());
+			logger.error("Error: " + e.toString());
+			userResponse.setMessage("Error: " + e.toString());
 			return new ResponseEntity<>(userResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping(value = "/verify", produces = "application/json")
 	public ResponseEntity<APIResponse<UserDTO>> verifyUser(@RequestParam String verifyid) {
 		verifyid = GeneralUtility.makeNotNull(verifyid);

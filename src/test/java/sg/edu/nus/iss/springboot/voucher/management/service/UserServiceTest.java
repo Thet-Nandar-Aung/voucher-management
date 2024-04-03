@@ -2,45 +2,42 @@ package sg.edu.nus.iss.springboot.voucher.management.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
+import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 import sg.edu.nus.iss.springboot.voucher.management.utility.EncryptionUtils;
 
 @SpringBootTest
 @Transactional
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestPropertySource(properties = {
-        "DB_USERNAME=admin",
-        "DB_PASSWORD=RDS_12345",
-        "AWS_ACCESS_KEY=AKIA47CRXTTV2EHMAA3S",
-        "AWS_SECRET_KEY=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",
-        "AES_SECRET_KEY=FAEAA55222E320F7F22E2A7FB6C68037F22E2A7FB6C68037FAEAA55222B6C680",
-        "FRONTEND_URL="
-})
+@ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class UserServiceTest {
 
 	@MockBean
@@ -56,21 +53,34 @@ public class UserServiceTest {
 	private UserService userService;
 
 	private static User user = new User("admin12345@gmail.com", "Admin", "Pwd@123", RoleType.ADMIN, true);
-	private static List<User> mockUsers = new ArrayList<>();
+	
+	private static List<User> mockUsers  = new ArrayList<>();
 
 	@BeforeEach
 	void setUp() {
 		//passwordEncoder = new BCryptPasswordEncoder();
 		//userService = new UserService(userRepository, passwordEncoder);
+	
 		mockUsers.add(user);
 
 	}
 	@Test
 	void getAllActiveStore() {
-		Mockito.when(userRepository.findByIsActiveTrue()).thenReturn(mockUsers);
-		List<User> userList = userService.findByIsActiveTrue();
-		assertEquals(mockUsers.size(), userList.size());
-		assertEquals(mockUsers.get(0).getEmail(), userList.get(0).getEmail());
+		long totalRecord =0;
+		List<UserDTO> userDTOList =new ArrayList<UserDTO>();
+		Pageable pageable = PageRequest.of(0, 10);
+		Page<User> mockUserPages = new PageImpl<>(mockUsers, pageable, mockUsers.size());
+		
+		Mockito.when(userRepository.findByIsActiveTrue(pageable)).thenReturn(mockUserPages);
+		Map<Long, List<UserDTO>> userPages = userService.findByIsActiveTrue(pageable);
+		
+		for (Map.Entry<Long, List<UserDTO>> entry : userPages.entrySet()) {
+			totalRecord = entry.getKey();
+			userDTOList = entry.getValue();
+
+		}
+		assertEquals(mockUsers.size(), userDTOList.size());
+		assertEquals(mockUsers.get(0).getEmail(), userDTOList.get(0).getEmail());
 
 	}
 
@@ -112,12 +122,11 @@ public class UserServiceTest {
 
 	}
 	
-	
 	@Test
     public void verifyUser() throws Exception {
-        String verificationCode = "4E5FCA157F8CEC4E6A351A349C08AC05896D21C97F102BBE318A70314B651E46BB23B575199E2A55720380070701C43D";
+        String verificationCode = "5700298DE6E20506B18FD57ED29782135264C4D0B2656EE27F83B902AEAB52D30E2AB2D689E151E9445012CB69B13504";
         String decodedVerificationCode = "7f03a9a9-d7a5-4742-bc85-68d52b2bee45";
-       
+        
         user.setVerified(false);
 
         Mockito.when(encryptionUtils.decrypt(verificationCode)).thenReturn(decodedVerificationCode);

@@ -1,20 +1,27 @@
 package sg.edu.nus.iss.springboot.voucher.management.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
+import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.dto.VoucherDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
@@ -39,23 +46,44 @@ public class VoucherController {
 	private CampaignService campaignService;
 
 	@PostMapping(value = "/getByEmail", produces = "application/json")
-	public ResponseEntity<APIResponse<List<VoucherDTO>>> findAllClaimedVouchersByEmail(@RequestBody UserRequest user) {
+	public ResponseEntity<APIResponse<List<VoucherDTO>>> findAllClaimedVouchersByEmail(@RequestBody UserRequest user,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "500") int size) {
 
 		String email = GeneralUtility.makeNotNull(user.getEmail()).trim();
+		long totalRecord = 0;
 		try {
-			logger.info("Calling get Voucher by email API...");
+			logger.info("Calling get Voucher by email API with page={}, size={}", page, size);
 
 			if (!email.equals("")) {
 
-				List<VoucherDTO> voucherList = voucherService.findAllClaimedVouchersByEmail(email);
+				Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").ascending());
+				Map<Long, List<VoucherDTO>> resultMap = voucherService.findAllClaimedVouchersByEmail(email, pageable);
 
-				if (voucherList.size() > 0) {
+				if (resultMap.size() == 0) {
+					String message = "Voucher not found by email: " + email;
+					logger.error(message);
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+				}
 
-					return ResponseEntity.status(HttpStatus.OK).body(
-							APIResponse.success(voucherList, "Successfully get claimed vouchers by email: " + email));
+				List<VoucherDTO> voucherDTOList = new ArrayList<VoucherDTO>();
+
+				for (Map.Entry<Long, List<VoucherDTO>> entry : resultMap.entrySet()) {
+					totalRecord = entry.getKey();
+					voucherDTOList = entry.getValue();
+
+					logger.info("totalRecord: " + totalRecord);
+					logger.info("voucherDTO List: " + voucherDTOList);
+
+				}
+
+				if (voucherDTOList.size() > 0) {
+					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(voucherDTOList,
+							"Successfully get claimed vouchers by email: " + email, totalRecord));
+
 				} else {
-					return ResponseEntity.status(HttpStatus.NOT_FOUND)
-							.body(APIResponse.error("Voucher not found by email: " + email));
+					String message = "Voucher not found by email: " + email;
+					logger.error(message);
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
 				}
 
 			} else {
@@ -73,24 +101,44 @@ public class VoucherController {
 
 	@PostMapping(value = "/getByCampaignId", produces = "application/json")
 	public ResponseEntity<APIResponse<List<VoucherDTO>>> findAllClaimedVouchersBycampaignId(
-			@RequestBody Campaign campaign) {
+			@RequestBody Campaign campaign, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "500") int size) {
 
 		String campaignId = GeneralUtility.makeNotNull(campaign.getCampaignId()).trim();
-
+		long totalRecord = 0;
 		try {
 			logger.info("Calling get Voucher by campaignId API...");
 
 			if (!campaignId.equals("")) {
+				Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").ascending());
+				Map<Long, List<VoucherDTO>> resultMap = voucherService.findAllClaimedVouchersByCampaignId(campaignId,
+						pageable);
 
-				List<VoucherDTO> voucherList = voucherService.findAllClaimedVouchersByCampaignId(campaignId);
+				if (resultMap.size() == 0) {
+					String message = "Voucher not found by campaignId: " + campaignId;
+					logger.error(message);
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+				}
 
-				if (voucherList.size() > 0) {
+				List<VoucherDTO> voucherDTOList = new ArrayList<VoucherDTO>();
 
-					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(voucherList,
-							"Successfully get claimed vouchers by campaignId: " + campaignId));
+				for (Map.Entry<Long, List<VoucherDTO>> entry : resultMap.entrySet()) {
+					totalRecord = entry.getKey();
+					voucherDTOList = entry.getValue();
+
+					logger.info("totalRecord: " + totalRecord);
+					logger.info("voucherDTO List: " + voucherDTOList);
+
+				}
+
+				if (voucherDTOList.size() > 0) {
+
+					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(voucherDTOList,
+							"Successfully get claimed vouchers by campaignId: " + campaignId, totalRecord));
 				} else {
-					return ResponseEntity.status(HttpStatus.NOT_FOUND)
-							.body(APIResponse.error("Voucher not found by campaignId: " + campaignId));
+					String message = "Voucher not found by campaignId: " + campaignId;
+					logger.error(message);
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
 
 				}
 			} else {
@@ -148,12 +196,29 @@ public class VoucherController {
 			if (dbCampaign.isPresent()) {
 
 				if (dbCampaign.get().getCampaignStatus().equals(CampaignStatus.PROMOTED)) {
-					return ResponseEntity.status(HttpStatus.OK)
-							.body(APIResponse.success(voucherService.claim(voucher), "Voucher claimed sucessfully."));
+
+					List<VoucherDTO> voucherDTOList = voucherService.findByCampaignIdAndClaimedBy(voucher.getCampaign(),
+							voucher.getClaimedBy());
+					if (voucherDTOList.size()>0) {
+						logger.error("Calling Voucher create API failed...");
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Voucher already claimed."));
+					}else {
+						VoucherDTO voucherDTO = voucherService.claim(voucher);
+						if (voucherDTO != null) {
+							return ResponseEntity.status(HttpStatus.OK).body(
+									APIResponse.success(voucherService.claim(voucher), "Voucher claimed sucessfully."));
+						} else {
+							logger.error("Calling Voucher create API failed...");
+							return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+									.body(APIResponse.error("Voucher claim failed."));
+						}
+						
+					}
+
 				} else {
 					logger.error("Calling Voucher create API failed...");
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse
-							.error("Campaign status is invalid to claim. Status:" + dbCampaign.get().getCampaignStatus()));
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(
+							"Campaign status should be PROMOTED. Status:" + dbCampaign.get().getCampaignStatus()));
 				}
 			} else {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -186,12 +251,12 @@ public class VoucherController {
 								.body(APIResponse.success(updateVoucherDTO, "Voucher consumed sucessfully."));
 					} else {
 						return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-								.body(APIResponse.error("Voucher consumed failed." ));
+								.body(APIResponse.error("Voucher consumed failed."));
 					}
 				} else {
 					logger.error("Calling Voucher consume API failed...");
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse
-							.error("Voucher has been already consumed."));
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+							.body(APIResponse.error("Voucher has been already consumed."));
 				}
 
 			} else {

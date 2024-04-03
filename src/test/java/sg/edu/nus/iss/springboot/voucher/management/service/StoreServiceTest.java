@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,14 +42,7 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 @SpringBootTest
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestPropertySource(properties = {
-        "DB_USERNAME=admin",
-        "DB_PASSWORD=RDS_12345",
-        "AWS_ACCESS_KEY=AKIA47CRXTTV2EHMAA3S",
-        "AWS_SECRET_KEY=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",
-        "AES_SECRET_KEY=",
-        "FRONTEND_URL="
-})
+@ActiveProfiles("test")
 public class StoreServiceTest {
 
 	@MockBean
@@ -85,8 +79,8 @@ public class StoreServiceTest {
 
 		Mockito.when(storeRepository.findByIsDeletedFalse(pageable)).thenReturn(mockStoresPage);
 
-		Map<Long, List<StoreDTO>> storePage = storeService.findByIsDeletedFalse(pageable);
-		for (Map.Entry<Long, List<StoreDTO>> entry : storePage.entrySet()) {
+		Map<Long, List<StoreDTO>> storePages = storeService.findByIsDeletedFalse(pageable);
+		for (Map.Entry<Long, List<StoreDTO>> entry : storePages.entrySet()) {
 			totalRecord = entry.getKey();
 			storeDTOList = entry.getValue();
 
@@ -100,7 +94,7 @@ public class StoreServiceTest {
 	void getAllActiveStoreByUser() {
 		long totalRecord =0;
 		List<StoreDTO> storeDTOList =new ArrayList<StoreDTO>();
-		Pageable pageable = PageRequest.of(0, 10); // Example page and size
+		Pageable pageable = PageRequest.of(0, 10);
 		Page<Store> mockStoresPage = new PageImpl<>(mockStores, pageable, mockStores.size());
 
 		Mockito.when(storeRepository.findAllByUserAndStatus(user, false, pageable)).thenReturn(mockStoresPage);

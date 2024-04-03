@@ -1,5 +1,7 @@
 package sg.edu.nus.iss.springboot.voucher.management.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,12 +17,15 @@ public interface CampaignRepository extends JpaRepository<Campaign, String> {
     @Query("SELECT c FROM Campaign c WHERE c.campaignStatus IN ?1")
     List<Campaign> findByCampaignStatusIn(List<CampaignStatus> statuses);
 
-    List<Campaign> findByStoreStoreId(String storeId);
+    Page<Campaign> findByStoreStoreId(String storeId,Pageable pageable);
     
-    List<Campaign> findByStoreStoreIdAndCampaignStatus(String storeId,CampaignStatus status);
+    Page<Campaign> findByStoreStoreIdAndCampaignStatus(String storeId,CampaignStatus status,Pageable pageable);
 
-    List<Campaign> findByCreatedByEmail(String email);
+    Page<Campaign> findByCreatedByEmail(String email,Pageable pageable);
     
     List<Campaign>  findByDescription(String description);
+    
+    @Query("SELECT c FROM Campaign c WHERE c.campaignStatus IN ?1")
+    Page<Campaign> findByCampaignStatusIn(List<CampaignStatus> statuses,Pageable pageable);
 
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,9 +24,11 @@ public interface UserRepository extends JpaRepository<User, String> {
 	User save(User user);
 
 	@Query("SELECT u FROM User u WHERE u.email = ?1 AND u.isActive = ?2")
-	public User findByEmailAndStatus(String email, boolean isActive);
+	public User findByEmailAndStatus(String email, boolean isActive,boolean isVerified);
 	
 	@Query("SELECT u FROM User u WHERE u.verificationCode = ?1 AND u.isVerified = ?2 AND u.isActive = ?3")
 	User findByVerificationCode(String verificationCode,boolean isVerified,boolean isActive);
+	
+	Page<User> findByIsActiveTrue(Pageable pageable);
 
 }

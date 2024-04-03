@@ -45,7 +45,7 @@ public class StoreController {
 
 	@GetMapping(value = "/getAll", produces = "application/json")
 	public ResponseEntity<APIResponse<List<StoreDTO>>> getAllActiveStore(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "200") int size) {
+			@RequestParam(defaultValue = "500") int size) {
 		logger.info("Call store getAll API with page={}, size={}", page, size);
 
 		long totalRecord = 0;
@@ -54,7 +54,7 @@ public class StoreController {
 			Map<Long, List<StoreDTO>> resultMap = storeService.findByIsDeletedFalse(pageable);
 
 			if (resultMap.size() == 0) {
-				String message = "No Store found.";
+				String message = "Store not found.";
 				logger.error(message);
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
 			}
@@ -68,8 +68,14 @@ public class StoreController {
 				logger.info("StoreDTO List: " + storeDTOList);
 
 			}
+			if(storeDTOList.size()>0) {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(APIResponse.success(storeDTOList, "Successfully get all active store.", totalRecord));
+			}else {
+				String message = "Store not found.";
+				logger.error(message);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+			}
 
 		} catch (Exception e) {
 			logger.error("Error: ", e);
@@ -81,7 +87,7 @@ public class StoreController {
 
 	@PostMapping(value = "/getAllByUser", produces = "application/json")
 	public ResponseEntity<APIResponse<List<StoreDTO>>> getAllStoreByUser(@RequestBody UserRequest userReq,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "200") int size) {
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "500") int size) {
 
 		logger.info("Call store getAllByUser API with page={}, size={}", page, size);
 		long totalRecord = 0;
@@ -194,28 +200,34 @@ public class StoreController {
 		String message = "";
 		StoreDTO storeDTO = new StoreDTO();
 		try {
+			ValidationResult validationResult = storeValidationStrategy.validateCreation(store, uploadFile);
 
-			message = storeValidationStrategy.validateCreation(store);
-			if (!message.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(message));
+			if (validationResult.isValid()) {
 
-			}
+				storeDTO = storeService.create(store, uploadFile);
+				if (storeDTO != null) {
+					message = "Store created successfully.";
 
-			storeDTO = storeService.create(store, uploadFile);
-			if (!GeneralUtility.makeNotNull(storeDTO.getStoreId()).equals("")) {
-				message = "Store created successfully.";
+					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(storeDTO, message));
 
-				return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(storeDTO, message));
+				} else {
+					message = "Create store failed: Unable to create a new store.";
+					logger.error(message);
+
+				}
 
 			} else {
-				message = "Create store failed: Unable to create a new store.";
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
+				message = validationResult.getMessage();
+				logger.error(message);
 			}
+
 		} catch (Exception e) {
 			message = "Error: " + e.toString();
 			logger.error(message);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
+
 		}
+
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
 	}
 
 	@PostMapping(value = "/update", produces = "application/json")
@@ -226,27 +238,32 @@ public class StoreController {
 		StoreDTO storeDTO = new StoreDTO();
 		try {
 
-			message = storeValidationStrategy.validateUpdating(store);
-			if (!message.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error(message));
+			ValidationResult validationResult = storeValidationStrategy.validateUpdating(store, uploadFile);
+			if (validationResult.isValid()) {
 
-			}
+				storeDTO = storeService.update(store, uploadFile);
+				if (!GeneralUtility.makeNotNull(storeDTO.getStoreId()).equals("")) {
+					message = "Store updated successfully.";
 
-			storeDTO = storeService.update(store, uploadFile);
-			if (!GeneralUtility.makeNotNull(storeDTO.getStoreId()).equals("")) {
-				message = "Store updated successfully.";
+					return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(storeDTO, message));
 
-				return ResponseEntity.status(HttpStatus.OK).body(APIResponse.success(storeDTO, message));
+				} else {
+					message = "Update store failed: Changes could not be applied to the store :" + store.getStoreName();
+					logger.error(message);
+				}
 
 			} else {
-				message = "Update store failed: Changes could not be applied to the store :" + store.getStoreName();
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
+				message = validationResult.getMessage();
+				logger.error(message);
 			}
+
 		} catch (Exception e) {
 			message = "Error: " + e.toString();
 			logger.error(message);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
 		}
+
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
 	}
 
 }

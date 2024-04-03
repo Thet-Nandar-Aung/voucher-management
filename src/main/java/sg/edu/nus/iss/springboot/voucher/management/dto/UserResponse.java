@@ -11,7 +11,7 @@ import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 public class UserResponse {
 
 	private String message;
-	private ArrayList<ResultItem> result;
+	private ArrayList<ResultItem> result= new ArrayList<>();;
 
 	public String getMessage() {
 		return message;

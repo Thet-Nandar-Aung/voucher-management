@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptionUtils {
 
-	@Value("${aes.secret.key}")
-	private String aesSecretKey;
+	//@Value("${aes.secret.key}")
+	private String aesSecretKey="AAEAA5821EF320F7F22EAB7FB6C68038AAEAA5821EF320F7F22EAB7FB6C68038";
 	
 	private static final String AES_ALGORITHM = "AES";
 	
@@ -54,5 +54,19 @@ public class EncryptionUtils {
 		}
 		return b;
 	}
+	/*
+	public static void main(String[] args) throws Exception {
+		EncryptionUtils util = new EncryptionUtils();
+		String verificationCode = "4E5FCA157F8CEC4E6A351A349C08AC05896D21C97F102BBE318A70314B651E46BB23B575199E2A55720380070701C43D";
+        String decodedVerificationCode = "7f03a9a9-d7a5-4742-bc85-68d52b2bee45";
+        try {
+			String decodedVerificationCode1 = util.encrypt(decodedVerificationCode);
+			System.out.println(decodedVerificationCode1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}*/
 
 }

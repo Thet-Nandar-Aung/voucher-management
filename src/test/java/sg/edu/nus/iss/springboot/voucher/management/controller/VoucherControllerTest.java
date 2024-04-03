@@ -6,7 +6,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,9 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -27,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.VoucherDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
@@ -36,6 +44,7 @@ import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.enums.VoucherStatus;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
+import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.VoucherService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
@@ -43,110 +52,126 @@ import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 @AutoConfigureMockMvc
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestPropertySource(properties = {
-        "DB_USERNAME=admin",
-        "DB_PASSWORD=RDS_12345",
-        "AWS_ACCESS_KEY=AKIA47CRXTTV2EHMAA3S",
-        "AWS_SECRET_KEY=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",
-        "AES_SECRET_KEY=",
-        "FRONTEND_URL="
-})
+@ActiveProfiles("test")
 public class VoucherControllerTest {
 
-        @Autowired
-        private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-        @Autowired
-        private ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
-        @MockBean
-        private VoucherService voucherService;
-        
-        @MockBean
-        private CampaignService campaignService;
+	@MockBean
+	private VoucherService voucherService;
 
-        private static List<VoucherDTO> mockVouchers = new ArrayList<>();
-        private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null,
-                        true, null, null, null, null, null, null, null, null, false);
-        private static Store store = new Store("1", "MUJI",
-    			"MUJI offers a wide variety of good quality items from stationery to household items and apparel.", "",
-    			"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
-    			"Singapore", "123456", null, user, null, user, false, null);
-    	
-        private static Campaign campaign = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 10,
-                        0,
-                        null, null, 10, LocalDateTime.now(), LocalDateTime.now(), user, user, LocalDateTime.now(),
-                        LocalDateTime.now(), null,false);
-        private static Voucher voucher1 = new Voucher("1", campaign, VoucherStatus.CLAIMED, LocalDateTime.now(), null,
-                        user);
-        private static Voucher voucher2 = new Voucher("2", campaign, VoucherStatus.CLAIMED, LocalDateTime.now(), null,
-                        user);
+	@MockBean
+	private CampaignService campaignService;
+	
+	@MockBean
+	private UserService userService;
 
-        @BeforeAll
-        static void setUp() {
-                mockVouchers.add(DTOMapper.toVoucherDTO(voucher1));
-                mockVouchers.add(DTOMapper.toVoucherDTO(voucher1));
-        }
+	private static List<VoucherDTO> mockVouchers = new ArrayList<>();
+	private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true,
+			null, null, null, null, null, null, null, null, false);
+	private static Store store = new Store("1", "MUJI",
+			"MUJI offers a wide variety of good quality items from stationery to household items and apparel.", "",
+			"Test", "#04-36/40 Paragon Shopping Centre", "290 Orchard Rd", "", "238859", "Singapore", "Singapore",
+			"Singapore", "123456", null, user, null, user, false, null);
 
-        @Test
-        void testGetAllVouchersByEmail() throws Exception {
-                Mockito.when(voucherService.findAllClaimedVouchersByEmail("test@email.com")).thenReturn(mockVouchers);
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/getByEmail")
-                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user)))
-                                .andExpect(MockMvcResultMatchers.status().isOk())
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.success").value(true))
-                                .andExpect(jsonPath("$.data[0].voucherId").value(1)).andDo(print());
-        }
+	private static Campaign campaign = new Campaign("1", "new campaign 1", store, CampaignStatus.PROMOTED, null, 10, 0,
+			null, null, 10, LocalDateTime.now(), LocalDateTime.now(), user, user, LocalDateTime.now(),
+			LocalDateTime.now(), null, false);
+	private static Voucher voucher1 = new Voucher("1", campaign, VoucherStatus.CLAIMED, LocalDateTime.now(), null,
+			user);
+	private static Voucher voucher2 = new Voucher("2", campaign, VoucherStatus.CLAIMED, LocalDateTime.now(), null,
+			user);
 
-        @Test
-        void testGetAllVouchersByCampaignId() throws Exception {
-                Mockito.when(voucherService.findAllClaimedVouchersByCampaignId(campaign.getCampaignId()))
-                                .thenReturn(mockVouchers);
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/getByCampaignId")
-                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign)))
-                                .andExpect(MockMvcResultMatchers.status().isOk())
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.success").value(true))
-                                .andExpect(jsonPath("$.data[0].voucherId").value(1)).andDo(print());
-        }
+	@BeforeAll
+	static void setUp() {
+		mockVouchers.add(DTOMapper.toVoucherDTO(voucher1));
+		mockVouchers.add(DTOMapper.toVoucherDTO(voucher1));
+	}
 
-        @Test
-        void testGetVoucherByVoucherId() throws Exception {
-                Mockito.when(voucherService.findByVoucherId(voucher2.getVoucherId()))
-                                .thenReturn(DTOMapper.toVoucherDTO(voucher2));
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/getById")
-                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(voucher2)))
-                                .andExpect(MockMvcResultMatchers.status().isOk())
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.success").value(true)).andDo(print());
-                                // .andExpect(jsonPath("$.data.voucherId").value(1)).andDo(print());
-        }
+	
+	@Test
+	void testGetAllVouchersByEmail() throws Exception {
 
-        /*
-        @Test
-        void testClaimVoucher() throws Exception {
-        	 Mockito.when(campaignService.promote(campaign)).thenReturn(DTOMapper.toCampaignDTO(campaign));
-        	    voucher1.setVoucherStatus(VoucherStatus.CONSUMED);
-                Mockito.when(voucherService.claim(voucher1)).thenReturn(DTOMapper.toVoucherDTO(voucher1));
-               
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/claim")
-                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(voucher1)))
-                                .andExpect(MockMvcResultMatchers.status().isOk())
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.success").value(true)).andDo(print());
-        }
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("startDate").ascending());
+		Map<Long, List<VoucherDTO>> mockVoucherMap = new HashMap<>();
+		mockVoucherMap.put(0L, mockVouchers);
 
-        @Test
-        void testConsumeVoucher() throws Exception {
-        	    Mockito.when(campaignService.promote(campaign)).thenReturn(DTOMapper.toCampaignDTO(campaign));
-                Mockito.when(voucherService.consume(voucher1)).thenReturn(DTOMapper.toVoucherDTO(voucher1));
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/consume")
-                                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(voucher1)))
-                                .andExpect(MockMvcResultMatchers.status().isOk())
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.success").value(true)).andDo(print());
-                // .andExpect(jsonPath("$data.description").value("new desc")).andDo(print());
-        }*/
+		Mockito.when(voucherService.findAllClaimedVouchersByEmail("test@email.com", pageable))
+				.thenReturn(mockVoucherMap);
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/getByEmail").param("page", "0").param("size", "10")
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.success").value(true)).andExpect(jsonPath("$.data[0].voucherId").value(1))
+				.andDo(print());
+	}
 
+	@Test
+	void testGetAllVouchersByCampaignId() throws Exception {
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("startDate").ascending());
+		Map<Long, List<VoucherDTO>> mockVoucherMap = new HashMap<>();
+		mockVoucherMap.put(0L, mockVouchers);
+
+		Mockito.when(voucherService.findAllClaimedVouchersByCampaignId(campaign.getCampaignId(), pageable))
+				.thenReturn(mockVoucherMap);
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/api/voucher/getByCampaignId").param("page", "0").param("size", "10")
+						.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.success").value(true)).andExpect(jsonPath("$.data[0].voucherId").value(1))
+				.andDo(print());
+	}
+
+	@Test
+	void testGetVoucherByVoucherId() throws Exception {
+		Mockito.when(voucherService.findByVoucherId(voucher2.getVoucherId()))
+				.thenReturn(DTOMapper.toVoucherDTO(voucher2));
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/getById").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(voucher2))).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.success").value(true)).andDo(print());
+		// .andExpect(jsonPath("$.data.voucherId").value(1)).andDo(print());
+	}
+
+	/*
+	@Test
+	void testClaimVoucher() throws Exception {
+		voucher1.setVoucherStatus(null);
+		Mockito.when(campaignService.promote(campaign)).thenReturn(DTOMapper.toCampaignDTO(campaign));
+		
+		Mockito.when(campaignService.findById(campaign.getCampaignId())).thenReturn(Optional.of(campaign));
+		
+		Mockito.when(voucherService.findByCampaignIdAndClaimedBy(voucher1.getCampaign(),
+				voucher1.getClaimedBy())).thenReturn(mockVouchers);
+		Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(user);
+		//voucher1.setVoucherStatus(VoucherStatus.CONSUMED);
+		Mockito.when(voucherService.claim(voucher1)).thenReturn(DTOMapper.toVoucherDTO(voucher1));
+		
+		
+
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/claim").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(voucher1))).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.success").value(true)).andDo(print());
+	}
+/*
+	@Test
+	void testConsumeVoucher() throws Exception {
+		//Mockito.when(campaignService.promote(campaign)).thenReturn(DTOMapper.toCampaignDTO(campaign));
+		Mockito.when(voucherService.findByVoucherId(voucher1.getVoucherId()))
+		.thenReturn(DTOMapper.toVoucherDTO(voucher1));
+		
+		Mockito.when(voucherService.consume(voucher1)).thenReturn(DTOMapper.toVoucherDTO(voucher1));
+		
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/consume").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(voucher1))).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.success").value(true)).andDo(print());
+	}
+*/
 }

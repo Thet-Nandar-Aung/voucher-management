@@ -3,16 +3,21 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
+import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
@@ -49,42 +54,91 @@ public class CampaignService implements ICampaignService, ICampaignSubject {
 	private FeedObserver feedObserver;
 
 	@Override
-	public List<CampaignDTO> findAllActiveCampaigns() {
+	public Map<Long, List<CampaignDTO>> findAllActiveCampaigns(Pageable pageable) {
 		logger.info("Getting all active campaigns...");
-		List<Campaign> campaigns = campaignRepository.findByCampaignStatusIn(Arrays.asList(CampaignStatus.PROMOTED));
-		logger.info("Found {}, converting to DTOs...", campaigns.size());
-		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
-		for (Campaign campaign : campaigns) {
-			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
-			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+		Map<Long, List<CampaignDTO>> result = new HashMap<>();
+		List<CampaignDTO> campaignDTOList = new ArrayList<>();
+
+		Page<Campaign> campaignPages = campaignRepository.findByCampaignStatusIn(Arrays.asList(CampaignStatus.PROMOTED),
+				pageable);
+		long totalRecord = campaignPages.getTotalElements();
+
+		if (totalRecord > 0) {
+			for (Campaign campaign : campaignPages.getContent()) {
+				CampaignDTO campaignDTO = DTOMapper.toCampaignDTO(campaign);
+				campaignDTOList.add(campaignDTO);
+			}
+
+		} else {
+			logger.info("Campaign not found...");
 		}
-		return campaignDTOs;
+
+		result.put(totalRecord, campaignDTOList);
+
+		return result;
 	}
 
 	@Override
-	public List<CampaignDTO> findAllCampaignsByStoreId(String storeId) {
+	public Map<Long, List<CampaignDTO>> findAllCampaignsByStoreId(String storeId, Pageable pageable) {
 		logger.info("Getting all campaigns by Store Id...");
-		List<Campaign> campaigns = campaignRepository.findByStoreStoreId(storeId);
-		logger.info("Found {}, converting to DTOs...", campaigns.size());
-		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
-		for (Campaign campaign : campaigns) {
-			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
-			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+		Map<Long, List<CampaignDTO>> result = new HashMap<>();
+		Page<Campaign> campaignPages = campaignRepository.findByStoreStoreId(storeId, pageable);
+		long totalRecord = campaignPages.getTotalElements();
+		List<CampaignDTO> campaignDTOList = new ArrayList<>();
+
+		if (totalRecord > 0) {
+			for (Campaign campaign : campaignPages) {
+				campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+				campaignDTOList.add(DTOMapper.toCampaignDTO(campaign));
+			}
+		} else {
+			logger.info("Campaign not found...");
 		}
-		return campaignDTOs;
+
+		result.put(totalRecord, campaignDTOList);
+		return result;
 	}
 
 	@Override
-	public List<CampaignDTO> findAllCampaignsByEmail(String email) {
-		logger.info("Getting all campaigns by email...");
-		List<Campaign> campaigns = campaignRepository.findByCreatedByEmail(email);
-		logger.info("Found {}, converting to DTOs...", campaigns.size());
-		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
-		for (Campaign campaign : campaigns) {
-			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
-			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
+	public Map<Long, List<CampaignDTO>> findByStoreIdAndStatus(String storeId, CampaignStatus campaignStatus,
+			Pageable pageable) {
+		logger.info("Getting all campaigns by Store Id and Status...");
+
+		Map<Long, List<CampaignDTO>> result = new HashMap<>();
+
+		Page<Campaign> campaignPages = campaignRepository.findByStoreStoreIdAndCampaignStatus(storeId, campaignStatus,
+				pageable);
+
+		long totalRecord = campaignPages.getTotalElements();
+		List<CampaignDTO> campaignDTOList = new ArrayList<>();
+		if (totalRecord > 0) {
+			for (Campaign campaign : campaignPages) {
+				campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+				campaignDTOList.add(DTOMapper.toCampaignDTO(campaign));
+			}
+		} else {
+			logger.info("Campaign not found...");
 		}
-		return campaignDTOs;
+		result.put(totalRecord, campaignDTOList);
+		return result;
+	}
+
+	@Override
+	public Map<Long, List<CampaignDTO>> findAllCampaignsByEmail(String email, Pageable pageable) {
+		logger.info("Getting all campaigns by email...");
+		Map<Long, List<CampaignDTO>> result = new HashMap<>();
+
+		Page<Campaign> campaignPages = campaignRepository.findByCreatedByEmail(email, pageable);
+		long totalRecord = campaignPages.getTotalElements();
+		List<CampaignDTO> campaignDTOList = new ArrayList<>();
+		if (totalRecord > 0) {
+			for (Campaign campaign : campaignPages) {
+				campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
+				campaignDTOList.add(DTOMapper.toCampaignDTO(campaign));
+			}
+		}
+		result.put(totalRecord, campaignDTOList);
+		return result;
 	}
 
 	@Override
@@ -233,19 +287,6 @@ public class CampaignService implements ICampaignService, ICampaignSubject {
 	public Optional<Campaign> findById(String campaignId) {
 		// TODO Auto-generated method stub
 		return campaignRepository.findById(campaignId);
-	}
-
-	@Override
-	public List<CampaignDTO> findByStoreIdAndStatus(String storeId, CampaignStatus campaignStatus) {
-		logger.info("Getting all campaigns by Store Id and Status...");
-		List<Campaign> campaigns = campaignRepository.findByStoreStoreIdAndCampaignStatus(storeId, campaignStatus);
-		logger.info("Found {}, converting to DTOs...", campaigns.size());
-		List<CampaignDTO> campaignDTOs = new ArrayList<CampaignDTO>();
-		for (Campaign campaign : campaigns) {
-			campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
-			campaignDTOs.add(DTOMapper.toCampaignDTO(campaign));
-		}
-		return campaignDTOs;
 	}
 
 	@Override
