@@ -46,7 +46,7 @@ public class UserServiceTest {
 	@MockBean
 	private PasswordEncoder passwordEncoder;
 	
-	@Mock
+	@MockBean
     private EncryptionUtils encryptionUtils;
 
 	@Autowired
@@ -124,9 +124,8 @@ public class UserServiceTest {
 	
 	@Test
     public void verifyUser() throws Exception {
-        String verificationCode = "5700298DE6E20506B18FD57ED29782135264C4D0B2656EE27F83B902AEAB52D30E2AB2D689E151E9445012CB69B13504";
         String decodedVerificationCode = "7f03a9a9-d7a5-4742-bc85-68d52b2bee45";
-        
+        String verificationCode = encryptionUtils.encrypt(decodedVerificationCode);
         user.setVerified(false);
 
         Mockito.when(encryptionUtils.decrypt(verificationCode)).thenReturn(decodedVerificationCode);
