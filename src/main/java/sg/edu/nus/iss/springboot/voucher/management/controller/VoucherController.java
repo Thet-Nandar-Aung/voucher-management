@@ -256,7 +256,7 @@ public class VoucherController {
 				} else {
 					logger.error("Calling Voucher consume API failed...");
 					return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-							.body(APIResponse.error("Voucher has been already consumed."));
+							.body(APIResponse.error("Voucher already consumed."));
 				}
 
 			} else {

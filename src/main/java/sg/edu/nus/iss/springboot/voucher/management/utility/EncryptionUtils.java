@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptionUtils {
 
-	//@Value("${aes.secret.key}")
-	private String aesSecretKey="AAEAA5821EF320F7F22EAB7FB6C68038AAEAA5821EF320F7F22EAB7FB6C68038";
+	@Value("${aes.secret.key}")
+	private String aesSecretKey;
 	
 	private static final String AES_ALGORITHM = "AES";
 	

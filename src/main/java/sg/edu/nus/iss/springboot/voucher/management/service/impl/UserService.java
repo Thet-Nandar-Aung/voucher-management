@@ -115,11 +115,11 @@ public class UserService implements IUserService {
 			user.setCreatedDate(LocalDateTime.now());
 
 			User createdUser = userRepository.save(user);
-/*
+
 			if (createdUser != null) {
 				sendVerificationEmail(createdUser);
 			}
-*/
+
 			return createdUser;
 
 		} catch (Exception e) {
