@@ -42,6 +42,7 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.*;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -61,10 +62,10 @@ public class UserControllerTest {
 	@MockBean
 	private UserService userService;
 
-	@Mock
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Mock
+	@Autowired
 	private EncryptionUtils encryptionUtils;
 
 	User testUser;
@@ -73,7 +74,7 @@ public class UserControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		passwordEncoder = new BCryptPasswordEncoder();
+		//passwordEncoder = new BCryptPasswordEncoder();
 		testUser = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
 
 		mockUsers.add(DTOMapper.toUserDTO(testUser));
@@ -87,13 +88,14 @@ public class UserControllerTest {
 /*
 	@Test
 	public void testCreateUser() throws Exception {
-		testUser.setActive(true);
+		
 		Mockito.when(userService.create(testUser)).thenReturn(testUser);
+		
 
 		MockMultipartFile imageFile = new MockMultipartFile("image", "welcome.jpg", "image/jpg", "welcome".getBytes());
 
 		MockMultipartFile user = new MockMultipartFile("user", "", "application/json",
-				"{\"email\": \"antonia@gmail.com\",\"username\": \"Antonia\",\"password\":\"Pwd@21212\",\"role\": \"MERCHANT\",\"active\":true}"
+				"{\"email\": \"antonia@gmail.com\",\"username\": \"Antonia\",\"password\":\"Pwd@21212\",\"role\": \"MERCHANT\"}"
 						.getBytes());
 
 		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/user/create").file(user).file(imageFile)
@@ -104,8 +106,8 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.result[0].email").value(testUser.getEmail()))
 				.andExpect(jsonPath("$.result[0].role").value(testUser.getRole().toString())).andDo(print());
 
-	}
-	*/
+	}*/
+
 	@Test
 	public void testUpdateUser() throws Exception {
 
@@ -127,7 +129,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.result[0].email").value(testUser.getEmail()))
 				.andExpect(jsonPath("$.result[0].role").value(testUser.getRole().toString())).andDo(print());
 	}
-	
+
 	@Test
 	public void testResetPassword() throws Exception {
 
@@ -163,10 +165,9 @@ public class UserControllerTest {
 		testUser.setVerified(true);
 		UserRequest userRequest = new UserRequest(testUser.getEmail(), "Pwd@21212");
 		Mockito.when(userService.findByEmail(userRequest.getEmail())).thenReturn(testUser);
-		
+
 		Mockito.when(userService.validateUserLogin(userRequest.getEmail(), userRequest.getPassword()))
 				.thenReturn(testUser);
-		
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userRequest))).andExpect(MockMvcResultMatchers.status().isOk())
@@ -179,9 +180,9 @@ public class UserControllerTest {
 
 	@Test
 	public void testVerifyUser() throws Exception {
-		String verificationCode = "4E5FCA157F8CEC4E6A351A349C08AC05896D21C97F102BBE318A70314B651E46BB23B575199E2A55720380070701C43D";
-		String decodedVerificationCode = "7f03a9a9-d7a5-4742-bc85-68d52b2bee45";
 
+		String decodedVerificationCode = "7f03a9a9-d7a5-4742-bc85-68d52b2bee45";
+		String verificationCode = encryptionUtils.encrypt(decodedVerificationCode);
 		testUser.setVerified(false);
 		testUser.setActive(true);
 		testUser.setVerificationCode(decodedVerificationCode);

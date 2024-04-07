@@ -56,7 +56,7 @@ public class VoucherController {
 
 			if (!email.equals("")) {
 
-				Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").ascending());
+				Pageable pageable = PageRequest.of(page, size, Sort.by("claimTime").ascending());
 				Map<Long, List<VoucherDTO>> resultMap = voucherService.findAllClaimedVouchersByEmail(email, pageable);
 
 				if (resultMap.size() == 0) {
@@ -110,7 +110,7 @@ public class VoucherController {
 			logger.info("Calling get Voucher by campaignId API...");
 
 			if (!campaignId.equals("")) {
-				Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").ascending());
+				Pageable pageable = PageRequest.of(page, size, Sort.by("claimTime").ascending());
 				Map<Long, List<VoucherDTO>> resultMap = voucherService.findAllClaimedVouchersByCampaignId(campaignId,
 						pageable);
 
