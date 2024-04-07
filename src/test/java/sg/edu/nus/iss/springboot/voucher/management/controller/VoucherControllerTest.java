@@ -44,6 +44,7 @@ import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.enums.VoucherStatus;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
+import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.VoucherService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
@@ -66,9 +67,12 @@ public class VoucherControllerTest {
 
 	@MockBean
 	private CampaignService campaignService;
-	
+
 	@MockBean
 	private UserService userService;
+
+	@MockBean
+	private StoreService storeService;
 
 	private static List<VoucherDTO> mockVouchers = new ArrayList<>();
 	private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true,
@@ -92,11 +96,10 @@ public class VoucherControllerTest {
 		mockVouchers.add(DTOMapper.toVoucherDTO(voucher1));
 	}
 
-	
 	@Test
 	void testGetAllVouchersByEmail() throws Exception {
 
-		Pageable pageable = PageRequest.of(0, 10, Sort.by("startDate").ascending());
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("claimTime").ascending());
 		Map<Long, List<VoucherDTO>> mockVoucherMap = new HashMap<>();
 		mockVoucherMap.put(0L, mockVouchers);
 
@@ -112,7 +115,7 @@ public class VoucherControllerTest {
 
 	@Test
 	void testGetAllVouchersByCampaignId() throws Exception {
-		Pageable pageable = PageRequest.of(0, 10, Sort.by("startDate").ascending());
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("claimTime").ascending());
 		Map<Long, List<VoucherDTO>> mockVoucherMap = new HashMap<>();
 		mockVoucherMap.put(0L, mockVouchers);
 
@@ -138,40 +141,31 @@ public class VoucherControllerTest {
 		// .andExpect(jsonPath("$.data.voucherId").value(1)).andDo(print());
 	}
 
-	/*
 	@Test
 	void testClaimVoucher() throws Exception {
-		voucher1.setVoucherStatus(null);
-		Mockito.when(campaignService.promote(campaign)).thenReturn(DTOMapper.toCampaignDTO(campaign));
-		
+
 		Mockito.when(campaignService.findById(campaign.getCampaignId())).thenReturn(Optional.of(campaign));
-		
-		Mockito.when(voucherService.findByCampaignIdAndClaimedBy(voucher1.getCampaign(),
-				voucher1.getClaimedBy())).thenReturn(mockVouchers);
-		Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(user);
-		//voucher1.setVoucherStatus(VoucherStatus.CONSUMED);
-		Mockito.when(voucherService.claim(voucher1)).thenReturn(DTOMapper.toVoucherDTO(voucher1));
-		
-		
+
+		Mockito.when(voucherService.claim(Mockito.any(Voucher.class))).thenReturn(DTOMapper.toVoucherDTO(voucher1));
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/claim").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(voucher1))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andDo(print());
 	}
-/*
+
 	@Test
 	void testConsumeVoucher() throws Exception {
-		//Mockito.when(campaignService.promote(campaign)).thenReturn(DTOMapper.toCampaignDTO(campaign));
+
 		Mockito.when(voucherService.findByVoucherId(voucher1.getVoucherId()))
-		.thenReturn(DTOMapper.toVoucherDTO(voucher1));
-		
-		Mockito.when(voucherService.consume(voucher1)).thenReturn(DTOMapper.toVoucherDTO(voucher1));
-		
+				.thenReturn(DTOMapper.toVoucherDTO(voucher1));
+		voucher1.setVoucherStatus(VoucherStatus.CONSUMED);
+		Mockito.when(voucherService.consume(Mockito.any(Voucher.class))).thenReturn(DTOMapper.toVoucherDTO(voucher1));
+
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/voucher/consume").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(voucher1))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andDo(print());
 	}
-*/
+
 }

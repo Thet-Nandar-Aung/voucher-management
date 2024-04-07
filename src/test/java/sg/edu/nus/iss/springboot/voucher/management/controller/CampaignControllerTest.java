@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,7 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
+import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
@@ -64,6 +66,9 @@ public class CampaignControllerTest {
 
 	@MockBean
 	private UserService userService;
+	
+	@MockBean
+	private StoreService storeService;
 
 	private static List<CampaignDTO> mockCampaigns = new ArrayList<>();
 	private static User user = new User("1", "test@email.com", "username", "pwd", RoleType.CUSTOMER, null, null, true,
@@ -135,11 +140,13 @@ public class CampaignControllerTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andDo(print());
 	}
-/*
+
 	@Test
 	void testCreateCampaign() throws Exception {
-		Mockito.when(campaignService.create(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
-
+		Mockito.when(campaignService.create(Mockito.any(Campaign.class))).thenReturn(DTOMapper.toCampaignDTO(campaign1));
+		Mockito.when(storeService.findByStoreId(store.getStoreId())).thenReturn(DTOMapper.toStoreDTO(store));
+		Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(user);
+		
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/create").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(campaign1))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -148,10 +155,10 @@ public class CampaignControllerTest {
 
 	@Test
 	void testUpdateCampaign() throws Exception {
+		Mockito.when(campaignService.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
 		campaign1.setDescription("new desc");
-
-		Mockito.when(campaignService.update(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
-
+		Mockito.when(campaignService.update(Mockito.any(Campaign.class))).thenReturn(DTOMapper.toCampaignDTO(campaign1));
+		
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/update").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(campaign1))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -162,11 +169,11 @@ public class CampaignControllerTest {
 	void testPromoteCampaign() throws Exception {
 		Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(user);
 		campaign1.setCampaignStatus(CampaignStatus.CREATED);
-		Mockito.when(campaignService.promote(campaign1)).thenReturn(DTOMapper.toCampaignDTO(campaign1));
+		Mockito.when(campaignService.promote(Mockito.any(Campaign.class))).thenReturn(DTOMapper.toCampaignDTO(campaign1));
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/promote").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(campaign1))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andDo(print());
 	}
-*/
+
 }

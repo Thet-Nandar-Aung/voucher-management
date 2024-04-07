@@ -58,8 +58,6 @@ public class StoreControllerTest {
 	@MockBean
 	private StoreService storeService;
 
-	@InjectMocks
-	private StoreController storeController;
 
 	private static List<StoreDTO> mockStores = new ArrayList<>();
 
@@ -80,6 +78,7 @@ public class StoreControllerTest {
 		mockStores.add(DTOMapper.toStoreDTO(store1));
 		mockStores.add(DTOMapper.toStoreDTO(store2));
 	}
+
 
 	@Test
 	void testGetStoreById() throws Exception {
@@ -131,15 +130,13 @@ public class StoreControllerTest {
 	void testCreateStore() throws Exception {
 
 		Mockito.when(userService.findByEmail(store1.getCreatedBy().getEmail())).thenReturn(user);
-		store1.setStoreId("");
-		store1.setUpdatedBy(null);
+		
 		MockMultipartFile uploadFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
 
 		MockMultipartFile store = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
 				objectMapper.writeValueAsBytes(store1));
-
-		// Mockito.when(storeService.create(store1,
-		// uploadFile)).thenReturn(DTOMapper.toStoreDTO(store1));
+		store1.setCreatedBy(user);
+		Mockito.when(storeService.create(store1,uploadFile)).thenReturn(DTOMapper.toStoreDTO(store1));
 
 		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/create").file(store).file(uploadFile)
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(MockMvcResultMatchers.status().isOk())
@@ -151,21 +148,23 @@ public class StoreControllerTest {
 
 	@Test
 	void testUpdateStore() throws Exception {
-
-		Mockito.when(storeService.findByStoreId(store1.getStoreId())).thenReturn(DTOMapper.toStoreDTO(store1));
-		Mockito.when(userService.findByEmail(store1.getUpdatedBy().getEmail())).thenReturn(user);
-
-		MockMultipartFile imageFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
+		
+		MockMultipartFile uploadFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
 
 		MockMultipartFile store = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
 				objectMapper.writeValueAsBytes(store1));
+		
+		Mockito.when(storeService.findByStoreId(store1.getStoreId())).thenReturn(DTOMapper.toStoreDTO(store1));
+		Mockito.when(userService.findByEmail(store1.getUpdatedBy().getEmail())).thenReturn(user);
+		
+		Mockito.when(storeService.update(store1,uploadFile)).thenReturn(DTOMapper.toStoreDTO(store1));
 
-		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/update").file(store).file(imageFile)
+		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/update").file(store).file(uploadFile)
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.message").value("Store updated successfully."))
 				.andExpect(jsonPath("$.result[0].storeName").value(store1.getStoreName())).andDo(print());
 
-	}
-   */
+	}*/
+   
 }
