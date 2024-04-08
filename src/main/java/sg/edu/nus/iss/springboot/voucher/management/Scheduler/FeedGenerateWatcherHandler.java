@@ -23,7 +23,7 @@ public class FeedGenerateWatcherHandler {
 		logger.info("Star Run FeedGenerateWatcherHandler...");
 
 		try {
-            feedService.generateFeed();
+            // feedService.generateFeed();
 
 		} catch (Exception ex) {
 			logger.error("FeedGenerateWatcherHandler exception... {}", ex.toString());
