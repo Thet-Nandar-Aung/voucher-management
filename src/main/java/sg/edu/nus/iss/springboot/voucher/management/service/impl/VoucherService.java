@@ -49,16 +49,20 @@ public class VoucherService implements IVoucherService {
 	public Map<Long, List<VoucherDTO>> findAllClaimedVouchersByEmail(String email, Pageable pageable) {
 		logger.info("Getting all claimed voucher for email {}...", email);
 		Map<Long, List<VoucherDTO>> result = new HashMap<>();
-
-		Page<Voucher> voucherPages = voucherRepository.findAllClaimedVouchersByEmail(email, pageable);
-		long totalRecord = voucherPages.getTotalElements();
-		List<VoucherDTO> voucherDTOList = new ArrayList<VoucherDTO>();
-		if (totalRecord > 0) {
-			for (Voucher voucher : voucherPages) {
-				voucherDTOList.add(DTOMapper.toVoucherDTO(voucher));
+		try{
+			Page<Voucher> voucherPages = voucherRepository.findAllClaimedVouchersByEmail(email, pageable);
+			long totalRecord = voucherPages.getTotalElements();
+			List<VoucherDTO> voucherDTOList = new ArrayList<VoucherDTO>();
+			if (totalRecord > 0) {
+				for (Voucher voucher : voucherPages) {
+					voucherDTOList.add(DTOMapper.toVoucherDTO(voucher));
+				}
 			}
+			result.put(totalRecord, voucherDTOList);
+
+		}catch (Exception ex){
+			logger.error(ex.toString());
 		}
-		result.put(totalRecord, voucherDTOList);
 		return result;
 	}
 

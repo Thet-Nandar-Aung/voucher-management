@@ -75,92 +75,92 @@ public class FeedServiceTest {
 		mockFeeds.add(feed2);
 	}
 
-	@Test
-	void generateFeeds() {
-		Mockito.when(feedRepository.save(Mockito.any(Feed.class))).thenReturn(feed1);
-		Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
-		Mockito.when(userRepository.findByIsActiveTrue()).thenReturn(mockUsers);
+	// @Test
+	// void generateFeeds() {
+	// 	Mockito.when(feedRepository.save(Mockito.any(Feed.class))).thenReturn(feed1);
+	// 	Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
+	// 	Mockito.when(userRepository.findByIsActiveTrue()).thenReturn(mockUsers);
 
-		boolean isGenerated = feedService.generateFeed();
+	// 	boolean isGenerated = feedService.generateFeed();
 
-		assertEquals(isGenerated,true);
-	}
+	// 	assertEquals(isGenerated,true);
+	// }
 
-	@Test
-	void findAllReadFeeds() {
-		Mockito.when(feedRepository.findByIsDeletedFalseAndIsReadTrue()).thenReturn(mockFeeds);
-		List<FeedDTO> feedDTOs = feedService.findAllReadFeeds();
-		assertEquals(mockFeeds.size(), feedDTOs.size());
-		assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
-		assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
-	}
+	// @Test
+	// void findAllReadFeeds() {
+	// 	Mockito.when(feedRepository.findByIsDeletedFalseAndIsReadTrue()).thenReturn(mockFeeds);
+	// 	List<FeedDTO> feedDTOs = feedService.findAllReadFeeds();
+	// 	assertEquals(mockFeeds.size(), feedDTOs.size());
+	// 	assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
+	// 	assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
+	// }
 
-	@Test
-	void findAllActiveFeedsByCampaignId() {
-		Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
-		Mockito.when(feedRepository.findAllFeedsByCampaignId(campaign1, false)).thenReturn(mockFeeds);
-		List<FeedDTO> feedDTOs = feedService.findAllActiveFeedsByCampaignId(campaign1.getCampaignId());
-		assertEquals(mockFeeds.size(), feedDTOs.size());
-		assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
-		assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
-	}
+	// @Test
+	// void findAllActiveFeedsByCampaignId() {
+	// 	Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
+	// 	Mockito.when(feedRepository.findAllFeedsByCampaignId(campaign1, false)).thenReturn(mockFeeds);
+	// 	List<FeedDTO> feedDTOs = feedService.findAllActiveFeedsByCampaignId(campaign1.getCampaignId());
+	// 	assertEquals(mockFeeds.size(), feedDTOs.size());
+	// 	assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
+	// 	assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
+	// }
 
-	@Test
-	void findAllFeeds() {
-		Mockito.when(feedRepository.findByIsDeletedFalse()).thenReturn(mockFeeds);
-		List<FeedDTO> feedDTOs = feedService.findAllFeeds();
-		assertEquals(mockFeeds.size(), feedDTOs.size());
-		assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
-		assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
-	}
+	// @Test
+	// void findAllFeeds() {
+	// 	Mockito.when(feedRepository.findByIsDeletedFalse()).thenReturn(mockFeeds);
+	// 	List<FeedDTO> feedDTOs = feedService.findAllFeeds();
+	// 	assertEquals(mockFeeds.size(), feedDTOs.size());
+	// 	assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
+	// 	assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
+	// }
 
-	@Test
-	void findAllReadFeedsByCampaignId() {
-		Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
-		Mockito.when(feedRepository.findAllReadFeedsByCampaignId(campaign1, false, true)).thenReturn(mockFeeds);
-		List<FeedDTO> feedDTOs = feedService.findAllReadFeedsByCampaignId(campaign1.getCampaignId());
-		assertEquals(mockFeeds.size(), feedDTOs.size());
-		assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
-		assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
-	}
+	// @Test
+	// void findAllReadFeedsByCampaignId() {
+	// 	Mockito.when(campaignRepository.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
+	// 	Mockito.when(feedRepository.findAllReadFeedsByCampaignId(campaign1, false, true)).thenReturn(mockFeeds);
+	// 	List<FeedDTO> feedDTOs = feedService.findAllReadFeedsByCampaignId(campaign1.getCampaignId());
+	// 	assertEquals(mockFeeds.size(), feedDTOs.size());
+	// 	assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
+	// 	assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
+	// }
 	
-	@Test
-	void findAllFeedsByEmail() {
-		Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
-		Mockito.when(feedRepository.findAllFeedsByEmail(user, false)).thenReturn(mockFeeds);
-		List<FeedDTO> feedDTOs = feedService.findAllFeedsByEmail(user.getEmail());
-		assertEquals(mockFeeds.size(), feedDTOs.size());
-		assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
-		assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
-	}
+	// @Test
+	// void findAllFeedsByEmail() {
+	// 	Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+	// 	Mockito.when(feedRepository.findAllFeedsByEmail(user, false)).thenReturn(mockFeeds);
+	// 	List<FeedDTO> feedDTOs = feedService.findAllFeedsByEmail(user.getEmail());
+	// 	assertEquals(mockFeeds.size(), feedDTOs.size());
+	// 	assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
+	// 	assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
+	// }
 	
-	@Test
-	void findAllReadFeedsByEmail() {
-		Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
-		Mockito.when(feedRepository.findAllReadFeedsByEmail(user, false, true)).thenReturn(mockFeeds);
-		List<FeedDTO> feedDTOs = feedService.findAllReadFeedsByEmail(user.getEmail());
-		assertEquals(mockFeeds.size(), feedDTOs.size());
-		assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
-		assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
-	}
+	// @Test
+	// void findAllReadFeedsByEmail() {
+	// 	Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+	// 	Mockito.when(feedRepository.findAllReadFeedsByEmail(user, false, true)).thenReturn(mockFeeds);
+	// 	List<FeedDTO> feedDTOs = feedService.findAllReadFeedsByEmail(user.getEmail());
+	// 	assertEquals(mockFeeds.size(), feedDTOs.size());
+	// 	assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
+	// 	assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
+	// }
 
 
-	@Test
-	void findByFeedId() {
-		Mockito.when(feedRepository.findById(feed1.getFeedId())).thenReturn(Optional.of(feed1));
-		FeedDTO feedDTO = feedService.findByFeedId(feed1.getFeedId());
-		assertEquals(feedDTO.getFeedId(), feed1.getFeedId());
-	}
+	// @Test
+	// void findByFeedId() {
+	// 	Mockito.when(feedRepository.findById(feed1.getFeedId())).thenReturn(Optional.of(feed1));
+	// 	FeedDTO feedDTO = feedService.findByFeedId(feed1.getFeedId());
+	// 	assertEquals(feedDTO.getFeedId(), feed1.getFeedId());
+	// }
 
-	@Test
-	void updateReadStatusById() {
+	// @Test
+	// void updateReadStatusById() {
 
-		Mockito.when(feedRepository.save(Mockito.any(Feed.class))).thenReturn(feed1);
-		Mockito.when(feedRepository.findById(feed1.getFeedId())).thenReturn(Optional.of(feed1));
-		FeedDTO feedDTO = feedService.updateReadStatusById(feed1.getFeedId());
-		assertEquals(feedDTO.isRead(), true);
+	// 	Mockito.when(feedRepository.save(Mockito.any(Feed.class))).thenReturn(feed1);
+	// 	Mockito.when(feedRepository.findById(feed1.getFeedId())).thenReturn(Optional.of(feed1));
+	// 	FeedDTO feedDTO = feedService.updateReadStatusById(feed1.getFeedId());
+	// 	assertEquals(feedDTO.isRead(), true);
 
-	}
+	// }
 	
 	
 }

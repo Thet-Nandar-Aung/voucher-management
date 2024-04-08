@@ -1,33 +1,34 @@
 package sg.edu.nus.iss.springboot.voucher.management.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Pageable;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 
 public interface IFeedService {
 
-	List<FeedDTO> findAllFeeds();
+	// Map<Long, List<FeedDTO>> findAllFeeds(Pageable pageable);
 
-	List<FeedDTO> findAllActiveFeedsByCampaignId(String campaignId);
+	// Map<Long, List<FeedDTO>> findAllActiveFeedsByCampaignId(String campaignId, Pageable pageable);
 
-	List<FeedDTO> findAllReadFeeds();
+	// Map<Long, List<FeedDTO>> findAllReadFeeds(Pageable pageable);
 
-	List<FeedDTO> findAllReadFeedsByCampaignId(String campaignId);
+	// Map<Long, List<FeedDTO>> findAllReadFeedsByCampaignId(String campaignId, Pageable pageable);
 	
-	List<FeedDTO> findAllFeedsByEmail(String email);
+	Map<Long, List<FeedDTO>> findAllFeedsByEmail(String email, Pageable pageable);
 	
-	List<FeedDTO> findAllReadFeedsByEmail(String email);
+	// Map<Long, List<FeedDTO>> findAllReadFeedsByEmail(String email, Pageable pageable);
 
 	FeedDTO findByFeedId(String feedId);
 
-	boolean generateFeed();
+	// boolean generateFeed();
 
-	void delete(String feedId);
-
-	List<Feed> findByTargetedUserAndStatus(User targetedUser, Campaign campaignId);
+	// void delete(String feedId);
 
 	FeedDTO updateReadStatusById(String feedId);
 
-	List<FeedDTO> updateReadStatusByEmail(String email);
+	// Map<Long, List<FeedDTO>> updateReadStatusByEmail(String email, Pageable pageable);
 }

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
+import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
@@ -31,4 +32,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 	
 	Page<User> findByIsActiveTrue(Pageable pageable);
 
+	@Query("SELECT u FROM User u WHERE u.role = ?1 AND u.isVerified = ?2 AND u.isActive = ?3")
+	List<User> findByRoleAndIsActiveAndIsVerifiedUsers(RoleType roleType, boolean isActive, boolean isVerified);
 }
