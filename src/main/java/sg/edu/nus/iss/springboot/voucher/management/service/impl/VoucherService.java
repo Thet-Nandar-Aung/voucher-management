@@ -55,7 +55,10 @@ public class VoucherService implements IVoucherService {
 		List<VoucherDTO> voucherDTOList = new ArrayList<VoucherDTO>();
 		if (totalRecord > 0) {
 			for (Voucher voucher : voucherPages) {
-				voucherDTOList.add(DTOMapper.toVoucherDTO(voucher));
+				VoucherDTO voucherDTO = DTOMapper.toVoucherDTO(voucher);
+				List<Voucher> voucherList= voucherRepository.findByCampaignCampaignId(voucherDTO.getCampaign().getCampaignId());
+				voucherDTO.getCampaign().setNumberOfClaimedVouchers(voucherList.size());
+				voucherDTOList.add(voucherDTO);
 			}
 		}
 		result.put(totalRecord, voucherDTOList);
@@ -73,7 +76,9 @@ public class VoucherService implements IVoucherService {
 		if (totalRecord > 0) {
 
 			for (Voucher voucher : voucherPages) {
-				voucherDTOList.add(DTOMapper.toVoucherDTO(voucher));
+				VoucherDTO voucherDTO = DTOMapper.toVoucherDTO(voucher);
+				voucherDTO.getCampaign().setNumberOfClaimedVouchers((int)totalRecord);
+				voucherDTOList.add(voucherDTO);
 			}
 		}
 		result.put(totalRecord, voucherDTOList);
@@ -92,8 +97,12 @@ public class VoucherService implements IVoucherService {
 			logger.info("Saving voucher...");
 			Voucher savedVoucher = voucherRepository.save(voucher);
 			logger.info("Saved successfully...");
+			
+			VoucherDTO voucherDTO = DTOMapper.toVoucherDTO(savedVoucher);
+			List<Voucher> voucherList= voucherRepository.findByCampaignCampaignId(voucherDTO.getCampaign().getCampaignId());
+			voucherDTO.getCampaign().setNumberOfClaimedVouchers(voucherList.size());
 
-			return DTOMapper.toVoucherDTO(savedVoucher);
+			return voucherDTO;
 		} catch (Exception ex) {
 			logger.error("Voucher saving exception... {}", ex.toString());
 			return null;
@@ -115,7 +124,12 @@ public class VoucherService implements IVoucherService {
 			logger.info("Consuming voucher...");
 			Voucher savedVoucher = voucherRepository.save(dbVoucher);
 			logger.info("Consumed successfully...");
-			return DTOMapper.toVoucherDTO(savedVoucher);
+			
+			VoucherDTO voucherDTO =  DTOMapper.toVoucherDTO(savedVoucher);
+			List<Voucher> voucherList= voucherRepository.findByCampaignCampaignId(voucherDTO.getCampaign().getCampaignId());
+			voucherDTO.getCampaign().setNumberOfClaimedVouchers(voucherList.size());
+
+			return voucherDTO;
 		} catch (Exception ex) {
 			logger.error("Voucher consuming exception... {}", ex.toString());
 			return null;
@@ -128,7 +142,11 @@ public class VoucherService implements IVoucherService {
 		Voucher voucher = voucherRepository.findById(voucherId).orElse(null);
 		if (voucher != null) {
 			logger.info("Voucher found...");
-			return DTOMapper.toVoucherDTO(voucher);
+			VoucherDTO voucherDTO=DTOMapper.toVoucherDTO(voucher);
+			List<Voucher> voucherList= voucherRepository.findByCampaignCampaignId(voucherDTO.getCampaign().getCampaignId());
+			voucherDTO.getCampaign().setNumberOfClaimedVouchers(voucherList.size());
+			
+			return voucherDTO;
 		}
 		logger.warn("Didn't find any voucher for voucherId {}...", voucherId);
 		return null;
@@ -149,6 +167,12 @@ public class VoucherService implements IVoucherService {
 			logger.warn("Didn't find any voucher CampaignId", campaign.getCampaignId() ," Claimedby{}...", claimedBy.getEmail() );
 		}
 		return voucherDTOList;
+	}
+
+	@Override
+	public List<Voucher> findByCampaignCampaignId(String campaignId) {
+		// TODO Auto-generated method stub
+		return voucherRepository.findByCampaignCampaignId(campaignId);
 	}
 
 }

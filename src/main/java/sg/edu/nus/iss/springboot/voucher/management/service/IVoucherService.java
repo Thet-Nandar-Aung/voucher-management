@@ -23,4 +23,6 @@ public interface IVoucherService {
     VoucherDTO consume(Voucher voucher);
     
     List<VoucherDTO> findByCampaignIdAndClaimedBy(Campaign campaignId, User claimedBy); 
+    
+    List<Voucher> findByCampaignCampaignId(String campaignId);
 }
