@@ -203,21 +203,31 @@ public class VoucherController {
 
 					List<VoucherDTO> voucherDTOList = voucherService.findByCampaignIdAndClaimedBy(voucher.getCampaign(),
 							voucher.getClaimedBy());
-					if (voucherDTOList.size()>0) {
+					if (voucherDTOList.size() > 0) {
 						logger.error("Calling Voucher create API failed...");
-						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.error("Voucher already claimed."));
-					}else {
-						VoucherDTO voucherDTO = voucherService.claim(voucher);
-						if (voucherDTO != null) {
-							return ResponseEntity.status(HttpStatus.OK).body(
-									APIResponse.success(voucherService.claim(voucher), "Voucher claimed sucessfully."));
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+								.body(APIResponse.error("Voucher already claimed."));
+					} else {
+
+						List<Voucher> claimedVoucherList = voucherService.findByCampaignCampaignId(campaignId);
+
+						logger.info("claimedVoucherList: " + claimedVoucherList);
+						if (dbCampaign.get().getNumberOfVouchers() > claimedVoucherList.size()) {
+							VoucherDTO voucherDTO = voucherService.claim(voucher);
+							if (voucherDTO != null) {
+								return ResponseEntity.status(HttpStatus.OK).body(APIResponse
+										.success(voucherService.claim(voucher), "Voucher claimed sucessfully."));
+							} else {
+								logger.error("Calling Voucher create API failed...");
+								return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+										.body(APIResponse.error("Voucher claim failed."));
+							}
 						} else {
-							logger.error("Calling Voucher create API failed...");
-							return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-									.body(APIResponse.error("Voucher claim failed."));
+							return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+									.body(APIResponse.error("Campaign is fully claimed."));
 						}
-						
-					}
+
+					} //
 
 				} else {
 					logger.error("Calling Voucher create API failed...");

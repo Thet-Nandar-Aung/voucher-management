@@ -65,6 +65,7 @@ public class CampaignService implements ICampaignService, ICampaignSubject {
 
 		if (totalRecord > 0) {
 			for (Campaign campaign : campaignPages.getContent()) {
+				campaign.setVoucher(voucherRepository.findByCampaignCampaignId(campaign.getCampaignId()));
 				CampaignDTO campaignDTO = DTOMapper.toCampaignDTO(campaign);
 				campaignDTOList.add(campaignDTO);
 			}
