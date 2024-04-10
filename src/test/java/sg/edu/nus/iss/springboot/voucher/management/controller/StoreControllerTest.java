@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -58,7 +59,6 @@ public class StoreControllerTest {
 	@MockBean
 	private StoreService storeService;
 
-
 	private static List<StoreDTO> mockStores = new ArrayList<>();
 
 	private static User user = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
@@ -79,7 +79,6 @@ public class StoreControllerTest {
 		mockStores.add(DTOMapper.toStoreDTO(store2));
 	}
 
-
 	@Test
 	void testGetStoreById() throws Exception {
 		Mockito.when(storeService.findByStoreId(store1.getStoreId())).thenReturn(DTOMapper.toStoreDTO(store1));
@@ -91,7 +90,7 @@ public class StoreControllerTest {
 
 	@Test
 	void testGetAllActiveStore() throws Exception {
-		
+
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("storeName").ascending());
 		Map<Long, List<StoreDTO>> mockStoreMap = new HashMap<>();
 		mockStoreMap.put(0L, mockStores);
@@ -125,46 +124,45 @@ public class StoreControllerTest {
 
 	}
 
-	/*
 	@Test
 	void testCreateStore() throws Exception {
 
-		Mockito.when(userService.findByEmail(store1.getCreatedBy().getEmail())).thenReturn(user);
-		
 		MockMultipartFile uploadFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
 
 		MockMultipartFile store = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
 				objectMapper.writeValueAsBytes(store1));
 		store1.setCreatedBy(user);
-		Mockito.when(storeService.create(store1,uploadFile)).thenReturn(DTOMapper.toStoreDTO(store1));
+
+		Mockito.when(userService.findByEmail(store1.getCreatedBy().getEmail())).thenReturn(user);
+
+		Mockito.when(storeService.create(Mockito.any(Store.class), Mockito.any(MultipartFile.class)))
+				.thenReturn(DTOMapper.toStoreDTO(store1));
 
 		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/create").file(store).file(uploadFile)
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.message").value("Store created successfully."))
-				.andExpect(jsonPath("$.result[0].storeName").value(store1.getStoreName())).andDo(print());
+				.andExpect(jsonPath("$.message").value("Store created successfully.")).andDo(print());
 
 	}
 
 	@Test
 	void testUpdateStore() throws Exception {
-		
+
 		MockMultipartFile uploadFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
 
 		MockMultipartFile store = new MockMultipartFile("store", "store", MediaType.APPLICATION_JSON_VALUE,
 				objectMapper.writeValueAsBytes(store1));
-		
+
 		Mockito.when(storeService.findByStoreId(store1.getStoreId())).thenReturn(DTOMapper.toStoreDTO(store1));
 		Mockito.when(userService.findByEmail(store1.getUpdatedBy().getEmail())).thenReturn(user);
-		
-		Mockito.when(storeService.update(store1,uploadFile)).thenReturn(DTOMapper.toStoreDTO(store1));
+		Mockito.when(storeService.update(Mockito.any(Store.class), Mockito.any(MultipartFile.class)))
+				.thenReturn(DTOMapper.toStoreDTO(store1));
 
 		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/store/update").file(store).file(uploadFile)
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.message").value("Store updated successfully."))
-				.andExpect(jsonPath("$.result[0].storeName").value(store1.getStoreName())).andDo(print());
+				.andExpect(jsonPath("$.message").value("Store updated successfully.")).andDo(print());
 
-	}*/
-   
+	}
+
 }

@@ -34,6 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -85,12 +86,12 @@ public class UserControllerTest {
 		testUser = new User();
 
 	}
-/*
+
 	@Test
 	public void testCreateUser() throws Exception {
 		
-		Mockito.when(userService.create(testUser)).thenReturn(testUser);
-		
+		Mockito.when(userService.create(Mockito.any(User.class)))
+		.thenReturn(testUser);
 
 		MockMultipartFile imageFile = new MockMultipartFile("image", "welcome.jpg", "image/jpg", "welcome".getBytes());
 
@@ -106,7 +107,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.result[0].email").value(testUser.getEmail()))
 				.andExpect(jsonPath("$.result[0].role").value(testUser.getRole().toString())).andDo(print());
 
-	}*/
+	}
 
 	@Test
 	public void testUpdateUser() throws Exception {
@@ -132,10 +133,12 @@ public class UserControllerTest {
 
 	@Test
 	public void testResetPassword() throws Exception {
-
+		testUser.setVerified(true);
 		UserRequest userRequest = new UserRequest(testUser.getEmail(), "Pwd@21212");
-		Mockito.when(userService.findByEmailAndStatus(userRequest.getEmail(), true, true)).thenReturn(testUser);
+		Mockito.when(userService.findByEmail(userRequest.getEmail())).thenReturn(testUser);
 		Mockito.when(userService.update(testUser)).thenReturn(testUser);
+		Mockito.when(userService.findByEmailAndStatus(testUser.getEmail(),true,true)).thenReturn(testUser);
+		
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/user/resetPassword").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userRequest))).andExpect(MockMvcResultMatchers.status().isOk())

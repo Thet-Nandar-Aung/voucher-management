@@ -145,7 +145,7 @@ public class CampaignControllerTest {
 	void testCreateCampaign() throws Exception {
 		Mockito.when(campaignService.create(Mockito.any(Campaign.class))).thenReturn(DTOMapper.toCampaignDTO(campaign1));
 		Mockito.when(storeService.findByStoreId(store.getStoreId())).thenReturn(DTOMapper.toStoreDTO(store));
-		Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(user);
+		Mockito.when(userService.findByEmailAndStatus(user.getEmail(),true,true)).thenReturn(user);
 		
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/create").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(campaign1))).andExpect(MockMvcResultMatchers.status().isOk())
@@ -156,6 +156,8 @@ public class CampaignControllerTest {
 	@Test
 	void testUpdateCampaign() throws Exception {
 		Mockito.when(campaignService.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
+		Mockito.when(userService.findByEmailAndStatus(user.getEmail(),true,true)).thenReturn(user);
+		
 		campaign1.setDescription("new desc");
 		Mockito.when(campaignService.update(Mockito.any(Campaign.class))).thenReturn(DTOMapper.toCampaignDTO(campaign1));
 		
@@ -167,7 +169,13 @@ public class CampaignControllerTest {
 
 	@Test
 	void testPromoteCampaign() throws Exception {
-		Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(user);
+		campaign1.setStartDate(LocalDateTime.now().plusDays(10));
+		
+		campaign1.setEndDate(LocalDateTime.now().plusDays(20));
+		Mockito.when(campaignService.findById(campaign1.getCampaignId())).thenReturn(Optional.of(campaign1));
+		
+		Mockito.when(userService.findByEmailAndStatus(user.getEmail(),true,true)).thenReturn(user);
+		
 		campaign1.setCampaignStatus(CampaignStatus.CREATED);
 		Mockito.when(campaignService.promote(Mockito.any(Campaign.class))).thenReturn(DTOMapper.toCampaignDTO(campaign1));
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/campaign/promote").contentType(MediaType.APPLICATION_JSON)

@@ -68,10 +68,10 @@ public class StoreController {
 				logger.info("StoreDTO List: " + storeDTOList);
 
 			}
-			if(storeDTOList.size()>0) {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(APIResponse.success(storeDTOList, "Successfully get all active store.", totalRecord));
-			}else {
+			if (storeDTOList.size() > 0) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(APIResponse.success(storeDTOList, "Successfully get all active store.", totalRecord));
+			} else {
 				String message = "Store not found.";
 				logger.error(message);
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
@@ -139,7 +139,8 @@ public class StoreController {
 				} else {
 					message = "Store retrieving failed: Invalid User :" + email;
 					logger.error(message);
-					return ResponseEntity.notFound().build();
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.error(message));
+					
 				}
 			} else {
 				message = "User email cannot be blank.";
@@ -213,21 +214,21 @@ public class StoreController {
 				} else {
 					message = "Create store failed: Unable to create a new store.";
 					logger.error(message);
-
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
 				}
 
 			} else {
 				message = validationResult.getMessage();
 				logger.error(message);
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
 			}
 
-		} catch (Exception e) {
-			message = "Error: " + e.toString();
+		} catch (Exception ex) {
+			message = "Error: " + ex.toString();
 			logger.error(message);
-
+			throw ex;
 		}
 
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
 	}
 
 	@PostMapping(value = "/update", produces = "application/json")

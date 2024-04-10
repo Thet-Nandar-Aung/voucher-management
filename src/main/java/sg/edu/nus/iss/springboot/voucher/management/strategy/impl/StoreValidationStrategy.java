@@ -3,6 +3,7 @@ package sg.edu.nus.iss.springboot.voucher.management.strategy.impl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,14 +40,9 @@ public class StoreValidationStrategy implements IAPIHelperValidationStrategy<Sto
 		}
 
 		String userEmail = GeneralUtility.makeNotNull(store.getCreatedBy().getEmail());
-		String validUserMsg = validateUser(userEmail);
-
-		if (!validUserMsg.equals("")) {
-
-			validationResult.setMessage(validUserMsg);
-			validationResult.setValid(false);
-			return validationResult;
-
+		ValidationResult validationObjResult = validateObject(userEmail);
+		if (!validationObjResult.isValid()) {
+			return validationObjResult;
 		}
 
 		if (store.getStoreName() == null || store.getStoreName().isEmpty()) {
@@ -89,13 +85,15 @@ public class StoreValidationStrategy implements IAPIHelperValidationStrategy<Sto
 
 		}
 
-		// Retrieve store from database
-		Optional<Store> optionalStore = storeRepository.findById(storeId);
-		if (optionalStore.isEmpty()) {
-			validationResult.setMessage("Unable to find the store with ID: " + storeId);
+		StoreDTO storeDTO = storeService.findByStoreId(storeId);
+
+		if (storeDTO == null || storeDTO.getStoreId() == null || storeDTO.getStoreId().isEmpty()) {
+			validationResult.setMessage("Invalid store Id: " + storeId);
+			validationResult.setStatus(HttpStatus.BAD_REQUEST);
 			validationResult.setValid(false);
 			return validationResult;
 		}
+		
 
 		// Check for updated by user
 		String updatedByEmail = GeneralUtility.makeNotNull(store.getUpdatedBy().getEmail());
@@ -105,37 +103,36 @@ public class StoreValidationStrategy implements IAPIHelperValidationStrategy<Sto
 			return validationResult;
 		}
 
-		String validUserMsg = validateUser(updatedByEmail);
+		ValidationResult validationObjResult = validateObject(updatedByEmail);
+		if (!validationObjResult.isValid()) {
+			return validationObjResult;
+		}
 
-		if (!validUserMsg.equals("")) {
-			validationResult.setMessage(validUserMsg);
+		validationResult.setValid(true);
+		return validationResult;
+	}
+
+	@Override
+	public ValidationResult validateObject(String userEmail) {
+		ValidationResult validationResult = new ValidationResult();
+		User user = userService.findByEmail(userEmail);
+		if (user == null || user.getEmail() == null || user.getEmail().isEmpty()) {
+			validationResult.setMessage("Store create failed: Invalid User: " + userEmail);
+			validationResult.setValid(false);
+			return validationResult;
+
+		}
+
+		// Check user role
+		String userRole = GeneralUtility.makeNotNull(user.getRole());
+		if (!userRole.equals(RoleType.MERCHANT.toString())) {
+			validationResult.setMessage("Invalid user role.");
 			validationResult.setValid(false);
 			return validationResult;
 
 		}
 		validationResult.setValid(true);
 		return validationResult;
-	}
-
-	private String validateUser(String userEmail) {
-		//
-		User user = userService.findByEmail(userEmail);
-		if (user == null) {
-			return "Store create failed: Invalid User: " + userEmail;
-		}
-
-		// Check user role
-		String userRole = GeneralUtility.makeNotNull(user.getRole());
-		if (!userRole.equals(RoleType.MERCHANT.toString())) {
-			return "Bad Request: Invalid user role.";
-		}
-		return "";
-	}
-
-	@Override
-	public ValidationResult validateObject(String data) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

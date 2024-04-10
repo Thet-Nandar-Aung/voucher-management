@@ -138,7 +138,6 @@ public class VoucherControllerTest {
 				.content(objectMapper.writeValueAsString(voucher2))).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andDo(print());
-		// .andExpect(jsonPath("$.data.voucherId").value(1)).andDo(print());
 	}
 
 	@Test

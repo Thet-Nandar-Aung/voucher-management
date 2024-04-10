@@ -197,8 +197,13 @@ public class UserController {
 		MessageResponse response = new MessageResponse();
 		String message = "";
 		try {
+			
+			ValidationResult validationResult = userValidationStrategy.validateObject(resetPwdReq.getEmail());
+			if (!validationResult.isValid()) {
+				response.setMessage(validationResult.getMessage());
+				return new ResponseEntity<>(response, validationResult.getStatus());
+			}
 
-			if (!GeneralUtility.makeNotNull(resetPwdReq.getEmail()).equals("")) {
 				User dbUser = userService.findByEmailAndStatus(resetPwdReq.getEmail(), true, true);
 				if (!GeneralUtility.makeNotNull(dbUser).equals("")) {
 
@@ -224,13 +229,7 @@ public class UserController {
 					response.setMessage(message);
 					return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 				}
-			} else {
-				message = "Bad Request.";
-				logger.error(message);
-				response.setMessage(message);
-				return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-
-			}
+			
 		} catch (Exception e) {
 			logger.error("Error, " + e.toString());
 			e.printStackTrace();
