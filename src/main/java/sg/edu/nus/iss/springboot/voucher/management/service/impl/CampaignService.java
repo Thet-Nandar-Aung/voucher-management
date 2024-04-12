@@ -261,9 +261,9 @@ public class CampaignService implements ICampaignService, ICampaignSubject {
 						logger.info("Promotted successfully...");
 						campaignDTO = DTOMapper.toCampaignDTO(promottedCampaign);
 						registerObserver(feedObserver); // attach observer
-						notifyObservers(campaign); // notify observer
+						notifyObservers(dbCampaign.orElse(campaign)); // notify observer
 						logger.info("Feed generated successfully...");
-					} else {
+					} else { 
 						logger.info(
 								"Promoting campaign Failed: startDate{} should not be greater than current date and endDate{} should not be less than current date...",
 								startDate, endDate);
