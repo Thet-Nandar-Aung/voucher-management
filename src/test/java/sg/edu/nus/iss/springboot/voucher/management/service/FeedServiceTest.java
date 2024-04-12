@@ -1,8 +1,10 @@
 package sg.edu.nus.iss.springboot.voucher.management.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -13,6 +15,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -124,15 +130,24 @@ public class FeedServiceTest {
 	// 	assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
 	// }
 	
-	// @Test
-	// void findAllFeedsByEmail() {
-	// 	Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
-	// 	Mockito.when(feedRepository.findAllFeedsByEmail(user, false)).thenReturn(mockFeeds);
-	// 	List<FeedDTO> feedDTOs = feedService.findAllFeedsByEmail(user.getEmail());
-	// 	assertEquals(mockFeeds.size(), feedDTOs.size());
-	// 	assertEquals(mockFeeds.get(0).getFeedId(), feedDTOs.get(0).getFeedId());
-	// 	assertEquals(mockFeeds.get(1).getFeedId(), feedDTOs.get(1).getFeedId());
-	// }
+	@Test
+	void findAllFeedsByEmail() {
+		long totalRecord =0;
+		List<FeedDTO> feedDTOList =new ArrayList<FeedDTO>();
+		Pageable pageable = PageRequest.of(0, 10);
+		Page<Feed> mockFeedsPage = new PageImpl<>(mockFeeds, pageable, mockFeeds.size());
+		Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+		Mockito.when(feedRepository.findAllFeedsByEmail(user, false, pageable)).thenReturn(mockFeedsPage);
+
+		Map<Long, List<FeedDTO>> feedPages = feedService.findAllFeedsByEmail(user.getEmail(), pageable);
+		for (Map.Entry<Long, List<FeedDTO>> entry : feedPages.entrySet()) {
+			totalRecord = entry.getKey();
+			feedDTOList = entry.getValue();
+		}
+
+		assertThat(totalRecord).isGreaterThan(0);
+		assertThat(feedDTOList.get(0).getFeedId()).isEqualTo("1");
+	}
 	
 	// @Test
 	// void findAllReadFeedsByEmail() {
@@ -145,22 +160,20 @@ public class FeedServiceTest {
 	// }
 
 
-	// @Test
-	// void findByFeedId() {
-	// 	Mockito.when(feedRepository.findById(feed1.getFeedId())).thenReturn(Optional.of(feed1));
-	// 	FeedDTO feedDTO = feedService.findByFeedId(feed1.getFeedId());
-	// 	assertEquals(feedDTO.getFeedId(), feed1.getFeedId());
-	// }
+	@Test
+	void findByFeedId() {
+		Mockito.when(feedRepository.findById(feed1.getFeedId())).thenReturn(Optional.of(feed1));
+		FeedDTO feedDTO = feedService.findByFeedId(feed1.getFeedId());
+		assertEquals(feedDTO.getFeedId(), feed1.getFeedId());
+	}
 
-	// @Test
-	// void updateReadStatusById() {
-
-	// 	Mockito.when(feedRepository.save(Mockito.any(Feed.class))).thenReturn(feed1);
-	// 	Mockito.when(feedRepository.findById(feed1.getFeedId())).thenReturn(Optional.of(feed1));
-	// 	FeedDTO feedDTO = feedService.updateReadStatusById(feed1.getFeedId());
-	// 	assertEquals(feedDTO.isRead(), true);
-
-	// }
+	@Test
+	void updateReadStatusById() {
+		Mockito.when(feedRepository.save(Mockito.any(Feed.class))).thenReturn(feed1);
+		Mockito.when(feedRepository.findById(feed1.getFeedId())).thenReturn(Optional.of(feed1));
+		FeedDTO feedDTO = feedService.updateReadStatusById(feed1.getFeedId());
+		assertEquals(feedDTO.isRead(), true);
+	}
 	
 	
 }
