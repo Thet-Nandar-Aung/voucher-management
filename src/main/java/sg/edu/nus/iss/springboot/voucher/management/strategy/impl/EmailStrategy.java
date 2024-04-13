@@ -22,7 +22,7 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 @Component
 public class EmailStrategy implements IFeedStrategy {
 
-    private static final Logger logger = LoggerFactory.getLogger(NotificationStrategy.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailStrategy.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -66,7 +66,7 @@ public class EmailStrategy implements IFeedStrategy {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error occurred while sendVerificationEmail, " + e.toString());
+            logger.error("Error occurred while sendFeedEmail, " + e.toString());
             e.printStackTrace();
         }
     }
