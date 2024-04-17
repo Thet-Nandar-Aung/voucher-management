@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 
@@ -27,5 +28,7 @@ public interface CampaignRepository extends JpaRepository<Campaign, String> {
     
     @Query("SELECT c FROM Campaign c WHERE c.campaignStatus IN ?1")
     Page<Campaign> findByCampaignStatusIn(List<CampaignStatus> statuses,Pageable pageable);
+    
+    List<Campaign> findByEndDateBefore(LocalDateTime currentDate);
 
 }

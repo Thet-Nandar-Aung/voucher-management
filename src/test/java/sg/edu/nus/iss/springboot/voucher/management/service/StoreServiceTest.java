@@ -23,21 +23,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
-import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
-import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
-import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
 @SpringBootTest
 @Transactional

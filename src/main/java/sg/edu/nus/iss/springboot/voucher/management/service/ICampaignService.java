@@ -23,10 +23,10 @@ public interface ICampaignService {
     CampaignDTO create(Campaign campaign);
 
     CampaignDTO update(Campaign campaign);
-
-    boolean delete(Campaign campaign);
     
     CampaignDTO promote(Campaign campaign);
+    
+    List<Campaign> expired();
     
     List<Campaign>  findByDescription(String description);
     

@@ -9,10 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 
-@Data
 @Getter
 @Setter
-@AllArgsConstructor
 public class CampaignDTO {
 
     private String campaignId;
@@ -35,9 +33,5 @@ public class CampaignDTO {
 
     public CampaignDTO(){
     }
-    
-    public CampaignDTO(String campaignId , UserDTO updatedBy) {
-    	this.campaignId = campaignId;
-    	this.updatedBy=updatedBy;
-    }
+   
 }

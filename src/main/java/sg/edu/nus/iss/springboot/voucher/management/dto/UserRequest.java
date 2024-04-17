@@ -10,12 +10,6 @@ public class UserRequest {
 	}
 	
 
-	public UserRequest(String email) {
-		super();
-		this.email = email;
-	}
-
-
 	public UserRequest(String email, String password) {
 		super();
 		this.email = email;

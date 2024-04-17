@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -31,10 +34,12 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
@@ -106,6 +111,30 @@ public class CampaignControllerTest {
 				.andExpect(jsonPath("$.success").value(true)).andExpect(jsonPath("$.data[0].campaignId").value(1))
 				.andDo(print());
 	}
+	
+	
+	@Test
+    void testGetAllActiveCampaigns_whenNoCampaignsFound() throws Exception {
+        // Mock empty resultMap
+        Map<Long, List<CampaignDTO>> mockCampaignMap = new HashMap<>();
+
+        // Mock pageable
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("startDate").ascending());
+
+        // Mock behavior of campaignService
+        Mockito.when(campaignService.findAllActiveCampaigns(pageable)).thenReturn(mockCampaignMap);
+
+
+        // Perform GET request and assert the response
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/campaign/all/active")
+                .param("page", "0").param("size", "10")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Campaign not found."))
+                .andDo(print());
+    }
 
 	@Test
 	void getAllCampaignsByStoreId() throws Exception {
@@ -183,6 +212,22 @@ public class CampaignControllerTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.success").value(true)).andDo(print());
 	}
+	
+	@Test
+	void testGetByCampaignId() throws Exception {
+
+		
+		Mockito.when(campaignService.findByCampaignId(campaign1.getCampaignId()))
+				.thenReturn(DTOMapper.toCampaignDTO(campaign1));
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/api/campaign/getById")
+						.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(campaign1)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.success").value(true)).andDo(print());
+	}
+
+	
 
 }
 

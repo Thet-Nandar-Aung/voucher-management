@@ -3,7 +3,6 @@ package sg.edu.nus.iss.springboot.voucher.management.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -281,7 +280,7 @@ public class CampaignController {
 			throw ex;
 		}
 	}
-
+/*
 	@PostMapping(value = "/delete", produces = "application/json")
 
 	public ResponseEntity<APIResponse<Campaign>> deleteCampaign(@RequestBody Campaign campaign) {
@@ -331,7 +330,7 @@ public class CampaignController {
 
 		}
 
-	}
+	}*/
 
 	@PostMapping(value = "/promote", produces = "application/json")
 	public ResponseEntity<APIResponse<CampaignDTO>> promoteCampaign(@RequestBody Campaign campaign) {

@@ -194,9 +194,9 @@ public class CampaignService implements ICampaignService, ICampaignSubject {
 			dbCampaign.get().setTandc(GeneralUtility.makeNotNull(campaign.getTandc()));
 			dbCampaign.get().setUpdatedBy(user);
 			dbCampaign.get().setUpdatedDate(LocalDateTime.now());
-			logger.info("Saving campaign...");
+			logger.info("Update campaign...");
 			Campaign savedCampaign = campaignRepository.save(dbCampaign.get());
-			logger.info("Saved successfully...");
+			logger.info("Updated successfully...");
 			campaignDTO = DTOMapper.toCampaignDTO(savedCampaign);
 
 		} catch (Exception ex) {
@@ -208,32 +208,25 @@ public class CampaignService implements ICampaignService, ICampaignSubject {
 
 	}
 
-	@Override
-	public boolean delete(Campaign campaign) {
-		boolean isDeleted = false;
-
-		try {
-			logger.info("Deleting campaignId {}...", campaign.getCampaignId());
-
-			User user = userRepository.findByEmail(campaign.getUpdatedBy().getEmail());
-			campaign.setUpdatedBy(user);
-			campaign.setUpdatedDate(LocalDateTime.now());
-			campaign.setDeleted(true);
-
-			logger.info("Saving campaign...");
-			Campaign savedCampaign = campaignRepository.save(campaign);
-			logger.info("Saved successfully...");
-			if (savedCampaign.isDeleted()) {
-				isDeleted = true;
-			}
-
-			logger.info("Deleted successfully...");
-		} catch (Exception ex) {
-			logger.error("Campaign deleting exception... {}", ex.toString());
-		}
-
-		return isDeleted;
-	}
+	/*
+	 * @Override public boolean delete(Campaign campaign) { boolean isDeleted =
+	 * false;
+	 * 
+	 * try { logger.info("Deleting campaignId {}...", campaign.getCampaignId());
+	 * 
+	 * User user = userRepository.findByEmail(campaign.getUpdatedBy().getEmail());
+	 * campaign.setUpdatedBy(user); campaign.setUpdatedDate(LocalDateTime.now());
+	 * campaign.setDeleted(true);
+	 * 
+	 * logger.info("Saving campaign..."); Campaign savedCampaign =
+	 * campaignRepository.save(campaign); logger.info("Saved successfully..."); if
+	 * (savedCampaign.isDeleted()) { isDeleted = true; }
+	 * 
+	 * logger.info("Deleted successfully..."); } catch (Exception ex) {
+	 * logger.error("Campaign deleting exception... {}", ex.toString()); }
+	 * 
+	 * return isDeleted; }
+	 */
 
 	@Override
 	public CampaignDTO promote(Campaign campaign) {
@@ -263,7 +256,7 @@ public class CampaignService implements ICampaignService, ICampaignSubject {
 						registerObserver(feedObserver); // attach observer
 						notifyObservers(dbCampaign.orElse(campaign)); // notify observer
 						logger.info("Feed generated successfully...");
-					} else { 
+					} else {
 						logger.info(
 								"Promoting campaign Failed: startDate{} should not be greater than current date and endDate{} should not be less than current date...",
 								startDate, endDate);
@@ -305,6 +298,30 @@ public class CampaignService implements ICampaignService, ICampaignSubject {
 		for (FeedObserver feedObserver : feedObservers) {
 			feedObserver.update(campaign);
 		}
+	}
+
+	@Override
+	public List<Campaign> expired() {
+		List<Campaign> expiredList = new ArrayList<Campaign>();
+		try {
+			List<Campaign> dbCampaigns = campaignRepository.findByEndDateBefore(LocalDateTime.now());
+			  if (!dbCampaigns.isEmpty()) {
+				for (Campaign campaing : dbCampaigns) {
+					campaing.setCampaignStatus(CampaignStatus.EXPIRED);
+					campaing.setUpdatedDate(LocalDateTime.now());
+					logger.info("Update campaign...");
+					Campaign savedCampaign = campaignRepository.save(campaing);
+					logger.info("Saved successfully...");
+					expiredList.add(savedCampaign);
+				}
+			}
+
+		} catch (Exception ex) {
+			logger.error("Campaign expiring exception... {}", ex.toString());
+
+		}
+		return expiredList;
+
 	}
 
 }

@@ -57,15 +57,6 @@ public class GlobalExceptionHandler {
 	}
 	
 	
-	@ExceptionHandler(VoucherAppErrorException.class)
-    @ResponseBody
-    public ResponseEntity<APIResponse> VoucherAppErrorException(VoucherAppErrorException ex) {
-        String message = "Custom error occurred: " + ex.getMessage();
-        logger.error(message);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(APIResponse.error(message));
-    }
-	
 	@ExceptionHandler(IllegalArgumentException.class)
     @ResponseBody
     public ResponseEntity<APIResponse> illegalArgumentException(IllegalArgumentException ex) {

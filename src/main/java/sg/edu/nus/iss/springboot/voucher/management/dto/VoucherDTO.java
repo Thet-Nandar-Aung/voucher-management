@@ -8,10 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import sg.edu.nus.iss.springboot.voucher.management.enums.VoucherStatus;
 
-@Data
 @Getter
 @Setter
-@AllArgsConstructor
 public class VoucherDTO {
 
     private String voucherId;
@@ -23,6 +21,7 @@ public class VoucherDTO {
 	private UserDTO claimedBy;
 
     public VoucherDTO(){
+    	
     }
 
 }

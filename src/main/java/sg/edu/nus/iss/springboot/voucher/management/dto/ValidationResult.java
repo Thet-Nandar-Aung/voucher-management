@@ -2,11 +2,9 @@ package sg.edu.nus.iss.springboot.voucher.management.dto;
 
 import org.springframework.http.HttpStatus;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
 @Getter
 @Setter
 public class ValidationResult {
@@ -15,4 +13,7 @@ public class ValidationResult {
 	private String imageUrl;
 	private HttpStatus status;
 
+	public ValidationResult() {
+
+	}
 }

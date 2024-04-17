@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import lombok.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 
-@Data
 public class UserResponse {
 
 	private String message;
@@ -38,14 +37,6 @@ public class UserResponse {
 
 		public ResultItem() {
 			super();
-		}
-
-		public ResultItem(String email, String username, RoleType role, String image) {
-			super();
-			this.email = email;
-			this.username = username;
-			this.role = role;
-			this.image = image;
 		}
 
 		public String getEmail() {

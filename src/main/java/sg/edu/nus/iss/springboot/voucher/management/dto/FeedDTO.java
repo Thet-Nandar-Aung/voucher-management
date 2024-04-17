@@ -8,10 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 
-@Data
 @Getter
 @Setter
-@AllArgsConstructor
 public class FeedDTO {
 
 	private String feedId;

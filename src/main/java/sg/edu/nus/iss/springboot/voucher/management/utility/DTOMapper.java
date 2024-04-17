@@ -1,11 +1,7 @@
 package sg.edu.nus.iss.springboot.voucher.management.utility;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.services.s3.AmazonS3;
-
-import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
@@ -19,12 +15,6 @@ import sg.edu.nus.iss.springboot.voucher.management.entity.Voucher;
 
 @Component
 public class DTOMapper {
-
-	@Autowired
-	private static AmazonS3 s3Client;
-
-	@Autowired
-	private static VourcherManagementSecurityConfig securityConfig;
 
 	public static CampaignDTO toCampaignDTO(Campaign campaign) {
 		CampaignDTO campaignDTO = new CampaignDTO();

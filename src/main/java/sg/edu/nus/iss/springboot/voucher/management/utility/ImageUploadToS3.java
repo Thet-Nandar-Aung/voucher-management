@@ -7,6 +7,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.HttpMethod;
@@ -19,6 +20,7 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import sg.edu.nus.iss.springboot.voucher.management.VoucherManagementApplication;
 import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
 
+@Component
 public class ImageUploadToS3 {
 
 	private static final Logger logger = LoggerFactory.getLogger(ImageUploadToS3.class);
@@ -137,33 +139,6 @@ public class ImageUploadToS3 {
 		}
 		return false;
 	}
-
-	public static boolean imageUploadWithReadAccess(AmazonS3 s3Client, MultipartFile multipartFile,
-			VourcherManagementSecurityConfig securityConfig, String keyPrefix) {
-
-		String bucketName = securityConfig.getS3Bucket().trim();
-		String uploadFileName = multipartFile.getOriginalFilename();
-
-		try {
-			if (!multipartFile.isEmpty()) {
-
-				InputStream is = multipartFile.getInputStream();
-
-				// Create a PutObjectRequest with public read access
-				PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, keyPrefix + uploadFileName, is,
-						null).withCannedAcl(CannedAccessControlList.PublicRead);
-
-				// Upload the object with specified ACL
-				PutObjectResult putObjResult = s3Client.putObject(putObjectRequest);
-				logger.info("Object ETag:" + putObjResult.getETag());
-
-				return true;
-			}
-		} catch (Exception e) {
-			logger.error("Error while uploading image: " + e.getMessage());
-			return false;
-		}
-		return false;
-	}
+	
 
 }

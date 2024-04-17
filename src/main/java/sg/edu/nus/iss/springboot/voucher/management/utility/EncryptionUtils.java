@@ -57,8 +57,8 @@ public class EncryptionUtils {
 	/*
 	public static void main(String[] args) throws Exception {
 		EncryptionUtils util = new EncryptionUtils();
-		String verificationCode = "4E5FCA157F8CEC4E6A351A349C08AC05896D21C97F102BBE318A70314B651E46BB23B575199E2A55720380070701C43D";
-        String decodedVerificationCode = "7f03a9a9-d7a5-4742-bc85-68d52b2bee45";
+		String verificationCode = "";
+        String decodedVerificationCode = "";
         try {
 			String decodedVerificationCode1 = util.encrypt(decodedVerificationCode);
 			System.out.println(decodedVerificationCode1);

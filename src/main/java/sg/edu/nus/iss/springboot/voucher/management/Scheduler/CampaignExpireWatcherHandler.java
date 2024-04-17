@@ -6,27 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.FeedService;
 
 @Component
-public class FeedGenerateWatcherHandler {
+public class CampaignExpireWatcherHandler {
 
-	private static final Logger logger = LoggerFactory.getLogger(FeedGenerateWatcherHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(CampaignExpireWatcherHandler.class);
 
 	@Autowired
-	private FeedService feedService;
+	private CampaignService campaignService;
 
 
 	@Scheduled(fixedDelay = 300000) // 5 minutes = 300,000 milliseconds
 	public void run() {
 
-		logger.info("Star Run FeedGenerateWatcherHandler...");
+		logger.info("Star Run CampaignExpireWatcherHandler...");
 
 		try {
-            // feedService.generateFeed();
+			campaignService.expired();
 
 		} catch (Exception ex) {
-			logger.error("FeedGenerateWatcherHandler exception... {}", ex.toString());
+			logger.error("CampaignExpireWatcherHandler exception... {}", ex.toString());
 			ex.printStackTrace();
 		}
 	}

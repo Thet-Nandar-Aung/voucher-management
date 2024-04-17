@@ -2,6 +2,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,8 +13,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,11 +23,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
-import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
@@ -78,7 +75,7 @@ public class CampaignServiceTest {
 	}
 
 	@Test
-	void getAllActiveCampaigns() {
+	void findAllActiveCampaigns() {
 		long totalRecord = 0;
 		List<CampaignDTO> campaignDTOList = new ArrayList<CampaignDTO>();
 		Pageable pageable = PageRequest.of(0, 10);
@@ -101,7 +98,7 @@ public class CampaignServiceTest {
 	}
 
 	@Test
-	void getAllCampaignsByStoreId() {
+	void findAllCampaignsByStoreId() {
 		long totalRecord = 0;
 		List<CampaignDTO> campaignDTOList = new ArrayList<CampaignDTO>();
 		Pageable pageable = PageRequest.of(0, 10);
@@ -123,7 +120,7 @@ public class CampaignServiceTest {
 	}
 
 	@Test
-	void getAllCampaignsByEmail() {
+	void findAllCampaignsByEmail() {
 		long totalRecord = 0;
 		List<CampaignDTO> campaignDTOList = new ArrayList<CampaignDTO>();
 		Pageable pageable = PageRequest.of(0, 10);
@@ -192,4 +189,27 @@ public class CampaignServiceTest {
 		CampaignDTO campaignDTO = campaignService.promote(campaign1);
 		assertEquals(campaignDTO.getCampaignStatus(), CampaignStatus.PROMOTED);
 	}
+
+	@Test
+	void findByStoreIdAndStatus() {
+		long totalRecord = 0;
+		List<CampaignDTO> campaignDTOList = new ArrayList<CampaignDTO>();
+		Pageable pageable = PageRequest.of(0, 10);
+		Page<Campaign> mockCampaignPage = new PageImpl<>(mockCampaigns, pageable, mockCampaigns.size());
+
+		Mockito.when(campaignRepository.findByStoreStoreIdAndCampaignStatus(campaign1.getStore().getStoreId(), CampaignStatus.CREATED,
+				pageable)).thenReturn(mockCampaignPage);
+		Map<Long, List<CampaignDTO>> campaignPage = campaignService.findByStoreIdAndStatus(campaign1.getStore().getStoreId(),CampaignStatus.CREATED, pageable);
+
+		for (Map.Entry<Long, List<CampaignDTO>> entry : campaignPage.entrySet()) {
+			totalRecord = entry.getKey();
+			campaignDTOList = entry.getValue();
+
+		}
+
+		assertEquals(mockCampaigns.size(), campaignDTOList.size());
+		assertEquals(mockCampaigns.get(0).getCampaignId(), campaignDTOList.get(0).getCampaignId());
+		assertEquals(mockCampaigns.get(1).getCampaignId(), campaignDTOList.get(1).getCampaignId());
+	}
+
 }
