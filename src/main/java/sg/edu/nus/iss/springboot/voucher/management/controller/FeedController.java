@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.*;
-import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Feed;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.FeedService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.GeneralUtility;

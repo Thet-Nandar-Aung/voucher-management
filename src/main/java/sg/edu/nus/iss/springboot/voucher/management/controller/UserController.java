@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 
 import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
 import sg.edu.nus.iss.springboot.voucher.management.dto.*;

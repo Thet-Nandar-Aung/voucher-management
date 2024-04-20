@@ -2,7 +2,6 @@ package sg.edu.nus.iss.springboot.voucher.management.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

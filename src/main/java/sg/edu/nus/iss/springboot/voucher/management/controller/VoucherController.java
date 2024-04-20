@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.APIResponse;
-import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserRequest;
 import sg.edu.nus.iss.springboot.voucher.management.dto.VoucherDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;

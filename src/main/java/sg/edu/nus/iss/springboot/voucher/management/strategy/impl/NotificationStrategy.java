@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.services.managedgrafana.model.Role;
-
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Feed;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;

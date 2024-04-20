@@ -2,9 +2,7 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,12 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import jakarta.persistence.EntityManager;
 import sg.edu.nus.iss.springboot.voucher.management.dto.*;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
-import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.IFeedService;
 import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;

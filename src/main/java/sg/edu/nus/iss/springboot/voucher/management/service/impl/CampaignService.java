@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
-import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;

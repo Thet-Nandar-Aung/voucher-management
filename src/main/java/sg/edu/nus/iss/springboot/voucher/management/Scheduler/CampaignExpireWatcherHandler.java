@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;
-import sg.edu.nus.iss.springboot.voucher.management.service.impl.FeedService;
 
 @Component
 public class CampaignExpireWatcherHandler {

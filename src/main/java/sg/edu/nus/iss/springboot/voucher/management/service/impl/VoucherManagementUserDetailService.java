@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;
-import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 
 @Component
 public class VoucherManagementUserDetailService implements UserDetailsService {

@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.ValidationResult;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
-import sg.edu.nus.iss.springboot.voucher.management.entity.Store;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.CampaignService;

@@ -2,7 +2,6 @@ package sg.edu.nus.iss.springboot.voucher.management.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +13,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import sg.edu.nus.iss.springboot.voucher.management.dto.CampaignDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.VoucherDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Campaign;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.entity.Voucher;
-import sg.edu.nus.iss.springboot.voucher.management.enums.CampaignStatus;
 import sg.edu.nus.iss.springboot.voucher.management.enums.VoucherStatus;
 import sg.edu.nus.iss.springboot.voucher.management.repository.CampaignRepository;
-import sg.edu.nus.iss.springboot.voucher.management.repository.FeedRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.VoucherRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.IVoucherService;
@@ -42,8 +38,6 @@ public class VoucherService implements IVoucherService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private FeedRepository feedRepository;
 
 	@Override
 	public Map<Long, List<VoucherDTO>> findAllClaimedVouchersByEmail(String email, Pageable pageable) {

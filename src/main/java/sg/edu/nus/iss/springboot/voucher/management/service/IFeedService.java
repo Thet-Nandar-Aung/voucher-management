@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 
 import sg.edu.nus.iss.springboot.voucher.management.dto.FeedDTO;
-import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 
 public interface IFeedService {
 

@@ -72,47 +72,6 @@ public class ImageUploadToS3 {
 		return presignedUrl;
 	}
 
-	public static String generatePresignedUrlAndUploadObject(AmazonS3 s3Client,
-			VourcherManagementSecurityConfig securityConfig, MultipartFile uploadFile, String keyPrefix) {
-
-		String presignedUrl = "";
-
-		try {
-			boolean isExistsValidImage = false;
-			// chekck Image already eixsts or not
-
-			boolean isImageExists = s3Client.doesObjectExist(securityConfig.getS3Bucket(),
-					keyPrefix.trim() + uploadFile.getOriginalFilename().trim());
-
-			logger.info("Image already uploaded to s3. " + isImageExists);
-
-			if (!isImageExists) {
-
-				boolean isUploaded = ImageUploadToS3.imageUpload(s3Client, uploadFile, securityConfig, keyPrefix);
-				if (isUploaded) {
-					isExistsValidImage = true;
-				}
-				//
-
-				logger.info("Image successfully uploaded. " + uploadFile);
-			} else {
-				isExistsValidImage = true;
-			}
-
-			if (isExistsValidImage) {
-
-				presignedUrl = ImageUploadToS3.generatePresignedUrl(s3Client, securityConfig,
-						keyPrefix.trim() + uploadFile.getOriginalFilename().trim());
-
-				logger.info("presignedUrl: " + presignedUrl);
-
-			}
-		} catch (Exception e) {
-			logger.error("Error while generatePresignedUrlAndUploadObject : " + e.getMessage());
-
-		}
-		return presignedUrl;
-	}
 
 	public static boolean checkImageExistBeforeUpload(AmazonS3 s3Client, MultipartFile multipartFile,
 			VourcherManagementSecurityConfig securityConfig, String keyPrefix) {

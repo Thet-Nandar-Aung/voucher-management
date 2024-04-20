@@ -21,7 +21,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 
 import sg.edu.nus.iss.springboot.voucher.management.configuration.VourcherManagementSecurityConfig;
-import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.UserDTO;
 import sg.edu.nus.iss.springboot.voucher.management.entity.User;
 import sg.edu.nus.iss.springboot.voucher.management.repository.*;

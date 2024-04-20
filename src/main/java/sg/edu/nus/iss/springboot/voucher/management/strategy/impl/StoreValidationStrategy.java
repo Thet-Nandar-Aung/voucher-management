@@ -1,7 +1,5 @@
 package sg.edu.nus.iss.springboot.voucher.management.strategy.impl;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,6 @@ import sg.edu.nus.iss.springboot.voucher.management.dto.StoreDTO;
 import sg.edu.nus.iss.springboot.voucher.management.dto.ValidationResult;
 import sg.edu.nus.iss.springboot.voucher.management.entity.*;
 import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
-import sg.edu.nus.iss.springboot.voucher.management.repository.*;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.UserService;
 import sg.edu.nus.iss.springboot.voucher.management.strategy.IAPIHelperValidationStrategy;
@@ -26,8 +23,6 @@ public class StoreValidationStrategy implements IAPIHelperValidationStrategy<Sto
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private StoreRepository storeRepository;
 
 	@Override
 	public ValidationResult validateCreation(Store store, MultipartFile val) {
