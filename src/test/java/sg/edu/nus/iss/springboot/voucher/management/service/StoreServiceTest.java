@@ -29,6 +29,7 @@ import sg.edu.nus.iss.springboot.voucher.management.enums.RoleType;
 import sg.edu.nus.iss.springboot.voucher.management.repository.StoreRepository;
 import sg.edu.nus.iss.springboot.voucher.management.repository.UserRepository;
 import sg.edu.nus.iss.springboot.voucher.management.service.impl.StoreService;
+import sg.edu.nus.iss.springboot.voucher.management.utility.DTOMapper;
 
 @SpringBootTest
 @Transactional
@@ -41,10 +42,9 @@ public class StoreServiceTest {
 
 	@MockBean
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private StoreService storeService;
-
 
 	private static User user = new User("antonia@gmail.com", "Antonia", "Pwd@21212", RoleType.MERCHANT, true);
 
@@ -63,8 +63,8 @@ public class StoreServiceTest {
 
 	@Test
 	void getAllActiveStore() {
-		long totalRecord =0;
-		List<StoreDTO> storeDTOList =new ArrayList<StoreDTO>();
+		long totalRecord = 0;
+		List<StoreDTO> storeDTOList = new ArrayList<StoreDTO>();
 		Pageable pageable = PageRequest.of(0, 10);
 		Page<Store> mockStoresPage = new PageImpl<>(mockStores, pageable, mockStores.size());
 
@@ -83,8 +83,8 @@ public class StoreServiceTest {
 
 	@Test
 	void getAllActiveStoreByUser() {
-		long totalRecord =0;
-		List<StoreDTO> storeDTOList =new ArrayList<StoreDTO>();
+		long totalRecord = 0;
+		List<StoreDTO> storeDTOList = new ArrayList<StoreDTO>();
 		Pageable pageable = PageRequest.of(0, 10);
 		Page<Store> mockStoresPage = new PageImpl<>(mockStores, pageable, mockStores.size());
 
@@ -131,12 +131,21 @@ public class StoreServiceTest {
 
 		Mockito.when(storeRepository.save(Mockito.any(Store.class))).thenReturn(store);
 		Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
-		// Creating a MockMultipartFile for the image file
 		MockMultipartFile imageFile = new MockMultipartFile("image", "store.jpg", "image/jpg", "store".getBytes());
 
 		StoreDTO storeDTO = storeService.update(store, imageFile);
 		assertThat(storeDTO).isNotNull();
 		assertEquals(storeDTO.getDescription(), store.getDescription());
+	}
+
+	@Test
+	void findByStoreId() {
+
+		Mockito.when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
+		StoreDTO storeDTO = storeService.findByStoreId(store.getStoreId());
+		assertThat(storeDTO).isNotNull();
+		assertEquals(storeDTO.getDescription(), store.getDescription());
+
 	}
 
 }
