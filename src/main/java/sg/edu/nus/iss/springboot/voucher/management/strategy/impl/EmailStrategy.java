@@ -56,7 +56,7 @@ public class EmailStrategy implements IFeedStrategy {
                             + "<i>(This is an auto-generated email, please do not reply)</i>";
 
                     body = body.replace("[[name]]", user.getUsername());
-                    body = body.replace("[[campaign]]", campaign.getCampaignId());
+                    body = body.replace("[[campaign]]", campaign.getDescription());
                     body = body.replace("[[URL]]", campaignURL);
 
                     AmazonSES.sendEmail(client, from, Arrays.asList(user.getEmail()), subject, body);
