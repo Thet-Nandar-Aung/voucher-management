@@ -91,6 +91,7 @@ public class DTOMapper {
 		voucherDTO.setClaimTime(voucher.getClaimTime());
 		voucherDTO.setConsumedTime(voucher.getConsumedTime());
 		voucherDTO.setClaimedBy(toUserDTO(voucher.getClaimedBy()));
+		voucherDTO.setAmount(voucherDTO.getCampaign().getAmount());
 		return voucherDTO;
 	}
 
