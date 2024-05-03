@@ -11,3 +11,4 @@
 4.Change aws accesskey, secretkey , s3 bucket Name and s3 url prefix in application.propteries.
 
 5.Change the logging file path in application.propteries.
+
