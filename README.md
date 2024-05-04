@@ -12,3 +12,4 @@
 
 5.Change the logging file path in application.propteries.
 
+Trigger Pipeline
